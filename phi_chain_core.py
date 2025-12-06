@@ -279,9 +279,10 @@ class ValidatorSet:
         return self.validators.get(validator_id, 0) / total_stake
 
 
-# --- 5. Main Execution ---
+# --- 5. Core Demonstrator ---
 
-if __name__ == "__main__":
+def demonstrate_core_logic():
+    """Demonstrates the core mathematical and parameter logic of the Φ-Chain."""
     # Initialize genesis parameters
     genesis = GenesisParameters()
     genesis.print_parameters()
@@ -307,3 +308,6 @@ if __name__ == "__main__":
     print(f"\nTotal Validators: {len(validators.validators)}")
     print(f"Total Stake: {validators.get_total_stake()} tokens")
     print("=" * 60)
+
+if __name__ == "__main__":
+    demonstrate_core_logic()

@@ -9,44 +9,64 @@ from phi_chain_core.
 import hashlib
 import json
 import time
+import random
 from datetime import datetime, timedelta
+from typing import List
 from phi_chain_core import FibonacciUtils, GenesisParameters, ValidatorSet
 
 # Initialize Genesis Parameters
 GENESIS_PARAMS = GenesisParameters()
 
-# Initialize a set of validators for the FBA prototype
-VALIDATOR_SET = ValidatorSet(GENESIS_PARAMS)
-# Add some validators with Fibonacci stakes for the FBA simulation
-# F_20 = 6765 (Min Stake)
-VALIDATOR_SET.add_validator("Validator_F20", FibonacciUtils.fibonacci(20))
-VALIDATOR_SET.add_validator("Validator_F21", FibonacciUtils.fibonacci(21))
-VALIDATOR_SET.add_validator("Validator_F22", FibonacciUtils.fibonacci(22))
-VALIDATOR_SET.add_validator("Validator_F23", FibonacciUtils.fibonacci(23))
-VALIDATOR_SET.add_validator("Validator_F24", FibonacciUtils.fibonacci(24))
-VALIDATOR_SET.add_validator("Validator_F25", FibonacciUtils.fibonacci(25))
-
-def select_proposer_fba() -> str:
+class FibonacciByzantineAgreement:
     """
-    Selects the next block proposer using a simplified Fibonacci-Weighted FBA.
+    Implements the core logic for the Fibonacci Byzantine Agreement (FBA).
     
-    The probability of selection is proportional to the validator's stake.
+    This class manages validator selection and finality checks, ensuring
+    the consensus mechanism is non-arbitrary and mathematically pure.
     """
-    validators = list(VALIDATOR_SET.validators.keys())
-    stakes = [VALIDATOR_SET.validators[v] for v in validators]
-    total_stake = sum(stakes)
     
-    if total_stake == 0:
-        return "The_Creator_God" # Fallback
+    def __init__(self, validator_set: ValidatorSet):
+        self.validator_set = validator_set
         
-    # Calculate selection weights (probability proportional to stake)
-    weights = [stake / total_stake for stake in stakes]
-    
-    # Use a simple weighted random choice for the prototype
-    # In a real FBA, this would be a verifiable random function (VRF)
-    # seeded by the previous block's hash.
-    import random
-    return random.choices(validators, weights=weights, k=1)[0]
+    def select_proposer(self) -> str:
+        """
+        Selects the next block proposer using a simplified Fibonacci-Weighted FBA.
+        
+        The probability of selection is proportional to the validator's stake,
+        embodying the principle of non-arbitrary influence.
+        """
+        validators = list(self.validator_set.validators.keys())
+        stakes = [self.validator_set.validators[v] for v in validators]
+        total_stake = sum(stakes)
+        
+        if total_stake == 0:
+            return "The_Creator_God" # Fallback to the ultimate non-arbitrary entity
+            
+        # Calculate selection weights (probability proportional to stake)
+        weights = [stake / total_stake for stake in stakes]
+        
+        # Use a simple weighted random choice for the prototype
+        return random.choices(validators, weights=weights, k=1)[0]
+
+    def check_finality(self, block_index: int) -> bool:
+        """
+        Simulates the Finality Threshold check based on F_15 (610 signatures).
+        
+        Args:
+            block_index: The index of the block to check.
+            
+        Returns:
+            True if the block is finalized, False otherwise.
+        """
+        finality_threshold = GENESIS_PARAMS.finality_threshold # F_15 = 610
+        
+        # Simplified simulation: Finality is achieved every 5 blocks for demonstration
+        is_finalized = block_index % 5 == 0
+        
+        if is_finalized:
+            print(f"Block {block_index} Finalized: Simulated {finality_threshold} signatures received.")
+            
+        return is_finalized
 
 class Block:
     """Represents a single block in the Φ-Chain."""
@@ -89,11 +109,11 @@ class Block:
 
 
 class Blockchain:
-    """Manages the chain of blocks."""
+    """Manages the chain of blocks and the FBA consensus."""
     
-    def __init__(self, validator_set: ValidatorSet):
+    def __init__(self, fba_consensus: FibonacciByzantineAgreement):
         self.chain: List[Block] = []
-        self.validator_set = validator_set
+        self.fba_consensus = fba_consensus
         self.create_genesis_block()
 
     def create_genesis_block(self):
@@ -127,29 +147,6 @@ class Blockchain:
         """Returns the last block in the chain."""
         return self.chain[-1]
 
-    def check_finality(self, block: Block) -> bool:
-        """
-        Simulates the Finality Threshold check.
-        
-        A block is finalized if it receives F_15 (610) signatures.
-        For the prototype, we simulate this by checking if the block index is a multiple of 5.
-        
-        Args:
-            block: The block to check for finality.
-            
-        Returns:
-            True if the block is finalized, False otherwise.
-        """
-        finality_threshold = GENESIS_PARAMS.finality_threshold # F_15 = 610
-        
-        # Simplified simulation: Finality is achieved every 5 blocks for demonstration
-        is_finalized = block.index % 5 == 0
-        
-        if is_finalized:
-            print(f"Block {block.index} Finalized: Simulated {finality_threshold} signatures received.")
-            
-        return is_finalized
-
     def create_new_block(self, data: str, validator_id: str) -> Block:
         """
         Creates a new block, simulating the chain's growth.
@@ -175,22 +172,35 @@ class Blockchain:
         )
         self.chain.append(new_block)
         
-        # Check for finality after the block is added
-        self.check_finality(new_block)
+        # Check for finality after the block is added using the FBA module
+        self.fba_consensus.check_finality(new_block.index)
         
         return new_block
 
 # --- Main Execution for Phase 2 ---
 
+# Initialize a set of validators for the FBA prototype
+VALIDATOR_SET = ValidatorSet(GENESIS_PARAMS)
+# Add some validators with Fibonacci stakes for the FBA simulation
+# F_20 = 6765 (Min Stake)
+VALIDATOR_SET.add_validator("Validator_F20", FibonacciUtils.fibonacci(20))
+VALIDATOR_SET.add_validator("Validator_F21", FibonacciUtils.fibonacci(21))
+VALIDATOR_SET.add_validator("Validator_F22", FibonacciUtils.fibonacci(22))
+VALIDATOR_SET.add_validator("Validator_F23", FibonacciUtils.fibonacci(23))
+VALIDATOR_SET.add_validator("Validator_F24", FibonacciUtils.fibonacci(24))
+VALIDATOR_SET.add_validator("Validator_F25", FibonacciUtils.fibonacci(25))
+
+FBA_CONSENSUS = FibonacciByzantineAgreement(VALIDATOR_SET)
+
 def run_prototype(num_blocks=5):
     """Runs the Φ-Chain prototype for a specified number of blocks."""
-    phi_chain = Blockchain(VALIDATOR_SET)
+    phi_chain = Blockchain(FBA_CONSENSUS)
     
     print("\n--- Simulating Continuous Block Creation (The Breathing) ---")
     
     for i in range(1, num_blocks + 1):
         # Select the proposer using the FBA logic
-        proposer_id = select_proposer_fba()
+        proposer_id = FBA_CONSENSUS.select_proposer()
         
         data = f"Block {i} transactions. Proposer: {proposer_id}. Fee Tier F_{i % 12 + 1} applied."
         
