@@ -242,3 +242,4 @@ if __name__ == "__main__":
     # التحقق من التماثل
     state = chain.get_temporal_state(-1)
     print(f"🔄 أحدث حالة: {'متماثلة' if state['is_symmetric'] else 'غير متماثلة'}")
+
