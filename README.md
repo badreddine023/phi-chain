@@ -1,4 +1,5 @@
 # Φ-Chain: The Canonical Blockchain of Universal Law
+![Phase 5](https://img.shields.io/badge/Phase%205-In%20Progress-%23FFD700?style=for-the-badge) ![MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)  
 
 > "The genesis of **Φ-Chain** is not an engineering problem solved by arbitrary constants, but a philosophical imperative realized through mathematical purity."
 
