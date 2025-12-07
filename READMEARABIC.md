@@ -65,3 +65,4 @@ MIT License – حريّة كاملة، مع الحفاظ على الـ φ.
 
 © 2025 Badreddine Baha – Visionary Architect  
 ```  
+
