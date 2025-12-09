@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Φ-Chain Fibonacci Visualizer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='90' fill='%23618034'>Φ</text></svg>">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/3.0.3/plotly.min.js"></script>
+    <style>
+        :root {
+            --primary-gold: #b9a369;
+            --dark-bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --accent-gold: #d4af37;
+            --text-light: #f0f0f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-top: 2rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            color: var(--primary-gold);
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            opacity: 0.9;
+        }
+
+        .home-btn {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            background: linear-gradient(135deg, var(--primary-gold), var(--accent-gold));
+            color: var(--dark-bg);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(185, 163, 105, 0.3);
+        }
+
+        .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(185, 163, 105, 0.4);
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .controls-panel, .visualization-panel {
+            background: var(--card-bg);
+            border: 1px solid rgba(185, 163, 105, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+        }
+
+        .controls-panel h3, .visualization-panel h3 {
+            color: var(--primary-gold);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-group label {
+            display: block;
+            color: var(--primary-gold);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .control-group input, .control-group select {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--dark-bg);
+            border: 1px solid rgba(185, 163, 105, 0.3);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary-gold), var(--accent-gold));
+            color: var(--dark-bg);
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(185, 163, 105, 0.3);
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .sequence-display {
+            background: var(--dark-bg);
+            border: 1px solid rgba(185, 163, 105, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .sequence-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(185, 163, 105, 0.1);
+        }
+
+        .sequence-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .sequence-index {
+            color: var(--primary-gold);
+            font-weight: bold;
+            min-width: 60px;
+        }
+
+        .sequence-value {
+            color: var(--text-light);
+            font-family: monospace;
+            text-align: right;
+            flex: 1;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            background: var(--dark-bg);
+            border: 1px solid rgba(185, 163, 105, 0.2);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .metric-card {
+            background: rgba(185, 163, 105, 0.1);
+            border: 1px solid rgba(185, 163, 105, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            color: var(--text-light);
+            opacity: 0.9;
+            font-size: 0.8rem;
+        }
+
+        .info-panel {
+            background: var(--card-bg);
+            border: 1px solid rgba(185, 163, 105, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .info-panel h3 {
+            color: var(--primary-gold);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .info-card {
+            background: rgba(185, 163, 105, 0.05);
+            border: 1px solid rgba(185, 163, 105, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+
+        .info-card h4 {
+            color: var(--primary-gold);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .info-card p {
+            color: var(--text-light);
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .formula {
+            background: rgba(185, 163, 105, 0.1);
+            border: 1px solid rgba(185, 163, 105, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: monospace;
+            color: var(--accent-gold);
+        }
+
+        .golden-ratio-highlight {
+            background: linear-gradient(135deg, rgba(185, 163, 105, 0.2), rgba(212, 175, 55, 0.2));
+            border: 2px solid var(--primary-gold);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .golden-ratio-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .home-btn {
+                position: relative;
+                top: auto;
+                left: auto;
+                display: block;
+                margin: 1rem auto;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-btn">← Home</a>
+        
+        <div class="header">
+            <h1>Fibonacci Visualizer</h1>
+            <p>Explore the mathematical beauty of Fibonacci sequences and the Golden Ratio</p>
+        </div>
+
+        <div class="main-grid">
+            <div class="controls-panel">
+                <h3>⚙️ Sequence Controls</h3>
+                
+                <div class="control-group">
+                    <label for="sequenceType">Sequence Type</label>
+                    <select id="sequenceType">
+                        <option value="fibonacci" selected>Fibonacci</option>
+                        <option value="lucas">Lucas</option>
+                        <option value="tribonacci">Tribonacci</option>
+                        <option value="phi">Golden Ratio Approximation</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="sequenceLength">Sequence Length</label>
+                    <input type="number" id="sequenceLength" min="5" max="50" value="20" step="1">
+                </div>
+
+                <div class="control-group">
+                    <label for="customPhi">Custom Φ Value</label>
+                    <input type="number" id="customPhi" step="0.0000001" value="1.6180339887">
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn" onclick="generateSequence()">Generate Sequence</button>
+                    <button class="btn" onclick="plotSequence()">Plot Sequence</button>
+                    <button class="btn" onclick="plotRatios()">Show Ratios</button>
+                    <button class="btn" onclick="plotSpiral()">Plot Spiral</button>
+                </div>
+
+                <div class="golden-ratio-highlight">
+                    <div class="golden-ratio-value" id="phiValue">Φ ≈ 1.6180339887</div>
+                    <div style="color: var(--text-light); opacity: 0.8;">
+                        The Golden Ratio - Divine Proportion
+                    </div>
+                </div>
+
+                <div class="sequence-display" id="sequenceDisplay">
+                    <div style="text-align: center; color: var(--primary-gold); padding: 2rem;">
+                        Generate a sequence to see results...
+                    </div>
+                </div>
+            </div>
+
+            <div class="visualization-panel">
+                <h3>📊 Mathematical Visualization</h3>
+                
+                <div class="chart-container" id="mainChart"></div>
+                
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value" id="lastNumber">0</div>
+                        <div class="metric-label">Last Number</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="sumSequence">0</div>
+                        <div class="metric-label">Sum</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="avgRatio">0.000</div>
+                        <div class="metric-label">Avg Ratio</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="phiAccuracy">0%</div>
+                        <div class="metric-label">Φ Accuracy</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <h3>📚 Fibonacci Mathematics</h3>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>Fibonacci Sequence</h4>
+                    <p>The Fibonacci sequence is defined by the recurrence relation where each number is the sum of the two preceding ones, starting from 0 and 1.</p>
+                    <div class="formula">
+                        F(n) = F(n-1) + F(n-2), with F(0) = 0, F(1) = 1
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h4>Golden Ratio</h4>
+                    <p>The ratio of consecutive Fibonacci numbers approaches the Golden Ratio (Φ) as the sequence progresses, creating the most aesthetically pleasing proportion.</p>
+                    <div class="formula">
+                        Φ = (1 + √5) / 2 ≈ 1.6180339887
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h4>Binet's Formula</h4>
+                    <p>A closed-form expression that gives the nth Fibonacci number directly without recursion, using the Golden Ratio.</p>
+                    <div class="formula">
+                        F(n) = (Φⁿ - (-Φ)⁻ⁿ) / √5
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h4>Applications</h4>
+                    <p>Fibonacci numbers and the Golden Ratio appear in nature, art, architecture, and modern technologies including blockchain systems, creating mathematically pure and aesthetically pleasing structures.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const PHI = 1.618033988749895;
+        let currentSequence = [];
+        let currentRatios = [];
+
+        function generateFibonacci(n) {
+            const sequence = [0, 1];
+            for (let i = 2; i < n; i++) {
+                sequence.push(sequence[i-1] + sequence[i-2]);
+            }
+            return sequence.slice(0, n);
+        }
+
+        function generateLucas(n) {
+            const sequence = [2, 1];
+            for (let i = 2; i < n; i++) {
+                sequence.push(sequence[i-1] + sequence[i-2]);
+            }
+            return sequence.slice(0, n);
+        }
+
+        function generateTribonacci(n) {
+            const sequence = [0, 0, 1];
+            for (let i = 3; i < n; i++) {
+                sequence.push(sequence[i-1] + sequence[i-2] + sequence[i-3]);
+            }
+            return sequence.slice(0, n);
+        }
+
+        function generatePhiApproximation(n) {
+            const sequence = [];
+            for (let i = 1; i <= n; i++) {
+                sequence.push(Math.round(Math.pow(PHI, i) / Math.sqrt(5)));
+            }
+            return sequence;
+        }
+
+        function calculateRatios(sequence) {
+            const ratios = [];
+            for (let i = 1; i < sequence.length; i++) {
+                if (sequence[i-1] !== 0) {
+                    ratios.push(sequence[i] / sequence[i-1]);
+                }
+            }
+            return ratios;
+        }
+
+        function generateSequence() {
+            const type = document.getElementById('sequenceType').value;
+            const length = parseInt(document.getElementById('sequenceLength').value);
+            const customPhi = parseFloat(document.getElementById('customPhi').value);
+
+            let sequence;
+            switch (type) {
+                case 'fibonacci':
+                    sequence = generateFibonacci(length);
+                    break;
+                case 'lucas':
+                    sequence = generateLucas(length);
+                    break;
+                case 'tribonacci':
+                    sequence = generateTribonacci(length);
+                    break;
+                case 'phi':
+                    sequence = generatePhiApproximation(length);
+                    break;
+                default:
+                    sequence = generateFibonacci(length);
+            }
+
+            currentSequence = sequence;
+            currentRatios = calculateRatios(sequence);
+
+            displaySequence(sequence);
+            updateMetrics(sequence, currentRatios);
+        }
+
+        function displaySequence(sequence) {
+            const container = document.getElementById('sequenceDisplay');
+            
+            container.innerHTML = sequence.map((value, index) => `
+                <div class="sequence-item">
+                    <span class="sequence-index">F(${index})</span>
+                    <span class="sequence-value">${value.toLocaleString()}</span>
+                </div>
+            `).join('');
+        }
+
+        function updateMetrics(sequence, ratios) {
+            const lastNumber = sequence[sequence.length - 1];
+            const sum = sequence.reduce((a, b) => a + b, 0);
+            const avgRatio = ratios.length > 0 ? ratios.reduce((a, b) => a + b, 0) / ratios.length : 0;
+            const phiAccuracy = Math.abs(avgRatio - PHI) / PHI * 100;
+
+            document.getElementById('lastNumber').textContent = lastNumber.toLocaleString();
+            document.getElementById('sumSequence').textContent = sum.toLocaleString();
+            document.getElementById('avgRatio').textContent = avgRatio.toFixed(6);
+            document.getElementById('phiAccuracy').textContent = (100 - phiAccuracy).toFixed(1) + '%';
+        }
+
+        function plotSequence() {
+            if (currentSequence.length === 0) {
+                generateSequence();
+            }
+
+            const data = [{
+                x: Array.from({length: currentSequence.length}, (_, i) => i),
+                y: currentSequence,
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: 'Fibonacci Sequence',
+                line: { color: '#b9a369', width: 3 },
+                marker: { color: '#d4af37', size: 8 }
+            }];
+
+            const layout = {
+                title: {
+                    text: 'Fibonacci Sequence',
+                    font: { color: '#b9a369', size: 16 }
+                },
+                xaxis: { 
+                    title: 'Index (n)', 
+                    color: '#f0f0f0',
+                    gridcolor: 'rgba(185, 163, 105, 0.2)'
+                },
+                yaxis: { 
+                    title: 'Value', 
+                    color: '#f0f0f0',
+                    gridcolor: 'rgba(185, 163, 105, 0.2)',
+                    type: 'log'
+                },
+                plot_bgcolor: '#0a0a0a',
+                paper_bgcolor: '#0a0a0a',
+                font: { color: '#f0f0f0' },
+                showlegend: false
+            };
+
+            Plotly.newPlot('mainChart', data, layout, {responsive: true});
+        }
+
+        function plotRatios() {
+            if (currentRatios.length === 0) {
+                generateSequence();
+            }
+
+            const data = [{
+                x: Array.from({length: currentRatios.length}, (_, i) => i + 1),
+                y: currentRatios,
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: 'Consecutive Ratios',
+                line: { color: '#b9a369', width: 3 },
+                marker: { color: '#d4af37', size: 8 }
+            }];
+
+            const layout = {
+                title: {
+                    text: 'Consecutive Number Ratios Approaching Φ',
+                    font: { color: '#b9a369', size: 16 }
+                },
+                xaxis: { 
+                    title: 'Ratio Index', 
+                    color: '#f0f0f0',
+                    gridcolor: 'rgba(185, 163, 105, 0.2)'
+                },
+                yaxis: { 
+                    title: 'Ratio (F(n+1)/F(n))', 
+                    color: '#f0f0f0',
+                    gridcolor: 'rgba(185, 163, 105, 0.2)'
+                },
+                plot_bgcolor: '#0a0a0a',
+                paper_bgcolor: '#0a0a0a',
+                font: { color: '#f0f0f0' },
+                showlegend: false,
+                shapes: [{
+                    type: 'line',
+                    x0: 0,
+                    y0: PHI,
+                    x1: currentRatios.length + 1,
+                    y1: PHI,
+                    line: { color: '#d4af37', width: 3, dash: 'dash' }
+                }],
+                annotations: [{
+                    x: currentRatios.length,
+                    y: PHI,
+                    text: `Φ ≈ ${PHI.toFixed(6)}`,
+                    showarrow: false,
+                    font: { color: '#d4af37', size: 12 },
+                    yshift: 20
+                }]
+            };
+
+            Plotly.newPlot('mainChart', data, layout, {responsive: true});
+        }
+
+        function plotSpiral() {
+            const points = 200;
+            const theta = Array.from({length: points}, (_, i) => i * 4 * Math.PI / (points - 1));
+            const r = theta.map(t => Math.pow(PHI, t / Math.PI));
+            const x = r.map((radius, i) => radius * Math.cos(theta[i]));
+            const y = r.map((radius, i) => radius * Math.sin(theta[i]));
+
+            const spiralData = [{
+                x: x,
+                y: y,
+                type: 'scatter',
+                mode: 'lines',
+                name: 'Golden Spiral',
+                line: { color: '#b9a369', width: 3 }
+            }];
+
+            // Add Fibonacci squares
+            const squares = [];
+            let currentX = 0, currentY = 0;
+            let direction = 0; // 0: right, 1: up, 2: left, 3: down
+            
+            for (let i = 1; i < Math.min(10, currentSequence.length); i++) {
+                const size = currentSequence[i] || 1;
+                
+                const square = {
+                    type: 'rect',
+                    x0: currentX,
+                    y0: currentY,
+                    x1: currentX + (direction === 0 ? size : direction === 2 ? -size : 0),
+                    y1: currentY + (direction === 1 ? size : direction === 3 ? -size : 0),
+                    line: { color: '#d4af37', width: 2 },
+                    fillcolor: 'rgba(212, 175, 55, 0.1)'
+                };
+                squares.push(square);
+
+                // Update position for next square
+                switch (direction) {
+                    case 0: currentX += size; currentY -= currentSequence[i-1] || 0; break;
+                    case 1: currentY += size; break;
+                    case 2: currentX -= size; currentY += currentSequence[i-1] || 0; break;
+                    case 3: currentY -= size; break;
+                }
+                direction = (direction + 1) % 4;
+            }
+
+            const layout = {
+                title: {
+                    text: 'Fibonacci Golden Spiral',
+                    font: { color: '#b9a369', size: 16 }
+                },
+                xaxis: { 
+                    title: 'X', 
+                    color: '#f0f0f0',
+                    gridcolor: 'rgba(185, 163, 105, 0.2)'
+                },
+                yaxis: { 
+                    title: 'Y', 
+                    color: '#f0f0f0',
+                    gridcolor: 'rgba(185, 163, 105, 0.2)',
+                    scaleanchor: 'x'
+                },
+                plot_bgcolor: '#0a0a0a',
+                paper_bgcolor: '#0a0a0a',
+                font: { color: '#f0f0f0' },
+                showlegend: false,
+                shapes: squares
+            };
+
+            Plotly.newPlot('mainChart', spiralData, layout, {responsive: true});
+        }
+
+        // Update phi value display
+        document.getElementById('customPhi').addEventListener('input', function() {
+            const phiValue = parseFloat(this.value) || PHI;
+            document.getElementById('phiValue').textContent = `Φ ≈ ${phiValue.toFixed(10)}`;
+        });
+
+        // Initialize with default sequence
+        document.addEventListener('DOMContentLoaded', function() {
+            generateSequence();
+            plotSequence();
+        });
+    </script>
+</body>
+</html>

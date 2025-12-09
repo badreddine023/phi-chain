@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockchain Comparison - Φ-Chain vs Kaspa vs Bitcoin</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='90' fill='%23b9a369'>Φ</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/3.0.3/plotly.min.js"></script>
+    <style>
+        :root {
+            --primary-gold: #b9a369;
+            --dark-bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --accent-gold: #d4af37;
+            --text-light: #f0f0f0;
+            --text-muted: #a0a0a0;
+            --border-color: rgba(185, 163, 105, 0.2);
+            --gradient-primary: linear-gradient(135deg, #b9a369, #d4af37);
+            --gradient-secondary: linear-gradient(135deg, rgba(185, 163, 105, 0.1), rgba(212, 175, 55, 0.1));
+            --shadow-gold: 0 10px 30px rgba(185, 163, 105, 0.3);
+            --shadow-hover: 0 20px 40px rgba(185, 163, 105, 0.4);
+            --bitcoin-orange: #f7931a;
+            --kaspa-blue: #2e5bff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            font-weight: 400;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-top: 2rem;
+        }
+
+        .header h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            color: var(--primary-gold);
+            margin-bottom: 1rem;
+            font-weight: 300;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            color: var(--text-muted);
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .home-btn {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            background: var(--gradient-primary);
+            color: var(--dark-bg);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-gold);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Comparison Grid */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .blockchain-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .blockchain-card:hover {
+            transform: translateY(-15px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-gold);
+        }
+
+        .bitcoin-card:hover {
+            border-color: var(--bitcoin-orange);
+        }
+
+        .kaspa-card:hover {
+            border-color: var(--kaspa-blue);
+        }
+
+        .phi-card:hover {
+            border-color: var(--primary-gold);
+        }
+
+        .blockchain-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .bitcoin-logo {
+            background: var(--bitcoin-orange);
+        }
+
+        .kaspa-logo {
+            background: var(--kaspa-blue);
+        }
+
+        .phi-logo {
+            background: var(--gradient-primary);
+        }
+
+        .blockchain-card:hover .blockchain-logo {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .blockchain-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .bitcoin-card h3 {
+            color: var(--bitcoin-orange);
+        }
+
+        .kaspa-card h3 {
+            color: var(--kaspa-blue);
+        }
+
+        .phi-card h3 {
+            color: var(--primary-gold);
+        }
+
+        .blockchain-card p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-item {
+            background: rgba(185, 163, 105, 0.1);
+            border: 1px solid rgba(185, 163, 105, 0.2);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .metric-item:hover {
+            background: rgba(185, 163, 105, 0.15);
+            transform: scale(1.05);
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .bitcoin-card .metric-value {
+            color: var(--bitcoin-orange);
+        }
+
+        .kaspa-card .metric-value {
+            color: var(--kaspa-blue);
+        }
+
+        .phi-card .metric-value {
+            color: var(--primary-gold);
+        }
+
+        .metric-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .status-legendary {
+            background: rgba(212, 175, 55, 0.2);
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+        }
+
+        .status-established {
+            background: rgba(247, 147, 26, 0.2);
+            color: var(--bitcoin-orange);
+            border: 1px solid var(--bitcoin-orange);
+        }
+
+        .status-innovative {
+            background: rgba(46, 91, 255, 0.2);
+            color: var(--kaspa-blue);
+            border: 1px solid var(--kaspa-blue);
+        }
+
+        /* Transaction Comparison */
+        .transaction-section {
+            background: var(--gradient-secondary);
+            padding: 3rem 2rem;
+            border-radius: 30px;
+            margin: 3rem 0;
+        }
+
+        .transaction-section h2 {
+            text-align: center;
+            color: var(--primary-gold);
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            font-weight: 300;
+        }
+
+        .transaction-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .transaction-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .transaction-card h4 {
+            color: var(--primary-gold);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .transaction-speed {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .bitcoin-speed {
+            color: var(--bitcoin-orange);
+        }
+
+        .kaspa-speed {
+            color: var(--kaspa-blue);
+        }
+
+        .phi-speed {
+            color: var(--primary-gold);
+        }
+
+        .transaction-unit {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .efficiency-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(185, 163, 105, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .efficiency-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .bitcoin-efficiency {
+            background: var(--bitcoin-orange);
+            width: 15%;
+        }
+
+        .kaspa-efficiency {
+            background: var(--kaspa-blue);
+            width: 85%;
+        }
+
+        .phi-efficiency {
+            background: var(--gradient-primary);
+            width: 95%;
+        }
+
+        /* Charts */
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            background: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            margin: 2rem 0;
+            padding: 1rem;
+        }
+
+        .btn {
+            background: var(--gradient-primary);
+            color: var(--dark-bg);
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+            box-shadow: var(--shadow-gold);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        /* Analysis Section */
+        .analysis-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin: 3rem 0;
+        }
+
+        .analysis-section h3 {
+            color: var(--primary-gold);
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .analysis-card {
+            background: rgba(185, 163, 105, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 2rem;
+        }
+
+        .analysis-card h4 {
+            color: var(--primary-gold);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .analysis-card p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .formula {
+            background: rgba(185, 163, 105, 0.1);
+            border: 1px solid rgba(185, 163, 105, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-gold);
+            font-size: 0.9rem;
+        }
+
+        .advantage-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .advantage-list li {
+            padding: 0.5rem 0;
+            color: var(--text-muted);
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .advantage-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary-gold);
+            font-weight: bold;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .transaction-comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: clamp(2rem, 8vw, 3rem);
+            }
+
+            .home-btn {
+                position: relative;
+                top: auto;
+                left: auto;
+                display: block;
+                margin: 1rem auto;
+                text-align: center;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-btn">
+            <i class="fas fa-home"></i>
+            Home
+        </a>
+        
+        <div class="header">
+            <h1>Blockchain Comparison</h1>
+            <p>Comprehensive analysis of Bitcoin, Kaspa, and Φ-Chain across key metrics including transaction speed, consensus mechanisms, and mathematical principles</p>
+        </div>
+
+        <!-- Blockchain Comparison Cards -->
+        <div class="comparison-grid">
+            <!-- Bitcoin Card -->
+            <div class="blockchain-card bitcoin-card">
+                <div class="blockchain-logo bitcoin-logo">₿</div>
+                <div class="status-badge status-established">ESTABLISHED</div>
+                <h3>Bitcoin</h3>
+                <p>The original cryptocurrency and digital gold standard. Uses Proof-of-Work consensus with SHA-256 hashing and 10-minute block times.</p>
+                
+                <div class="metrics-grid">
+                    <div class="metric-item">
+                        <div class="metric-value bitcoin-speed">~7</div>
+                        <div class="metric-label">TPS</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">~10 min</div>
+                        <div class="metric-label">Block Time</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">21M</div>
+                        <div class="metric-label">Max Supply</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">SHA-256</div>
+                        <div class="metric-label">Algorithm</div>
+                    </div>
+                </div>
+
+                <div class="efficiency-bar">
+                    <div class="efficiency-fill bitcoin-efficiency"></div>
+                </div>
+                <div style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">
+                    Transaction Efficiency: 15%
+                </div>
+            </div>
+
+            <!-- Kaspa Card -->
+            <div class="blockchain-card kaspa-card">
+                <div class="blockchain-logo kaspa-logo">K</div>
+                <div class="status-badge status-innovative">INNOVATIVE</div>
+                <h3>Kaspa</h3>
+                <p>High-speed DAG-based blockchain using GhostDAG protocol. Achieves high throughput with 1-second block times and parallel block processing.</p>
+                
+                <div class="metrics-grid">
+                    <div class="metric-item">
+                        <div class="metric-value kaspa-speed">~1,000</div>
+                        <div class="metric-label">TPS</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">1 sec</div>
+                        <div class="metric-label">Block Time</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">28.7B</div>
+                        <div class="metric-label">Max Supply</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">kHeavyHash</div>
+                        <div class="metric-label">Algorithm</div>
+                    </div>
+                </div>
+
+                <div class="efficiency-bar">
+                    <div class="efficiency-fill kaspa-efficiency"></div>
+                </div>
+                <div style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">
+                    Transaction Efficiency: 85%
+                </div>
+            </div>
+
+            <!-- Φ-Chain Card -->
+            <div class="blockchain-card phi-card">
+                <div class="blockchain-logo phi-logo">Φ</div>
+                <div class="status-badge status-legendary">LEGENDARY</div>
+                <h3>Φ-Chain</h3>
+                <p>Revolutionary blockchain governed by Fibonacci sequences and the Golden Ratio. Features mathematical purity with zero arbitrary constants and organic growth.</p>
+                
+                <div class="metrics-grid">
+                    <div class="metric-item">
+                        <div class="metric-value phi-speed">~987</div>
+                        <div class="metric-label">TPS</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">8 sec</div>
+                        <div class="metric-label">Block Time</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">∞</div>
+                        <div class="metric-label">Max Supply</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">FBA</div>
+                        <div class="metric-label">Consensus</div>
+                    </div>
+                </div>
+
+                <div class="efficiency-bar">
+                    <div class="efficiency-fill phi-efficiency"></div>
+                </div>
+                <div style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">
+                    Transaction Efficiency: 95%
+                </div>
+            </div>
+        </div>
+
+        <!-- Transaction Speed Comparison -->
+        <div class="transaction-section">
+            <h2>⚡ Transaction Speed Comparison</h2>
+            <div class="transaction-comparison">
+                <div class="transaction-card">
+                    <h4>Bitcoin Transactions</h4>
+                    <div class="transaction-speed bitcoin-speed">3-7</div>
+                    <div class="transaction-unit">TPS (Global Average)</div>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">
+                        Limited by 1MB block size and 10-minute block time. Lightning Network provides faster payments but requires additional setup.
+                    </p>
+                </div>
+
+                <div class="transaction-card">
+                    <h4>Kaspa Transactions</h4>
+                    <div class="transaction-speed kaspa-speed">1,000+</div>
+                    <div class="transaction-unit">TPS (Theoretical)</div>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">
+                        High throughput enabled by GhostDAG protocol and parallel block processing. Sub-second confirmation times.
+                    </p>
+                </div>
+
+                <div class="transaction-card">
+                    <h4>Φ-Chain Transactions</h4>
+                    <div class="transaction-speed phi-speed">987</div>
+                    <div class="transaction-unit">TPS (Fibonacci-based)</div>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">
+                        Mathematically optimal throughput using F₁₆ scaling. Each block processes exactly 987 transactions by design.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Chart -->
+        <div class="chart-container" id="performanceChart"></div>
+
+        <!-- Detailed Analysis -->
+        <div class="analysis-section">
+            <h3>🔍 Detailed Analysis</h3>
+            <div class="analysis-grid">
+                <div class="analysis-card">
+                    <h4>Consensus Mechanisms</h4>
+                    <p><strong>Bitcoin:</strong> Proof-of-Work with SHA-256 hashing. Energy-intensive but proven secure over 15 years.</p>
+                    <p><strong>Kaspa:</strong> GhostDAG protocol enabling parallel blocks and high throughput with energy-efficient mining.</p>
+                    <p><strong>Φ-Chain:</strong> Fibonacci Byzantine Agreement with mathematical validator selection and F₁₅ finality.</p>
+                    <div class="formula">
+                        Φ-Chain Finality = F₁₅ = 610 signatures
+                    </div>
+                </div>
+
+                <div class="analysis-card">
+                    <h4>Scalability Solutions</h4>
+                    <p><strong>Bitcoin:</strong> Lightning Network for off-chain payments, limited on-chain scaling.</p>
+                    <p><strong>Kaspa:</strong> Native DAG architecture with parallel processing and sub-second confirmations.</p>
+                    <p><strong>Φ-Chain:</strong> Fibonacci sharding with cross-shard communication following natural growth patterns.</p>
+                    <ul class="advantage-list">
+                        <li>Mathematically proven scaling</li>
+                        <li>Zero arbitrary parameters</li>
+                        <li>Universal law compliance</li>
+                    </ul>
+                </div>
+
+                <div class="analysis-card">
+                    <h4>Security Models</h4>
+                    <p><strong>Bitcoin:</strong> Computational security through mining difficulty and longest chain rule.</p>
+                    <p><strong>Kaspa:</strong> DAG security with GhostDAG providing resistance to double-spending attacks.</p>
+                    <p><strong>Φ-Chain:</strong> Mathematical security through Fibonacci consensus and entropy coherence.</p>
+                    <div class="formula">
+                        Φ-Chain Security = |ratio - Φ| < tolerance
+                    </div>
+                </div>
+
+                <div class="analysis-card">
+                    <h4>Economic Models</h4>
+                    <p><strong>Bitcoin:</strong> Fixed supply of 21M coins with halving events every 210,000 blocks.</p>
+                    <p><strong>Kaspa:</strong> Maximum supply of 28.7B coins with decreasing emission schedule.</p>
+                    <p><strong>Φ-Chain:</strong> Infinite supply with Fibonacci-scaled rewards and natural inflation rate.</p>
+                    <div class="formula">
+                        Φ-Chain Rewards = Base × F(n)/F(n-1)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transaction Volume Chart -->
+        <div class="chart-container" id="transactionChart"></div>
+
+        <!-- Control Buttons -->
+        <div class="btn-group">
+            <button class="btn" onclick="updateCharts()">
+                <i class="fas fa-sync-alt"></i>
+                Update Charts
+            </button>
+            <button class="btn" onclick="simulateTransactionLoad()">
+                <i class="fas fa-bolt"></i>
+                Simulate Load
+            </button>
+            <button class="btn" onclick="exportComparison()">
+                <i class="fas fa-download"></i>
+                Export Data
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Blockchain data
+        const blockchainData = {
+            bitcoin: {
+                name: 'Bitcoin',
+                tps: 7,
+                blockTime: 600, // seconds
+                maxSupply: 21000000,
+                algorithm: 'SHA-256',
+                color: '#f7931a',
+                efficiency: 15
+            },
+            kaspa: {
+                name: 'Kaspa',
+                tps: 1000,
+                blockTime: 1,
+                maxSupply: 28700000000,
+                algorithm: 'kHeavyHash',
+                color: '#2e5bff',
+                efficiency: 85
+            },
+            phi: {
+                name: 'Φ-Chain',
+                tps: 987,
+                blockTime: 8,
+                maxSupply: Infinity,
+                algorithm: 'FBA',
+                color: '#b9a369',
+                efficiency: 95
+            }
+        };
+
+        // Initialize performance chart
+        function initializePerformanceChart() {
+            const blockchains = Object.keys(blockchainData);
+            const tpsValues = blockchains.map(key => blockchainData[key].tps);
+            const names = blockchains.map(key => blockchainData[key].name);
+            const colors = blockchains.map(key => blockchainData[key].color);
+
+            const data = [{
+                x: names,
+                y: tpsValues,
+                type: 'bar',
+                name: 'Transactions Per Second',
+                marker: { 
+                    color: colors,
+                    line: {
+                        color: 'rgba(255,255,255,0.2)',
+                        width: 2
+                    }
+                },
+                text: tpsValues.map(val => val.toLocaleString()),
+                textposition: 'auto',
+                textfont: {
+                    color: 'white',
+                    size: 14,
+                    family: 'Inter'
+                }
+            }];
+
+            const layout = {
+                title: {
+                    text: 'Transaction Throughput Comparison',
+                    font: { 
+                        color: '#b9a369', 
+                        size: 20,
+                        family: 'Inter'
+                    }
+                },
+                xaxis: { 
+                    title: { 
+                        text: 'Blockchain', 
+                        font: { color: '#f0f0f0', family: 'Inter' }
+                    },
+                    color: '#f0f0f0',
+                    gridcolor: 'rgba(185, 163, 105, 0.2)',
+                    tickfont: { family: 'Inter' }
+                },
+                yaxis: { 
+                    title: { 
+                        text: 'Transactions Per Second (Log Scale)', 
+                        font: { color: '#f0f0f0', family: 'Inter' }
+                    },
+                    color: '#f0f0f0',
+                    gridcolor: 'rgba(185, 163, 105, 0.2)',
+                    type: 'log',
+                    tickfont: { family: 'Inter' }
+                },
+                plot_bgcolor: '#0a0a0a',
+                paper_bgcolor: '#0a0a0a',
+                font: { color: '#f0f0f0', family: 'Inter' },
+                showlegend: false,
+                margin: { t: 60, b: 60, l: 80, r: 40 }
+            };
+
+            const config = {
+                responsive: true,
+                displayModeBar: false
+            };
+
+            Plotly.newPlot('performanceChart', data, layout, config);
+        }
+
+        // Initialize transaction volume chart
+        function initializeTransactionChart() {
+            const timeLabels = ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'];
+            
+            const bitcoinTxs = timeLabels.map(() => Math.floor(Math.random() * 400000) + 300000);
+            const kaspaTxs = timeLabels.map(() => Math.floor(Math.random() * 50000000) + 30000000);
+            const phiTxs = timeLabels.map(() => Math.floor(Math.random() * 40000000) + 35000000);
+
+            const data = [
+                {
+                    x: timeLabels,
+                    y: bitcoinTxs,
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    name: 'Bitcoin',
+                    line: { color: '#f7931a', width: 3 },
+                    marker: { color: '#f7931a', size: 8 }
+                },
+                {
+                    x: timeLabels,
+                    y: kaspaTxs,
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    name: 'Kaspa',
+                    line: { color: '#2e5bff', width: 3 },
+                    marker: { color: '#2e5bff', size: 8 }
+                },
+                {
+                    x: timeLabels,
+                    y: phiTxs,
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    name: 'Φ-Chain',
+                    line: { color: '#b9a369', width: 3 },
+                    marker: { color: '#b9a369', size: 8 }
+                }
+            ];
+
+            const layout = {
+                title: {
+                    text: '24-Hour Transaction Volume',
+                    font: { 
+                        color: '#b9a369', 
+                        size: 20,
+                        family: 'Inter'
+                    }
+                },
+                xaxis: { 
+                    title: { 
+                        text: 'Time (UTC)', 
+                        font: { color: '#f0f0f0', family: 'Inter' }
+                    },
+                    color: '#f0f0f0',
+                    gridcolor: 'rgba(185, 163, 105, 0.2)',
+                    tickfont: { family: 'Inter' }
+                },
+                yaxis: { 
+                    title: { 
+                        text: 'Transaction Count', 
+                        font: { color: '#f0f0f0', family: 'Inter' }
+                    },
+                    color: '#f0f0f0',
+                    gridcolor: 'rgba(185, 163, 105, 0.2)',
+                    tickfont: { family: 'Inter' }
+                },
+                plot_bgcolor: '#0a0a0a',
+                paper_bgcolor: '#0a0a0a',
+                font: { color: '#f0f0f0', family: 'Inter' },
+                legend: { 
+                    font: { color: '#f0f0f0', family: 'Inter' },
+                    bgcolor: 'rgba(0,0,0,0.5)',
+                    bordercolor: 'rgba(185, 163, 105, 0.3)',
+                    borderwidth: 1
+                },
+                margin: { t: 60, b: 60, l: 80, r: 40 }
+            };
+
+            const config = {
+                responsive: true,
+                displayModeBar: false
+            };
+
+            Plotly.newPlot('transactionChart', data, layout, config);
+        }
+
+        // Update charts with new data
+        function updateCharts() {
+            // Simulate data update
+            const bitcoinNewTps = Math.floor(Math.random() * 5) + 5;
+            const kaspaNewTps = Math.floor(Math.random() * 200) + 900;
+            const phiNewTps = 987; // Fixed by design
+
+            blockchainData.bitcoin.tps = bitcoinNewTps;
+            blockchainData.kaspa.tps = kaspaNewTps;
+            blockchainData.phi.tps = phiNewTps;
+
+            initializePerformanceChart();
+            initializeTransactionChart();
+
+            // Show update feedback
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = 'Updated!';
+            btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+            
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = 'var(--gradient-primary)';
+            }, 1500);
+        }
+
+        // Simulate transaction load
+        function simulateTransactionLoad() {
+            // Simulate high load scenario
+            const loadMultiplier = 3;
+            
+            Object.keys(blockchainData).forEach(key => {
+                blockchainData[key].tps *= loadMultiplier;
+            });
+
+            initializePerformanceChart();
+            
+            // Reset after 3 seconds
+            setTimeout(() => {
+                Object.keys(blockchainData).forEach(key => {
+                    blockchainData[key].tps /= loadMultiplier;
+                });
+                initializePerformanceChart();
+            }, 3000);
+
+            // Visual feedback
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = 'Simulating...';
+            btn.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+            
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = 'var(--gradient-primary)';
+            }, 3000);
+        }
+
+        // Export comparison data
+        function exportComparison() {
+            const exportData = {
+                timestamp: new Date().toISOString(),
+                comparison: blockchainData,
+                analysis: {
+                    winner_tps: 'Kaspa (theoretical)',
+                    winner_efficiency: 'Φ-Chain',
+                    winner_security: 'Bitcoin (proven)',
+                    winner_innovation: 'Φ-Chain (mathematical)'
+                },
+                metrics: {
+                    transaction_speed_ratio: {
+                        bitcoin: 1,
+                        kaspa: 142.8,
+                        phi_chain: 141
+                    },
+                    efficiency_ratio: {
+                        bitcoin: 1,
+                        kaspa: 5.67,
+                        phi_chain: 6.33
+                    }
+                }
+            };
+
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `blockchain-comparison-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            URL.revokeObjectURL(url);
+
+            // Visual feedback
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = 'Exported!';
+            btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+            
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = 'var(--gradient-primary)';
+            }, 2000);
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePerformanceChart();
+            initializeTransactionChart();
+            
+            // Add some animation to the cards
+            const cards = document.querySelectorAll('.blockchain-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>

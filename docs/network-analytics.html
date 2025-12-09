@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Φ-Chain Network Analytics</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='90' fill='%23618034'>Φ</text></svg>">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/3.0.3/plotly.min.js"></script>
+    <style>
+        :root {
+            --primary-gold: #b9a369;
+            --dark-bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --accent-gold: #d4af37;
+            --text-light: #f0f0f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-top: 2rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            color: var(--primary-gold);
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            opacity: 0.9;
+        }
+
+        .home-btn {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            background: linear-gradient(135deg, var(--primary-gold), var(--accent-gold));
+            color: var(--dark-bg);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(185, 163, 105, 0.3);
+        }
+
+        .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(185, 163, 105, 0.4);
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .dashboard-panel, .charts-panel {
+            background: var(--card-bg);
+            border: 1px solid rgba(185, 163, 105, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+        }
+
+        .dashboard-panel h3, .charts-panel h3 {
+            color: var(--primary-gold);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .kpi-card {
+            background: rgba(185, 163, 105, 0.1);
+            border: 1px solid rgba(185, 163, 105, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .kpi-card:hover {
+            background: rgba(185, 163, 105, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .kpi-label {
+            color: var(--text-light);
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .kpi-change {
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+        }
+
+        .kpi-change.positive {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .kpi-change.negative {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .trend-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+
+        .trend-arrow {
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 350px;
+            background: var(--dark-bg);
+            border: 1px solid rgba(185, 163, 105, 0.2);
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary-gold), var(--accent-gold));
+            color: var(--dark-bg);
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(185, 163, 105, 0.3);
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .time-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .time-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(185, 163, 105, 0.1);
+            border: 1px solid rgba(185, 163, 105, 0.3);
+            border-radius: 20px;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .time-btn.active {
+            background: var(--primary-gold);
+            color: var(--dark-bg);
+            border-color: var(--primary-gold);
+        }
+
+        .time-btn:hover {
+            background: rgba(185, 163, 105, 0.2);
+        }
+
+        .data-table {
+            background: var(--dark-bg);
+            border: 1px solid rgba(185, 163, 105, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .data-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background: rgba(185, 163, 105, 0.1);
+            color: var(--primary-gold);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid rgba(185, 163, 105, 0.1);
+            color: var(--text-light);
+        }
+
+        .data-table tr:hover {
+            background: rgba(185, 163, 105, 0.05);
+        }
+
+        .metric-positive {
+            color: #22c55e;
+        }
+
+        .metric-negative {
+            color: #ef4444;
+        }
+
+        .metric-neutral {
+            color: var(--text-light);
+        }
+
+        .info-panel {
+            background: var(--card-bg);
+            border: 1px solid rgba(185, 163, 105, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .info-panel h3 {
+            color: var(--primary-gold);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .info-card {
+            background: rgba(185, 163, 105, 0.05);
+            border: 1px solid rgba(185, 163, 105, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+
+        .info-card h4 {
+            color: var(--primary-gold);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .info-card p {
+            color: var(--text-light);
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .formula {
+            background: rgba(185, 163, 105, 0.1);
+            border: 1px solid rgba(185, 163, 105, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: monospace;
+            color: var(--accent-gold);
+        }
+
+        @media (max-width: 768px) {
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .home-btn {
+                position: relative;
+                top: auto;
+                left: auto;
+                display: block;
+                margin: 1rem auto;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-btn">← Home</a>
+        
+        <div class="header">
+            <h1>Network Analytics</h1>
+            <p>Comprehensive analytics dashboard for Φ-Chain network performance</p>
+        </div>
+
+        <div class="analytics-grid">
+            <div class="dashboard-panel">
+                <h3>📈 Key Performance Indicators</h3>
+                
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="totalBlocks">1,597</div>
+                        <div class="kpi-label">Total Blocks</div>
+                        <div class="trend-indicator">
+                            <span class="trend-arrow">↗</span>
+                            <span class="kpi-change positive">+12.5%</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="avgBlockTime">8.2s</div>
+                        <div class="kpi-label">Avg Block Time</div>
+                        <div class="trend-indicator">
+                            <span class="trend-arrow">→</span>
+                            <span class="kpi-change">±0.1%</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="networkTPS">1,847</div>
+                        <div class="kpi-label">Network TPS</div>
+                        <div class="trend-indicator">
+                            <span class="trend-arrow">↗</span>
+                            <span class="kpi-change positive">+8.3%</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="totalStake">2.4M</div>
+                        <div class="kpi-label">Total Stake</div>
+                        <div class="trend-indicator">
+                            <span class="trend-arrow">↗</span>
+                            <span class="kpi-change positive">+15.7%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn" onclick="refreshData()">Refresh Data</button>
+                    <button class="btn" onclick="exportReport()">Export Report</button>
+                    <button class="btn" onclick="simulateLoad()">Simulate Load</button>
+                </div>
+
+                <div class="chart-container" id="kpiChart"></div>
+            </div>
+
+            <div class="charts-panel">
+                <h3>📊 Network Performance</h3>
+                
+                <div class="time-selector">
+                    <div class="time-btn active" onclick="setTimeRange('1h')">1H</div>
+                    <div class="time-btn" onclick="setTimeRange('24h')">24H</div>
+                    <div class="time-btn" onclick="setTimeRange('7d')">7D</div>
+                    <div class="time-btn" onclick="setTimeRange('30d')">30D</div>
+                </div>
+
+                <div class="chart-container" id="performanceChart"></div>
+                <div class="chart-container" id="distributionChart"></div>
+            </div>
+        </div>
+
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Current Value</th>
+                        <th>24h Change</th>
+                        <th>7d Change</th>
+                        <th>30d Change</th>
+                        <th>Fibonacci Target</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="metricsTable">
+                    <!-- Table rows will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="info-panel">
+            <h3>🔍 Analytics Insights</h3>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>Performance Metrics</h4>
+                    <p>Network performance is measured using Fibonacci-based benchmarks, ensuring optimal scaling according to the Golden Ratio principles.</p>
+                    <div class="formula">
+                        Target TPS = F(n) × 1000
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h4>Economic Model</h4>
+                    <p>Staking rewards and transaction fees follow Fibonacci scaling, creating sustainable economic incentives aligned with natural growth patterns.</p>
+                    <div class="formula">
+                        Reward = Base × F(n)/F(n-1)
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h4>Network Health</h4>
+                    <p>Overall network health is calculated using weighted Fibonacci metrics, ensuring mathematical purity in performance assessment.</p>
+                </div>
+
+                <div class="info-card">
+                    <h4>Predictive Analytics</h4>
+                    <p>Future network behavior is predicted using Fibonacci regression models, enabling proactive scaling and optimization.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const PHI = 1.618033988749895;
+        const FIBONACCI = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765];
+        
+        let currentTimeRange = '1h';
+        let networkData = {};
+
+        // Initialize network data
+        function initializeData() {
+            networkData = {
+                totalBlocks: 1597,
+                avgBlockTime: 8.2,
+                networkTPS: 1847,
+                totalStake: 2400000,
+                activeValidators: 21,
+                transactionCount: 3141592,
+                gasUsed: 9876543210,
+                rewardsDistributed: 159700,
+                networkUptime: 99.8,
+                consensusEfficiency: 94.7,
+                decentralizationScore: 8.5
+            };
+
+            updateKPIs();
+            updateMetricsTable();
+        }
+
+        function updateKPIs() {
+            document.getElementById('totalBlocks').textContent = networkData.totalBlocks.toLocaleString();
+            document.getElementById('avgBlockTime').textContent = networkData.avgBlockTime.toFixed(1) + 's';
+            document.getElementById('networkTPS').textContent = networkData.networkTPS.toLocaleString();
+            document.getElementById('totalStake').textContent = (networkData.totalStake / 1000000).toFixed(1) + 'M';
+        }
+
+        function updateMetricsTable() {
+            const metrics = [
+                {
+                    name: 'Block Production',
+                    current: networkData.totalBlocks.toLocaleString(),
+                    change24h: '+2.1%',
+                    change7d: '+15.7%',
+                    change30d: '+89.2%',
+                    target: 'F₁₇ = 1,597',
+                    status: 'positive'
+                },
+                {
+                    name: 'Transaction Throughput',
+                    current: networkData.networkTPS.toLocaleString() + ' TPS',
+                    change24h: '+8.3%',
+                    change7d: '+34.1%',
+                    change30d: '+144.7%',
+                    target: 'F₁₆ × 100 = 987',
+                    status: 'positive'
+                },
+                {
+                    name: 'Network Latency',
+                    current: networkData.avgBlockTime.toFixed(1) + 's',
+                    change24h: '-1.2%',
+                    change7d: '-3.5%',
+                    change30d: '-8.1%',
+                    target: 'F₆ = 8s',
+                    status: 'positive'
+                },
+                {
+                    name: 'Validator Participation',
+                    current: networkData.activeValidators + ' active',
+                    change24h: '0%',
+                    change7d: '+5.0%',
+                    change30d: '+16.7%',
+                    target: 'F₂₁ = 10,946',
+                    status: 'neutral'
+                },
+                {
+                    name: 'Total Stake',
+                    current: (networkData.totalStake / 1000000).toFixed(1) + 'M Φ',
+                    change24h: '+4.2%',
+                    change7d: '+15.7%',
+                    change30d: '+89.3%',
+                    target: 'F₁₈ × 1000 = 2,584',
+                    status: 'positive'
+                },
+                {
+                    name: 'Consensus Efficiency',
+                    current: networkData.consensusEfficiency.toFixed(1) + '%',
+                    change24h: '+1.1%',
+                    change7d: '+3.2%',
+                    change30d: '+7.8%',
+                    target: 'F₁₅ / F₁₄ = 94.7%',
+                    status: 'positive'
+                }
+            ];
+
+            const tableBody = document.getElementById('metricsTable');
+            tableBody.innerHTML = metrics.map(metric => `
+                <tr>
+                    <td><strong>${metric.name}</strong></td>
+                    <td>${metric.current}</td>
+                    <td class="${metric.status}">${metric.change24h}</td>
+                    <td class="${metric.status}">${metric.change7d}</td>
+                    <td class="${metric.status}">${metric.change30d}</td>
+                    <td style="color: var(--primary-gold);">${metric.target}</td>
+                    <td>
+                        <span style="color: ${metric.status === 'positive' ? '#22c55e' : metric.status === 'negative' ? '#ef4444' : '#f0f0f0'};">
+                            ${metric.status === 'positive' ? '✅' : metric.status === 'negative' ? '❌' : '⚠️'}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function setTimeRange(range) {
+            currentTimeRange = range;
+            
+            // Update active button
+            document.querySelectorAll('.time-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update charts based on time range
+            updatePerformanceChart();
+            updateDistributionChart();
+        }
+
+        function updatePerformanceChart() {
+            const timePoints = currentTimeRange === '1h' ? 60 : currentTimeRange === '24h' ? 24 : currentTimeRange === '7d' ? 7 : 30;
+            const labels = Array.from({length: timePoints}, (_, i) => {
+                if (currentTimeRange === '1h') return `${i}m`;
+                if (currentTimeRange === '24h') return `${i}h`;
+                if (currentTimeRange === '7d') return `Day ${i + 1}`;
+                return `${i + 1}d`;
+            });
+
+            const tpsData = labels.map(() => networkData.networkTPS + (Math.random() - 0.5) * 200);
+            const blockTimeData = labels.map(() => networkData.avgBlockTime + (Math.random() - 0.5) * 2);
+
+            const data = [
+                {
+                    x: labels,
+                    y: tpsData,
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    name: 'TPS',
+                    line: { color: '#b9a369', width: 3 },
+                    yaxis: 'y'
+                },
+                {
+                    x: labels,
+                    y: blockTimeData,
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    name: 'Block Time (s)',
+                    line: { color: '#d4af37', width: 3 },
+                    yaxis: 'y2'
+                }
+            ];
+
+            const layout = {
+                title: {
+                    text: `Network Performance (${currentTimeRange.toUpperCase()})`,
+                    font: { color: '#b9a369', size: 16 }
+                },
+                xaxis: { 
+                    title: 'Time', 
+                    color: '#f0f0f0',
+                    gridcolor: 'rgba(185, 163, 105, 0.2)'
+                },
+                yaxis: { 
+                    title: 'Transactions Per Second', 
+                    color: '#b9a369',
+                    gridcolor: 'rgba(185, 163, 105, 0.2)'
+                },
+                yaxis2: {
+                    title: 'Block Time (seconds)',
+                    color: '#d4af37',
+                    overlaying: 'y',
+                    side: 'right'
+                },
+                plot_bgcolor: '#0a0a0a',
+                paper_bgcolor: '#0a0a0a',
+                font: { color: '#f0f0f0' },
+                legend: { font: { color: '#f0f0f0' } }
+            };
+
+            Plotly.newPlot('performanceChart', data, layout, {responsive: true});
+        }
+
+        function updateDistributionChart() {
+            const stakeDistribution = [
+                { range: '0-1K', count: Math.floor(Math.random() * 5) + 2 },
+                { range: '1K-10K', count: Math.floor(Math.random() * 8) + 5 },
+                { range: '10K-50K', count: Math.floor(Math.random() * 6) + 3 },
+                { range: '50K-100K', count: Math.floor(Math.random() * 4) + 2 },
+                { range: '100K+', count: Math.floor(Math.random() * 3) + 1 }
+            ];
+
+            const data = [{
+                x: stakeDistribution.map(d => d.range),
+                y: stakeDistribution.map(d => d.count),
+                type: 'bar',
+                name: 'Validator Distribution',
+                marker: { 
+                    color: stakeDistribution.map((_, i) => 
+                        `rgba(185, 163, 105, ${0.3 + (i * 0.15)})`
+                    )
+                }
+            }];
+
+            const layout = {
+                title: {
+                    text: 'Stake Distribution by Range',
+                    font: { color: '#b9a369', size: 16 }
+                },
+                xaxis: { 
+                    title: 'Stake Range (Φ)', 
+                    color: '#f0f0f0',
+                    gridcolor: 'rgba(185, 163, 105, 0.2)'
+                },
+                yaxis: { 
+                    title: 'Number of Validators', 
+                    color: '#f0f0f0',
+                    gridcolor: 'rgba(185, 163, 105, 0.2)'
+                },
+                plot_bgcolor: '#0a0a0a',
+                paper_bgcolor: '#0a0a0a',
+                font: { color: '#f0f0f0' },
+                showlegend: false
+            };
+
+            Plotly.newPlot('distributionChart', data, layout, {responsive: true});
+        }
+
+        function updateKPIChart() {
+            const timeLabels = ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'];
+            const blocks = [1567, 1573, 1581, 1589, 1593, 1597];
+            const tps = [1823, 1831, 1842, 1845, 1849, 1854];
+
+            const data = [
+                {
+                    x: timeLabels,
+                    y: blocks,
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    name: 'Blocks',
+                    line: { color: '#b9a369', width: 3 },
+                    yaxis: 'y'
+                },
+                {
+                    x: timeLabels,
+                    y: tps,
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    name: 'TPS',
+                    line: { color: '#d4af37', width: 3 },
+                    yaxis: 'y2'
+                }
+            ];
+
+            const layout = {
+                title: {
+                    text: '24-Hour Network Overview',
+                    font: { color: '#b9a369', size: 16 }
+                },
+                xaxis: { 
+                    title: 'Time (UTC)', 
+                    color: '#f0f0f0',
+                    gridcolor: 'rgba(185, 163, 105, 0.2)'
+                },
+                yaxis: { 
+                    title: 'Block Count', 
+                    color: '#b9a369',
+                    gridcolor: 'rgba(185, 163, 105, 0.2)'
+                },
+                yaxis2: {
+                    title: 'Transactions Per Second',
+                    color: '#d4af37',
+                    overlaying: 'y',
+                    side: 'right'
+                },
+                plot_bgcolor: '#0a0a0a',
+                paper_bgcolor: '#0a0a0a',
+                font: { color: '#f0f0f0' },
+                legend: { font: { color: '#f0f0f0' } }
+            };
+
+            Plotly.newPlot('kpiChart', data, layout, {responsive: true});
+        }
+
+        function refreshData() {
+            // Simulate data refresh
+            networkData.totalBlocks += Math.floor(Math.random() * 10) + 1;
+            networkData.networkTPS += Math.floor(Math.random() * 100) - 50;
+            networkData.totalStake += Math.floor(Math.random() * 100000) - 50000;
+            networkData.consensusEfficiency += (Math.random() - 0.5) * 2;
+            
+            // Ensure values stay positive and reasonable
+            networkData.networkTPS = Math.max(1000, networkData.networkTPS);
+            networkData.totalStake = Math.max(1000000, networkData.totalStake);
+            networkData.consensusEfficiency = Math.max(80, Math.min(100, networkData.consensusEfficiency));
+
+            updateKPIs();
+            updateMetricsTable();
+            updatePerformanceChart();
+            updateDistributionChart();
+            
+            // Show refresh feedback
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = 'Refreshing...';
+            btn.disabled = true;
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }, 1000);
+        }
+
+        function exportReport() {
+            const report = {
+                timestamp: new Date().toISOString(),
+                networkData: networkData,
+                fibonacciTarget: 'F₁₇ = 1,597 blocks',
+                performance: 'Above target',
+                health: 'Optimal'
+            };
+
+            const dataStr = JSON.stringify(report, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `phi-chain-analytics-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            URL.revokeObjectURL(url);
+        }
+
+        function simulateLoad() {
+            // Simulate network load by temporarily increasing metrics
+            const originalTPS = networkData.networkTPS;
+            const originalBlockTime = networkData.avgBlockTime;
+            
+            networkData.networkTPS *= 1.5; // 50% increase
+            networkData.avgBlockTime *= 0.9; // 10% decrease
+            
+            updateKPIs();
+            updatePerformanceChart();
+            
+            // Reset after 3 seconds
+            setTimeout(() => {
+                networkData.networkTPS = originalTPS;
+                networkData.avgBlockTime = originalBlockTime;
+                updateKPIs();
+                updatePerformanceChart();
+            }, 3000);
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeData();
+            updateKPIChart();
+            updatePerformanceChart();
+            updateDistributionChart();
+        });
+    </script>
+</body>
+</html>

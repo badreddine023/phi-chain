@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Φ-Chain MANUS Prototype</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='90' fill='%23618034'>Φ</text></svg>">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/3.0.3/plotly.min.js"></script>
+    <style>
+        :root {
+            --primary-gold: #b9a369;
+            --dark-bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --accent-gold: #d4af37;
+            --text-light: #f0f0f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-top: 2rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            color: var(--primary-gold);
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            opacity: 0.9;
+        }
+
+        .home-btn {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            background: linear-gradient(135deg, var(--primary-gold), var(--accent-gold));
+            color: var(--dark-bg);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(185, 163, 105, 0.3);
+        }
+
+        .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(185, 163, 105, 0.4);
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .input-section, .analysis-section {
+            background: var(--card-bg);
+            border: 1px solid rgba(185, 163, 105, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+        }
+
+        .input-section h3, .analysis-section h3 {
+            color: var(--primary-gold);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .state-input {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            color: var(--primary-gold);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .input-group textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 0.8rem;
+            background: var(--dark-bg);
+            border: 1px solid rgba(185, 163, 105, 0.3);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-family: monospace;
+            resize: vertical;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary-gold), var(--accent-gold));
+            color: var(--dark-bg);
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(185, 163, 105, 0.3);
+        }
+
+        .edo-list {
+            max-height: 300px;
+            overflow-y: auto;
+            background: var(--dark-bg);
+            border: 1px solid rgba(185, 163, 105, 0.2);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .edo-item {
+            background: rgba(185, 163, 105, 0.1);
+            border: 1px solid rgba(185, 163, 105, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .edo-item:hover {
+            background: rgba(185, 163, 105, 0.15);
+            transform: translateX(5px);
+        }
+
+        .edo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .edo-id {
+            color: var(--primary-gold);
+            font-weight: bold;
+            font-family: monospace;
+        }
+
+        .edo-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-coherent {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid #22c55e;
+        }
+
+        .status-incoherent {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+
+        .edo-details {
+            font-family: monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .coherence-ratio {
+            color: var(--accent-gold);
+            margin: 0.5rem 0;
+        }
+
+        .hash-display {
+            color: var(--text-light);
+            word-break: break-all;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            background: var(--dark-bg);
+            border: 1px solid rgba(185, 163, 105, 0.2);
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .metric-card {
+            background: rgba(185, 163, 105, 0.1);
+            border: 1px solid rgba(185, 163, 105, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            color: var(--text-light);
+            opacity: 0.9;
+            font-size: 0.8rem;
+        }
+
+        .info-panel {
+            background: var(--card-bg);
+            border: 1px solid rgba(185, 163, 105, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .info-panel h3 {
+            color: var(--primary-gold);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .info-card {
+            background: rgba(185, 163, 105, 0.05);
+            border: 1px solid rgba(185, 163, 105, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+
+        .info-card h4 {
+            color: var(--primary-gold);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .info-card p {
+            color: var(--text-light);
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .formula {
+            background: rgba(185, 163, 105, 0.1);
+            border: 1px solid rgba(185, 163, 105, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: monospace;
+            color: var(--accent-gold);
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .home-btn {
+                position: relative;
+                top: auto;
+                left: auto;
+                display: block;
+                margin: 1rem auto;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-btn">← Home</a>
+        
+        <div class="header">
+            <h1>MANUS Prototype</h1>
+            <p>Entangled Data Objects: Quantum-Classical Bridge Coherence</p>
+        </div>
+
+        <div class="main-grid">
+            <div class="input-section">
+                <h3>🔄 Create EDO</h3>
+                
+                <div class="state-input">
+                    <div class="input-group">
+                        <label for="digitalState">Digital State (JSON)</label>
+                        <textarea id="digitalState" placeholder='{"type": "transaction", "amount": 100, "sender": "Alice", "receiver": "Bob"}'></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="physicalState">Physical State (JSON)</label>
+                        <textarea id="physicalState" placeholder='{"location": {"lat": 40.7128, "lon": -74.0060}, "timestamp": "2025-12-09T12:00:00Z", "device_id": "sensor_001"}'></textarea>
+                    </div>
+
+                    <div style="text-align: center; margin: 1.5rem 0;">
+                        <button class="btn" onclick="createEDO()">Create EDO</button>
+                        <button class="btn" onclick="generateSampleData()">Generate Sample</button>
+                        <button class="btn" onclick="clearAllEDOs()">Clear All</button>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="tolerance">Coherence Tolerance</label>
+                        <input type="range" id="tolerance" min="0.001" max="0.1" step="0.001" value="0.01" style="width: 100%;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-light); opacity: 0.7;">
+                            <span>Strict</span>
+                            <span id="toleranceValue">0.010</span>
+                            <span>Loose</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value" id="totalEDOs">0</div>
+                        <div class="metric-label">Total EDOs</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="coherentEDOs">0</div>
+                        <div class="metric-label">Coherent</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="coherenceRate">0%</div>
+                        <div class="metric-label">Coherence Rate</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="avgRatio">0.000</div>
+                        <div class="metric-label">Avg Φ Ratio</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analysis-section">
+                <h3>📊 EDO Analysis</h3>
+                
+                <div class="edo-list" id="edoList">
+                    <div style="text-align: center; color: var(--primary-gold); padding: 2rem;">
+                        Create an EDO to see analysis results...
+                    </div>
+                </div>
+
+                <div class="chart-container" id="coherenceChart"></div>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <h3>🔬 MANUS System Information</h3>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>Quantum-Classical Bridge</h4>
+                    <p>MANUS creates a unified data structure that bridges quantum and classical states, ensuring coherence through mathematical principles based on the Golden Ratio.</p>
+                    <div class="formula">
+                        Coherence = |ratio - Φ| < tolerance
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h4>Entangled Data Objects</h4>
+                    <p>EDOs contain both digital (quantum) and physical (classical) states, with a coherence hash that validates their unified integrity through entropy ratio analysis.</p>
+                    <div class="formula">
+                        ratio = digital_entropy / physical_entropy
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h4>Coherence Validation</h4>
+                    <p>The system validates coherence by checking if the entropy ratio approaches Φ or 1/Φ within a specified tolerance, ensuring quantum-classical consistency.</p>
+                </div>
+
+                <div class="info-card">
+                    <h4>Applications</h4>
+                    <p>MANUS enables secure quantum computing interfaces, IoT device authentication, and blockchain integration where quantum and classical systems must interact reliably.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const PHI = 1.618033988749895;
+        const PHI_INV = 1 / PHI;
+        let edoList = [];
+        let edoCounter = 0;
+
+        class EntangledDataObject {
+            constructor(digitalState, physicalState, tolerance = 0.01) {
+                this.id = `EDO_${++edoCounter}`;
+                this.timestamp = new Date().toISOString();
+                this.digitalState = digitalState;
+                this.physicalState = physicalState;
+                this.tolerance = tolerance;
+                this.coherenceData = this.calculateCoherence();
+                this.coherenceHash = this.generateHash();
+            }
+
+            calculateCoherence() {
+                const digitalStr = JSON.stringify(this.digitalState);
+                const physicalStr = JSON.stringify(this.physicalState);
+                
+                const digitalEntropy = digitalStr.length;
+                const physicalEntropy = physicalStr.length;
+                
+                if (physicalEntropy === 0) {
+                    return { ratio: 0, isCoherent: false, digitalEntropy, physicalEntropy };
+                }
+                
+                const ratio = digitalEntropy / physicalEntropy;
+                const isCoherent = Math.abs(ratio - PHI) < this.tolerance || Math.abs(ratio - PHI_INV) < this.tolerance;
+                
+                return { ratio, isCoherent, digitalEntropy, physicalEntropy };
+            }
+
+            generateHash() {
+                const combined = JSON.stringify(this.digitalState) + 
+                               JSON.stringify(this.physicalState) + 
+                               this.coherenceData.isCoherent + 
+                               this.timestamp;
+                
+                let hash = 0;
+                for (let i = 0; i < combined.length; i++) {
+                    const char = combined.charCodeAt(i);
+                    hash = ((hash << 5) - hash) + char;
+                    hash = hash & hash;
+                }
+                return '0x' + Math.abs(hash).toString(16).padStart(16, '0');
+            }
+
+            getStatusColor() {
+                return this.coherenceData.isCoherent ? 'status-coherent' : 'status-incoherent';
+            }
+
+            getStatusText() {
+                return this.coherenceData.isCoherent ? 'Coherent' : 'Incoherent';
+            }
+        }
+
+        function createEDO() {
+            try {
+                const digitalInput = document.getElementById('digitalState').value.trim();
+                const physicalInput = document.getElementById('physicalState').value.trim();
+                const tolerance = parseFloat(document.getElementById('tolerance').value);
+
+                if (!digitalInput || !physicalInput) {
+                    alert('Please enter both digital and physical states');
+                    return;
+                }
+
+                const digitalState = JSON.parse(digitalInput);
+                const physicalState = JSON.parse(physicalInput);
+
+                const edo = new EntangledDataObject(digitalState, physicalState, tolerance);
+                edoList.push(edo);
+
+                document.getElementById('digitalState').value = '';
+                document.getElementById('physicalState').value = '';
+
+                updateDisplay();
+                updateCoherenceChart();
+
+            } catch (error) {
+                alert('Invalid JSON format. Please check your input.');
+                console.error(error);
+            }
+        }
+
+        function generateSampleData() {
+            const sampleDigitalStates = [
+                { type: "transaction", amount: Math.floor(Math.random() * 1000), sender: "Alice", receiver: "Bob", timestamp: Date.now() },
+                { type: "sensor", value: Math.random() * 100, unit: "Celsius", device_id: `sensor_${Math.floor(Math.random() * 1000)}` },
+                { type: "block", index: Math.floor(Math.random() * 10000), hash: Math.random().toString(36).substring(7), validator: "Validator_" + Math.floor(Math.random() * 10) },
+                { type: "identity", user: "user_" + Math.floor(Math.random() * 100), credentials: ["read", "write"], authenticated: Math.random() > 0.5 },
+                { type: "quantum", qubits: Math.floor(Math.random() * 16) + 1, state: Math.random() > 0.5 ? "entangled" : "separable", fidelity: Math.random() }
+            ];
+
+            const samplePhysicalStates = [
+                { location: { lat: 40.7128 + (Math.random() - 0.5) * 10, lon: -74.0060 + (Math.random() - 0.5) * 10 }, timestamp: new Date().toISOString(), device_id: `device_${Math.floor(Math.random() * 1000)}` },
+                { temperature: Math.random() * 40, humidity: Math.random() * 100, pressure: 1013 + (Math.random() - 0.5) * 100, location: "Lab_" + Math.floor(Math.random() * 10) },
+                { coordinates: { x: Math.random() * 1000, y: Math.random() * 1000, z: Math.random() * 100 }, velocity: Math.random() * 50, acceleration: Math.random() * 10 },
+                { biometric: { heart_rate: Math.floor(Math.random() * 60) + 60, blood_pressure: { systolic: Math.floor(Math.random() * 40) + 120, diastolic: Math.floor(Math.random() * 20) + 80 }, temperature: 36.5 + (Math.random() - 0.5) * 2 } },
+                { environmental: { radiation: Math.random() * 0.5, air_quality: Math.random() * 500, noise_level: Math.random() * 100 }, timestamp: new Date().toISOString() }
+            ];
+
+            const randomDigital = sampleDigitalStates[Math.floor(Math.random() * sampleDigitalStates.length)];
+            const randomPhysical = samplePhysicalStates[Math.floor(Math.random() * samplePhysicalStates.length)];
+
+            document.getElementById('digitalState').value = JSON.stringify(randomDigital, null, 2);
+            document.getElementById('physicalState').value = JSON.stringify(randomPhysical, null, 2);
+        }
+
+        function clearAllEDOs() {
+            if (edoList.length === 0) return;
+            
+            if (confirm('Are you sure you want to clear all EDOs?')) {
+                edoList = [];
+                edoCounter = 0;
+                updateDisplay();
+                updateCoherenceChart();
+            }
+        }
+
+        function updateDisplay() {
+            const totalEDOs = edoList.length;
+            const coherentEDOs = edoList.filter(edo => edo.coherenceData.isCoherent).length;
+            const coherenceRate = totalEDOs > 0 ? (coherentEDOs / totalEDOs * 100).toFixed(1) : 0;
+            const avgRatio = totalEDOs > 0 ? (edoList.reduce((sum, edo) => sum + edo.coherenceData.ratio, 0) / totalEDOs).toFixed(3) : 0;
+
+            document.getElementById('totalEDOs').textContent = totalEDOs;
+            document.getElementById('coherentEDOs').textContent = coherentEDOs;
+            document.getElementById('coherenceRate').textContent = coherenceRate + '%';
+            document.getElementById('avgRatio').textContent = avgRatio;
+
+            renderEDOList();
+        }
+
+        function renderEDOList() {
+            const container = document.getElementById('edoList');
+            
+            if (edoList.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; color: var(--primary-gold); padding: 2rem;">
+                        Create an EDO to see analysis results...
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = edoList.slice(-5).reverse().map(edo => `
+                <div class="edo-item">
+                    <div class="edo-header">
+                        <span class="edo-id">${edo.id}</span>
+                        <span class="edo-status ${edo.getStatusColor()}">${edo.getStatusText()}</span>
+                    </div>
+                    <div class="edo-details">
+                        <div class="coherence-ratio">
+                            <strong>Entropy Ratio:</strong> ${edo.coherenceData.ratio.toFixed(6)}
+                        </div>
+                        <div>
+                            <strong>Digital Entropy:</strong> ${edo.coherenceData.digitalEntropy} bytes
+                        </div>
+                        <div>
+                            <strong>Physical Entropy:</strong> ${edo.coherenceData.physicalEntropy} bytes
+                        </div>
+                        <div class="hash-display">
+                            <strong>Coherence Hash:</strong><br>${edo.coherenceHash}
+                        </div>
+                        <div style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.8;">
+                            ${new Date(edo.timestamp).toLocaleString()}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateCoherenceChart() {
+            if (edoList.length === 0) return;
+
+            const coherentCount = edoList.filter(edo => edo.coherenceData.isCoherent).length;
+            const incoherentCount = edoList.length - coherentCount;
+
+            const pieData = [{
+                values: [coherentCount, incoherentCount],
+                labels: ['Coherent', 'Incoherent'],
+                type: 'pie',
+                marker: {
+                    colors: ['#22c55e', '#ef4444']
+                },
+                textinfo: 'label+percent',
+                textfont: { color: '#f0f0f0' }
+            }];
+
+            const pieLayout = {
+                title: {
+                    text: 'EDO Coherence Distribution',
+                    font: { color: '#b9a369', size: 16 }
+                },
+                plot_bgcolor: '#0a0a0a',
+                paper_bgcolor: '#0a0a0a',
+                font: { color: '#f0f0f0' },
+                showlegend: true,
+                legend: { font: { color: '#f0f0f0' } }
+            };
+
+            const timeData = edoList.map((edo, index) => ({
+                x: index + 1,
+                y: edo.coherenceData.ratio,
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: 'Coherence Ratio',
+                line: { color: '#b9a369' },
+                marker: { 
+                    color: edo.coherenceData.isCoherent ? '#22c55e' : '#ef4444',
+                    size: 8
+                }
+            }));
+
+            const timeLayout = {
+                title: {
+                    text: 'Coherence Ratio Over Time',
+                    font: { color: '#b9a369', size: 16 }
+                },
+                xaxis: { title: 'EDO Sequence', color: '#f0f0f0' },
+                yaxis: { 
+                    title: 'Entropy Ratio', 
+                    color: '#f0f0f0',
+                    range: [0, Math.max(2, Math.max(...edoList.map(edo => edo.coherenceData.ratio)))]
+                },
+                plot_bgcolor: '#0a0a0a',
+                paper_bgcolor: '#0a0a0a',
+                font: { color: '#f0f0f0' },
+                showlegend: false,
+                shapes: [
+                    {
+                        type: 'line',
+                        x0: 0,
+                        y0: PHI,
+                        x1: edoList.length + 1,
+                        y1: PHI,
+                        line: { color: '#d4af37', width: 2, dash: 'dash' }
+                    },
+                    {
+                        type: 'line',
+                        x0: 0,
+                        y0: PHI_INV,
+                        x1: edoList.length + 1,
+                        y1: PHI_INV,
+                        line: { color: '#d4af37', width: 2, dash: 'dash' }
+                    }
+                ],
+                annotations: [
+                    {
+                        x: edoList.length,
+                        y: PHI,
+                        text: 'Φ',
+                        showarrow: false,
+                        font: { color: '#d4af37', size: 14 }
+                    },
+                    {
+                        x: edoList.length,
+                        y: PHI_INV,
+                        text: '1/Φ',
+                        showarrow: false,
+                        font: { color: '#d4af37', size: 14 }
+                    }
+                ]
+            };
+
+            // Combine both charts
+            const combinedData = [...timeData, ...pieData];
+            
+            Plotly.newPlot('coherenceChart', timeData, timeLayout, {responsive: true});
+        }
+
+        // Initialize tolerance display
+        document.getElementById('tolerance').addEventListener('input', function() {
+            document.getElementById('toleranceValue').textContent = parseFloat(this.value).toFixed(3);
+        });
+
+        // Generate initial sample data
+        document.addEventListener('DOMContentLoaded', function() {
+            generateSampleData();
+        });
+    </script>
+</body>
+</html>
