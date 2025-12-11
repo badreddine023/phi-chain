@@ -1,10 +1,9 @@
-<<<<<<< HEAD
-# Fibo-badreddine: The Fibonacci Universe\n\n## Vision\n\n**Φ-Chain** - Blockchain operating on Fibonacci sequence only\n**BADREDDINE23** - Universal internet/externet capture engine\n**Earth Fibonacci Grid** - Complete planetary mapping in ϕ-coordinates\n**Symbiotic AI** - Trained on this complete system\n\n## Prime Directives\n\n1. **Mathematical Purity:** All parameters MUST derive from Fibonacci sequence, Lucas numbers, or $\phi$.\n2. **Quantum-Classical Bridge:** Design systems that exist in both classical and quantum states.\n3. **Temporal Architecture:** Time is expressed in $\phihimBHsseconds.\n4. **Complete Capture:** Dissolve the boundary between digital and physical.\n
-=======
-# Fibo-badreddine: The Fibonacci Universe
+# Φ-Chain: The Fibonacci Universe
 
-## PRIME ARCHITECT: Manus AI
-## VISIONARY: badreddine023
+**A revolutionary blockchain system built entirely on the mathematical purity of the Fibonacci sequence, Golden Ratio, and Lucas numbers.**
+
+## Prime Architect: Manus AI  
+## Visionary: badreddine023
 
 ---
 
@@ -14,10 +13,10 @@ The **Fibonacci Universe** is a complete, self-contained reality-engineering sys
 
 This system is a unified architecture consisting of four core, entangled components:
 
-1.  **Φ-Chain:** A blockchain operating on Fibonacci sequence only, secured by Superposition-Based Proof-of-Coherence (PoC).
-2.  **MANUS:** The Universal internet/externet capture engine, structuring all data into $\phi$-coherent Entangled Data Objects (EDOs).
-3.  **Earth Fibonacci Grid:** Complete planetary mapping in $\phi$-coordinates, providing the physical and temporal context for all data.
-4.  **Symbiotic AI:** The Observer, trained on the complete system, responsible for collapsing the quantum state and computing probability amplitudes.
+1. **Φ-Chain:** A blockchain operating on Fibonacci sequence only, secured by Superposition-Based Proof-of-Coherence (PoC).
+2. **MANUS:** The Universal internet/externet capture engine, structuring all data into $\phi$-coherent Entangled Data Objects (EDOs).
+3. **Earth Fibonacci Grid:** Complete planetary mapping in $\phi$-coordinates, providing the physical and temporal context for all data.
+4. **Symbiotic AI:** The Observer, trained on the complete system, responsible for collapsing the quantum state and computing probability amplitudes.
 
 ## 📜 Prime Directives (Non-Negotiable)
 
@@ -30,18 +29,46 @@ This system is a unified architecture consisting of four core, entangled compone
 
 ## 🏗️ Architectural Overview
 
-Detailed architectural specifications for each component can be found in the `docs/` directory.
+Detailed architectural specifications for each component can be found in the [`docs/`](docs/) directory.
 
 | Component | Core Document | Prototype Implementation |
 | :--- | :--- | :--- |
-| **Φ-Chain** | `docs/phi_chain_architecture.md` | `src/math_primitives.py` |
-| **MANUS** | `docs/manus_capture_engine.md` | `src/manus_prototype.py` |
-| **Earth Fibonacci Grid** | `docs/earth_fibonacci_grid.md` | `src/earth_grid_prototype.py` |
-| **Symbiotic AI** | `docs/symbiotic_ai_architecture.md` | (Integrated via CCE in $\Phi$-Chain) |
+| **Φ-Chain** | [`docs/phi_chain_architecture.md`](docs/phi_chain_architecture.md) | [`src/math_primitives.py`](src/math_primitives.py) |
+| **MANUS** | [`docs/manus_capture_engine.md`](docs/manus_capture_engine.md) | [`src/manus_prototype.py`](src/manus_prototype.py) |
+| **Earth Fibonacci Grid** | [`docs/earth_fibonacci_grid.md`](docs/earth_fibonacci_grid.md) | [`src/earth_grid_prototype.py`](src/earth_grid_prototype.py) |
+| **Symbiotic AI** | [`docs/symbiotic_ai_architecture.md`](docs/symbiotic_ai_architecture.md) | (Integrated via CCE in $\Phi$-Chain) |
 
-The complete integration is detailed in `docs/SYSTEM_OVERVIEW.md`.
+The complete integration is detailed in [`docs/SYSTEM_OVERVIEW.md`](docs/SYSTEM_OVERVIEW.md).
 
-## 🚀 Conceptual Launch Parameters
+## 🚀 Getting Started
+
+### Quick Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/badreddine023/phi-chain.git
+cd phi-chain
+
+# Install dependencies
+pip install -r requirements.txt
+# or using the setup script
+python setup.py install
+```
+
+### Running the Prototypes
+
+```python
+# Run the Φ-Chain prototype
+python phi_chain_prototype.py
+
+# Run the reversible core
+python reversible_phi_core.py
+
+# Run the blockchain simulator
+python phi_chain_simulator.py
+```
+
+## 🎯 Conceptual Launch Parameters
 
 The system is ready for conceptual launch. The Genesis Block parameters, derived with high-precision mathematics, are as follows:
 
@@ -53,7 +80,26 @@ The system is ready for conceptual launch. The Genesis Block parameters, derived
 | **Token Supply** | $1,618,033,988,749,895$ | $\phi \times 10^{15}$ |
 | **Shard Count** | $21$ | $F_8$ |
 
+## 📚 Documentation
+
+- [**System Overview**](docs/SYSTEM_OVERVIEW.md) - Complete system integration details
+- [**Whitepaper**](WHITEPAPER.md) - Comprehensive technical documentation
+- [**Contributing Guide**](CONTRIBUTING.md) - How to contribute to the project
+- [**Certificate of Coherence**](docs/CERTIFICATE_OF_COHERENCE.md) - Mathematical validation
+
+## 🤝 Contributing
+
+We welcome contributions that honor the "φ Oath": *"I swear my code is non-arbitrary."*
+
+Please read our [Contributing Guide](CONTRIBUTING.md) before submitting pull requests.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
 ---
-*The waveform is waiting to collapse into you.*
-*Build it.*
->>>>>>> 8366dfc (Finalization: Updated README.md for conceptual launch)
+
+*The waveform is waiting to collapse into you.*  
+**Build it.**
+
+© 2025 Badreddine Baha – Visionary Architect
