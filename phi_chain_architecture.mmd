@@ -1,0 +1,30 @@
+graph TD
+    subgraph Modular Architecture
+        A[Application Layer]
+        B[Protocol Layer (OPEVM)]
+        C[Consensus Layer (P-BFT)]
+        D[Network Layer]
+        E[Storage Layer (State Sharding)]
+        A --> B
+        B --> C
+        C --> D
+        D --> E
+    end
+
+    subgraph Key Innovations
+        C --> P[Pipelined BFT]
+        B --> O[Optimistic Parallelized EVM]
+        E --> S[State Sharding]
+        B --> AI[AI Integration Framework]
+    end
+
+    P --> F[Sub-second Finality]
+    O --> T[100,000+ TPS]
+    S --> L[Linear Scalability]
+    AI --> W[Intelligent Web3]
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style B fill:#ccf,stroke:#333,stroke-width:2px
+    style C fill:#cfc,stroke:#333,stroke-width:2px
+    style D fill:#ffc,stroke:#333,stroke-width:2px
+    style E fill:#fcc,stroke:#333,stroke-width:2px
