@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/3.0.3/plotly.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>\n    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
     <style>
         :root {
             --primary-gold: #b9a369;
@@ -626,33 +626,63 @@
                 </div>
             </div>
 
-            <div class="wallet-card">
-                <div class="wallet-icon coinbase-icon">
-                    <i class="fas fa-coins"></i>
+            <!-- New Wallet Creation Card -->
+            <div class="wallet-card" id="create-wallet-card">
+                <div class="wallet-icon" style="background: linear-gradient(135deg, #4c51bf, #667eea);">
+                    <i class="fas fa-key"></i>
                 </div>
-                <div class="wallet-status status-disconnected" id="coinbase-status">
-                    Not Connected
+                <div class="wallet-status status-disconnected" id="new-wallet-status">
+                    Not Created
                 </div>
-                <h3>Coinbase Wallet</h3>
-                <p>Connect your Coinbase Wallet for seamless integration with the Coinbase ecosystem.</p>
-                <div class="wallet-balance" id="coinbase-balance">
+                <h3>Create New Wallet</h3>
+                <p>Generate a new, secure, non-custodial wallet with a unique mnemonic phrase and private key.</p>
+                <div class="wallet-balance" id="new-wallet-balance" style="display: none;">
                     0.000 Φ
                 </div>
-                <div class="wallet-address" id="coinbase-address" style="display: none;">
-                    Not connected
+                <div class="wallet-address" id="new-wallet-address" style="display: none;">
+                    New Address
                 </div>
                 <div class="wallet-actions">
-                    <button class="btn" onclick="connectCoinbase()">
-                        <i class="fas fa-plug"></i>
-                        Connect
-                    </button>
-                    <button class="btn btn-secondary btn-small" onclick="disconnectCoinbase()" disabled>
-                        <i class="fas fa-sign-out-alt"></i>
-                        Disconnect
+                    <button class="btn" onclick="createNewWallet()">
+                        <i class="fas fa-plus-circle"></i>
+                        Generate Wallet
                     </button>
                 </div>
             </div>
         </div>
+
+        </div>
+
+        <!-- New Wallet Details Section -->
+        <section class="transaction-section" id="new-wallet-details" style="display: none;">
+            <h2>⚠️ Securely Save Your Wallet Details ⚠️</h2>
+            <p style="text-align: center; color: #ef4444; font-weight: bold; margin-bottom: 2rem;">
+                **CRITICAL:** Write down your Mnemonic Phrase and Private Key. Do not share them. They are the only way to recover your funds.
+            </p>
+            <div class="wallet-grid" style="grid-template-columns: 1fr;">
+                <div class="wallet-card" style="text-align: left; background: #2a2a2a;">
+                    <h3>Mnemonic Phrase (Seed Phrase)</h3>
+                    <p id="new-wallet-mnemonic" style="font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; color: #22c55e; word-break: break-all;"></p>
+                    <button class="btn btn-secondary btn-small" onclick="copyToClipboard('new-wallet-mnemonic')" style="margin-top: 1rem;">
+                        <i class="fas fa-copy"></i> Copy Mnemonic
+                    </button>
+                </div>
+                <div class="wallet-card" style="text-align: left; background: #2a2a2a;">
+                    <h3>Private Key</h3>
+                    <p id="new-wallet-private-key" style="font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; color: #f59e0b; word-break: break-all;"></p>
+                    <button class="btn btn-secondary btn-small" onclick="copyToClipboard('new-wallet-private-key')" style="margin-top: 1rem;">
+                        <i class="fas fa-copy"></i> Copy Private Key
+                    </button>
+                </div>
+                <div class="wallet-card" style="text-align: left; background: #2a2a2a;">
+                    <h3>Wallet Address</h3>
+                    <p id="new-wallet-address-display" style="font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; color: #b9a369; word-break: break-all;"></p>
+                    <button class="btn btn-secondary btn-small" onclick="copyToClipboard('new-wallet-address-display')" style="margin-top: 1rem;">
+                        <i class="fas fa-copy"></i> Copy Address
+                    </button>
+                </div>
+            </div>
+        </section>
 
         <!-- Portfolio Overview -->
         <section class="portfolio-section">
@@ -1200,6 +1230,34 @@
                 console.log('Chain changed to:', chainId);
             });
         }
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard: ' + text.substring(0, 20) + '...');
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+                alert('Failed to copy text.');
+            });
+        }
+
+        function updateNewWalletUI(mnemonic, privateKey, address) {
+            document.getElementById('new-wallet-details').style.display = 'block';
+            document.getElementById('new-wallet-mnemonic').textContent = mnemonic;
+            document.getElementById('new-wallet-private-key').textContent = privateKey;
+            document.getElementById('new-wallet-address-display').textContent = address;
+            
+            // Update the card status
+            const statusElement = document.getElementById('new-wallet-status');
+            statusElement.textContent = 'Created';
+            statusElement.className = 'wallet-status status-connected';
+            
+            // Scroll to the new section
+            document.getElementById('new-wallet-details').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Override the function in web3-connector.js to use the local UI update function
+        web3Connector.updateNewWalletUI = updateNewWalletUI;
     </script>
 </body>
 </html>
