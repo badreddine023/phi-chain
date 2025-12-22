@@ -1,42 +1,41 @@
-# Φ-Chain Wallet and Proof-of-Coherence (PoC) Mining Application
+# Φ-Chain: The Golden Ratio Blockchain
 
-## Overview
+Welcome to the official repository of **Φ-Chain**, the first autonomous blockchain ecosystem governed by the Golden Ratio (Φ) and the Fibonacci sequence.
 
-This repository contains the source code for the official Φ-Chain Wallet and Proof-of-Coherence (PoC) Mining Application. Φ-Chain is a blockchain operating on universal mathematical law, where every parameter derives from the Golden Ratio and the Fibonacci sequence.
+## 🚀 Quick Start
 
-## Key Features
+### 1. Mainnet Deployment
+To initialize the Φ-Chain Mainnet and generate the genesis block:
+```bash
+python3 tools/deploy_mainnet.py
+```
 
-### Wallet Functionality
-*   **Secure Wallet Creation (New!):** Easily generate a new, non-custodial wallet with a unique 12-word mnemonic phrase and private key.
-*   **Wallet Connection:** Connect seamlessly with existing wallets such as MetaMask, Phantom, and WalletConnect.
-*   **Asset Management:** View your Φ token balance, staked sΦ tokens, and transaction history.
+### 2. Start a Validator Node
+After deployment, you can start a validator node using the generated configuration:
+```bash
+python3 consensus/node_runner.py config/validators/node_0.json
+```
 
-### Mining Functionality
-*   **PoC Mining:** Interface for starting and monitoring the Proof-of-Coherence mining process.
+### 3. Launch the Wallet
+Open `wallet.html` in your browser to manage your assets, stake tokens, and start PoC mining.
 
-## Getting Started
+### 4. Monitor the Network
+Open `consensus-monitor.html` to view real-time network metrics and validator performance.
 
-### Prerequisites
+## 🛠 Architecture
 
-*   A modern web browser (Chrome, Firefox, Edge).
-*   For connecting existing wallets, the respective browser extension (e.g., MetaMask, Phantom) is required.
+- **Core**: `phi_chain_core.py` - Fibonacci logic, Q-Matrix state transitions, and block structures.
+- **Consensus**: `consensus/` - Validator logic, node runner, and FBA implementation.
+- **Tools**: `tools/` - Deployment, key generation, and research aggregation.
+- **UI**: `index.html`, `wallet.html`, `consensus-monitor.html`.
 
-### Local Setup
+## 📖 Documentation
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/badreddine023/phi-chain.git
-    cd phi-chain
-    ```
-2.  **Open the application:**
-    Simply open `index.html` or `wallet.html` in your web browser.
+- [WHITEPAPER.md](WHITEPAPER.md): Theoretical foundation and economic model.
+- [TECHNICAL_REPORT.md](TECHNICAL_REPORT.md): Detailed implementation and setup guide.
 
-## Development
+## 🤖 Self-Evolution
+Φ-Chain is designed to evolve autonomously. The `research_aggregator.py` script monitors external innovations every 24 hours to ensure Φ-Chain remains at the forefront of blockchain technology.
 
-The wallet functionality is primarily handled by the following files:
-*   `wallet.html`: The main wallet interface and UI logic.
-*   `js/web3-connector.js`: Contains the logic for connecting to external wallets and the newly added `createNewWallet()` function using `ethers.js`.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+## ⚖️ License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

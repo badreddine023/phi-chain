@@ -120,7 +120,7 @@ class ValidatorSet:
             return False
         
         # Check minimum stake
-        if stake < self.genesis_params.min_validator_stake:
+        if stake < self.genesis_params.MIN_VALIDATOR_STAKE:
             return False
         
         # Check that validator doesn't already exist
@@ -169,7 +169,7 @@ class ValidatorSet:
         Returns:
             The finality threshold (F_15 = 610)
         """
-        return self.genesis_params.finality_threshold
+        return self.genesis_params.FINALITY_THRESHOLD
     
     def check_finality(self, signatures: int) -> bool:
         """

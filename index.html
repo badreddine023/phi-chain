@@ -1,369 +1,65 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Φ-Chain Portal: The official web application for the Φ-Chain Wallet and Proof-of-Coherence (PoC) Mining. Built on the Golden Ratio and Fibonacci sequence.">
-    <meta name="keywords" content="Phi-Chain, Blockchain, Wallet, Mining, Fibonacci, Golden Ratio, PoC, Crypto">
-    <meta name="author" content="badreddine023">
-    <title>Φ-Chain Portal | Wallet & PoC Mining Application</title>
+    <title>Φ-Chain | The Golden Ratio Blockchain</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="skeleton-loader.css">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='90' fill='%23b9a369'>Φ</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/3.0.3/plotly.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
     <style>
         :root {
             --primary-gold: #b9a369;
             --dark-bg: #0a0a0a;
-            --card-bg: #1a1a1a;
-            --accent-gold: #d4af37;
             --text-light: #f0f0f0;
-            --text-muted: #a0a0a0;
-            --border-color: rgba(185, 163, 105, 0.2);
+            --accent-gold: #d4af37;
             --gradient-primary: linear-gradient(135deg, #b9a369, #d4af37);
-            --gradient-secondary: linear-gradient(135deg, rgba(185, 163, 105, 0.1), rgba(212, 175, 55, 0.1));
-            --shadow-gold: 0 10px 30px rgba(185, 163, 105, 0.3);
-            --shadow-hover: 0 20px 40px rgba(185, 163, 105, 0.4);
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--dark-bg);
-            color: var(--text-light);
-            line-height: 1.6;
-            overflow-x: hidden;
-            font-weight: 400;
-        }
-
-        .hero-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: var(--dark-bg);
-        }
-
-        .phi-particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        .phi-symbol {
-            position: absolute;
-            color: rgba(185, 163, 105, 0.1);
-            font-size: 2rem;
-            font-weight: 300;
-            animation: float 20s infinite linear;
-            pointer-events: none;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.1; }
-            90% { opacity: 0.1; }
-            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
-        }
-
-        .navbar {
-            position: sticky;
-            top: 0;
-            width: 100%;
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(20px);
-            z-index: 1000;
-            padding: 1rem 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-        }
-
-        .logo {
-            font-size: 2.5rem;
-            font-weight: 300;
-            color: var(--primary-gold);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .logo::before {
-            content: 'Φ';
-            font-size: 2.5rem;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary-gold);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .section {
-            padding: 4rem 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .section h2 {
-            font-size: 3rem;
-            text-align: center;
-            margin-bottom: 3rem;
-            color: var(--accent-gold);
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 15px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .btn {
-            background: var(--gradient-primary);
-            color: var(--dark-bg);
-            padding: 0.8rem 2rem;
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1rem;
-            box-shadow: var(--shadow-gold);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        /* AI Oracle Specific Styles */
-        #ai-oracle-interface {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        #oracle-input {
-            width: 100%;
-            padding: 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            background: #151515;
-            color: var(--text-light);
-            font-size: 1rem;
-            resize: vertical;
-        }
-
-        #oracle-response {
-            min-height: 200px;
-            padding: 1.5rem;
-            background: #1a1a1a;
-            border: 2px solid var(--primary-gold);
-            border-radius: 10px;
-            white-space: pre-wrap;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            color: #e0e0e0;
-            box-shadow: 0 0 15px rgba(185, 163, 105, 0.2);
-        }
-
-        .status-connected { color: #4caf50; }
-        .status-disconnected { color: #f44336; }
+        body { font-family: 'Inter', sans-serif; background: var(--dark-bg); color: var(--text-light); margin: 0; overflow-x: hidden; }
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%); }
+        .phi-logo { font-size: 8rem; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; animation: pulse 3s infinite ease-in-out; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } }
+        h1 { font-size: 4rem; font-weight: 300; letter-spacing: 0.5rem; margin: 0; }
+        p { font-size: 1.2rem; color: #a0a0a0; max-width: 600px; margin: 1.5rem 0 3rem; }
+        .btn-group { display: flex; gap: 1.5rem; }
+        .btn { padding: 1rem 2.5rem; border-radius: 50px; font-weight: 600; text-decoration: none; transition: 0.3s; }
+        .btn-primary { background: var(--gradient-primary); color: var(--dark-bg); }
+        .btn-secondary { border: 1px solid var(--primary-gold); color: var(--primary-gold); }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(185, 163, 105, 0.2); }
+        .features { padding: 5rem 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; max-width: 1200px; margin: 0 auto; }
+        .feature-card { text-align: center; }
+        .feature-card i { font-size: 2.5rem; color: var(--primary-gold); margin-bottom: 1.5rem; }
+        .feature-card h3 { font-size: 1.5rem; margin-bottom: 1rem; }
     </style>
 </head>
 <body>
-
-    <div class="hero-background">
-        <div class="phi-particles" id="phi-particles"></div>
-    </div>
-
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#home" class="logo">Phi Chain</a>
-            <ul class="nav-links">
-                <li><a href="#wallet"><i class="fas fa-wallet"></i> Portefeuille</a></li>
-                <li><a href="#simulator"><i class="fas fa-chart-line"></i> Simulateur</a></li>
-                <li><a href="#oracle"><i class="fas fa-brain"></i> Oracle IA</a></li>
-                <li><a href="https://github.com/badreddine023/phi-chain" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
-            </ul>
+    <section class="hero">
+        <div class="phi-logo">Φ</div>
+        <h1>Φ-CHAIN</h1>
+        <p>The world's first autonomous blockchain ecosystem governed by the Golden Ratio and Fibonacci sequence.</p>
+        <div class="btn-group">
+            <a href="wallet.html" class="btn btn-primary">Launch Wallet</a>
+            <a href="WHITEPAPER.md" class="btn btn-secondary">Read Whitepaper</a>
         </div>
-    </nav>
+    </section>
 
-    <main>
-        <section id="home" class="section">
-            <div class="container" style="text-align: center; padding-top: 5rem;">
-                <h1 style="font-size: 5rem; color: var(--primary-gold); margin-bottom: 1rem;">Φ-Chain</h1>
-                <p style="font-size: 1.5rem; color: var(--text-muted); margin-bottom: 3rem;">L'Interface Universelle pour la Blockchain du Nombre d'Or.</p>
-                <a href="#wallet" class="btn"><i class="fas fa-arrow-down"></i> Commencer</a>
-            </div>
-        </section>
-
-        <section id="wallet" class="section">
-            <div class="container">
-                <h2><i class="fas fa-wallet"></i> Portefeuille & Connexion</h2>
-                <div class="card">
-                    <h3>Connexion aux Portefeuilles</h3>
-                    <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem;">
-                        <button class="btn" onclick="connectMetaMask()"><i class="fab fa-ethereum"></i> Connecter MetaMask</button>
-                        <button class="btn" onclick="connectPhantom()"><i class="fas fa-ghost"></i> Connecter Phantom</button>
-                        <button class="btn" onclick="connectWalletConnect()"><i class="fas fa-qrcode"></i> WalletConnect</button>
-                    </div>
-                    <h3 style="margin-top: 2rem;">Statut de Connexion</h3>
-                    <p>MetaMask: <span id="metamask-status" class="status-disconnected">Déconnecté</span> | Solde: <span id="metamask-balance">0 Φ</span></p>
-                    <p>Phantom: <span id="phantom-status" class="status-disconnected">Déconnecté</span> | Solde: <span id="phantom-balance">0 Φ</span></p>
-                    <p>WalletConnect: <span id="walletconnect-status" class="status-disconnected">Déconnecté</span> | Solde: <span id="walletconnect-balance">0 Φ</span></p>
-                </div>
-                <div class="card">
-                    <h3>Créer un Nouveau Portefeuille</h3>
-                    <button class="btn" onclick="createNewWallet()"><i class="fas fa-plus"></i> Générer un Nouveau Portefeuille</button>
-                    <div style="margin-top: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">
-                        <p>Adresse: <span id="new-wallet-address">...</span></p>
-                        <p>Mnémonique: <span id="new-wallet-mnemonic">...</span></p>
-                        <p>Clé Privée: <span id="new-wallet-private-key">...</span></p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="oracle" class="section">
-            <div class="container">
-                <h2><i class="fas fa-brain"></i> Oracle IA de Phi Chain</h2>
-                <p style="text-align: center; margin-bottom: 2rem; color: var(--text-muted);">Interrogez l'Oracle IA pour obtenir des analyses et des prédictions basées sur les données de la blockchain Φ-Chain.</p>
-                <div class="card" id="ai-oracle-interface">
-                    <textarea id="oracle-input" placeholder="Posez votre question à l'Oracle IA (ex: Quel est l'impact du ratio de Fibonacci sur la sécurité du consensus ?)" rows="4"></textarea>
-                    <button class="btn" id="query-oracle-btn" onclick="queryAIOracle()"><i class="fas fa-paper-plane"></i> Interroger l'Oracle</button>
-                    <div id="oracle-response">
-                        L'Oracle IA est prêt. Entrez votre requête ci-dessus.
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="simulator" class="section">
-            <div class="container">
-                <h2><i class="fas fa-chart-line"></i> Simulateurs & Outils</h2>
-	                <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-bottom: 2rem;">
-	                    <a href="WHITEPAPER.md" class="card btn" style="text-align: center; display: block; padding: 2rem; background: #2a2a2a; color: var(--text-light); text-decoration: none; flex-basis: 45%;">
-	                        <i class="fas fa-file-alt fa-2x" style="color: var(--primary-gold);"></i>
-	                        <h3 style="margin-top: 1rem;">Livre Blanc (Whitepaper)</h3>
-	                        <p style="font-size: 0.9rem; color: var(--text-muted);">Lisez les principes fondamentaux de la Φ-Chain.</p>
-	                    </a>
-	                    <a href="docs/index.md" class="card btn" style="text-align: center; display: block; padding: 2rem; background: #2a2a2a; color: var(--text-light); text-decoration: none; flex-basis: 45%;">
-	                        <i class="fas fa-book-open fa-2x" style="color: var(--primary-gold);"></i>
-	                        <h3 style="margin-top: 1rem;">Documentation Technique</h3>
-	                        <p style="font-size: 0.9rem; color: var(--text-muted);">Accédez aux guides et à la référence API.</p>
-	                    </a>
-	                </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
-                    <a href="blockchain-simulator.html" class="card btn" style="text-align: center; display: block; padding: 2rem; background: #2a2a2a; color: var(--text-light); text-decoration: none;">
-                        <i class="fas fa-cubes fa-2x" style="color: var(--primary-gold);"></i>
-                        <h3 style="margin-top: 1rem;">Simulateur de Blockchain</h3>
-                        <p style="font-size: 0.9rem; color: var(--text-muted);">Visualisez la création de blocs et les transactions.</p>
-                    </a>
-                    <a href="consensus-monitor.html" class="card btn" style="text-align: center; display: block; padding: 2rem; background: #2a2a2a; color: var(--text-light); text-decoration: none;">
-                        <i class="fas fa-users-cog fa-2x" style="color: var(--primary-gold);"></i>
-                        <h3 style="margin-top: 1rem;">Moniteur de Consensus</h3>
-                        <p style="font-size: 0.9rem; color: var(--text-muted);">Suivez l'accord des nœuds via l'algorithme FBA.</p>
-                    </a>
-                    <a href="fibonacci-viz.html" class="card btn" style="text-align: center; display: block; padding: 2rem; background: #2a2a2a; color: var(--text-light); text-decoration: none;">
-                        <i class="fas fa-infinity fa-2x" style="color: var(--primary-gold);"></i>
-                        <h3 style="margin-top: 1rem;">Visualisation de Fibonacci</h3>
-                        <p style="font-size: 0.9rem; color: var(--text-muted);">Explorez le ratio d'or dans la structure de la chaîne.</p>
-                    </a>
-                </div>
-            </div>
-        </section>
-            <section id="gallery" class="section image-gallery">
-	            <div class="container">
-	                <h2><i class="fas fa-image"></i> Galerie d'Images IA Φ-Chain</h2>
-	                <div class="gallery-grid">
-	                    <div class="gallery-item">
-	                        <img src="assets/phi_quantum_spiral.png" alt="Golden Ratio Spiral on Quantum Circuit">
-	                    </div>
-	                    <div class="gallery-item">
-	                        <img src="assets/phi_logo_concept.png" alt="Phi-Chain Logo Concept">
-	                    </div>
-	                    <div class="gallery-item">
-	                        <img src="assets/phi_cosmic_network.png" alt="Cosmic Fibonacci Network">
-	                    </div>
-	                </div>
-	            </div>
-	        </section>
-	    </main>
-
-    <footer style="text-align: center; padding: 2rem; background: #151515; border-top: 1px solid var(--border-color);">
-        <p>&copy; 2025 Φ-Chain. Propulsé par le Nombre d'Or et l'IA.</p>
-    </footer>
-
-    <script src="js/web3-connector.js"></script>
-    <script src="js/ai-oracle.js"></script>
-    <script>
-        // Script pour les particules Phi en arrière-plan
-        const particlesContainer = document.getElementById('phi-particles');
-        const numParticles = 30;
-        for (let i = 0; i < numParticles; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'phi-symbol';
-            particle.textContent = 'Φ';
-            particle.style.left = `${Math.random() * 100}vw`;
-            particle.style.top = `${Math.random() * 100}vh`;
-            particle.style.fontSize = `${Math.random() * 3 + 1}rem`;
-            particle.style.animationDuration = `${Math.random() * 15 + 10}s`;
-            particle.style.animationDelay = `-${Math.random() * 10}s`;
-            particlesContainer.appendChild(particle);
-        }
-
-        // Initialisation du connecteur Web3
-        web3Connector.init();
-    </script>
+    <section class="features">
+        <div class="feature-card">
+            <i class="fas fa-microchip"></i>
+            <h3>PoC Consensus</h3>
+            <p>Proof-of-Coherence: A mathematically pure agreement mechanism.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-bolt"></i>
+            <h3>OPEVM</h3>
+            <p>Optimistic Parallelized EVM for Fibonacci-speed transactions.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-shield-alt"></i>
+            <h3>Validator Nodes</h3>
+            <p>Decentralized security powered by Fibonacci-weighted staking.</p>
+        </div>
+    </section>
 </body>
 </html>

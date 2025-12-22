@@ -1,29 +1,108 @@
 """
-phi_chain_core.py - Core Data Structures for Phi Chain
-This module defines the fundamental data structures for the Phi Chain,
-including the Block, Transaction, and P-BFT Consensus Message.
+phi_chain_core.py - Core Data Structures and Fibonacci Logic for Phi Chain
+This module defines the fundamental data structures and mathematical logic
+for the Phi Chain, including Fibonacci-derived parameters and Q-Matrix state transitions.
 """
 
 import time
-from typing import List, Dict, Optional
+import math
+import numpy as np
+from typing import List, Dict, Optional, Tuple
+from decimal import Decimal, getcontext
 
-# --- 1. Transaction Structure (Optimized for OPEVM) ---
+# --- 1. Fibonacci & Golden Ratio Utilities ---
+
+class FibonacciUtils:
+    @staticmethod
+    def fibonacci(n: int) -> int:
+        """Calculates the nth Fibonacci number F_n with support for negative indices."""
+        if n == 0:
+            return 0
+        if abs(n) <= 2:
+            return 1 if n > 0 else (-1 if abs(n) % 2 == 0 else 1)
+        
+        a, b = 1, 1
+        target = abs(n)
+        for _ in range(3, target + 1):
+            a, b = b, a + b
+        
+        result = b
+        if n < 0:
+            result *= (-1) ** (target + 1)
+        return result
+
+    @staticmethod
+    def golden_ratio(precision: int = 60) -> Decimal:
+        """Calculates the Golden Ratio (Φ) with high precision."""
+        getcontext().prec = precision + 10
+        sqrt5 = Decimal(5).sqrt()
+        phi = (Decimal(1) + sqrt5) / Decimal(2)
+        getcontext().prec = precision
+        return +phi
+
+    @staticmethod
+    def is_fibonacci(n: int) -> bool:
+        """Checks if a number is a Fibonacci number."""
+        if n < 0: return False
+        def is_perfect_square(x):
+            s = int(math.isqrt(x))
+            return s*s == x
+        return is_perfect_square(5*n*n + 4) or is_perfect_square(5*n*n - 4)
+
+# --- 2. Genesis Parameters (Derived from Fibonacci) ---
+
+class GenesisParameters:
+    def __init__(self):
+        self.PHI = float(FibonacciUtils.golden_ratio())
+        self.SLOT_DURATION = FibonacciUtils.fibonacci(6)      # F_6 = 8
+        self.EPOCH_DURATION = FibonacciUtils.fibonacci(18)    # F_18 = 2584
+        self.MIN_VALIDATOR_STAKE = FibonacciUtils.fibonacci(20) # F_20 = 6765
+        self.MAX_VALIDATOR_COUNT = FibonacciUtils.fibonacci(17) # F_17 = 1597
+        self.TARGET_COMMITTEE_SIZE = FibonacciUtils.fibonacci(14) # F_14 = 377
+        self.FINALITY_THRESHOLD = FibonacciUtils.fibonacci(15) # F_15 = 610
+        
+    def to_dict(self) -> Dict:
+        return {
+            "phi": self.PHI,
+            "slot_duration": self.SLOT_DURATION,
+            "epoch_duration": self.EPOCH_DURATION,
+            "min_validator_stake": self.MIN_VALIDATOR_STAKE,
+            "max_validator_count": self.MAX_VALIDATOR_COUNT,
+            "finality_threshold": self.FINALITY_THRESHOLD
+        }
+
+# --- 3. State Transition (Fibonacci Q-Matrix) ---
+
+class PhiState:
+    """
+    Represents the chain state, evolved via the Fibonacci Q-Matrix.
+    State Vector S_n = [F_{n+1}, F_n]^T
+    """
+    def __init__(self, f_n_plus_1: int = 1, f_n: int = 1):
+        self.vector = np.array([f_n_plus_1, f_n])
+        self.Q_matrix = np.array([[1, 1], [1, 0]])
+
+    def evolve(self):
+        """S_{n+1} = Q * S_n"""
+        self.vector = self.Q_matrix @ self.vector
+        return self.vector
+
+    def get_current_metrics(self) -> Tuple[int, int]:
+        return int(self.vector[0]), int(self.vector[1])
+
+# --- 4. Transaction Structure ---
 
 class PhiTransaction:
-    """
-    Represents a transaction in the Phi Chain, including fields necessary
-    for the Optimistic Parallelized EVM (OPEVM) conflict detection.
-    """
     def __init__(self,
                  sender: str,
                  recipient: str,
                  value: int,
-                 data: bytes,
-                 nonce: int,
-                 gas_limit: int,
-                 signature: bytes,
-                 estimated_read_set: Optional[List[str]] = None,
-                 estimated_write_set: Optional[List[str]] = None):
+                 data: bytes = b"",
+                 nonce: int = 0,
+                 gas_limit: int = 21000,
+                 signature: bytes = b"",
+                 read_set: Optional[List[str]] = None,
+                 write_set: Optional[List[str]] = None):
         self.sender = sender
         self.recipient = recipient
         self.value = value
@@ -31,128 +110,80 @@ class PhiTransaction:
         self.nonce = nonce
         self.gas_limit = gas_limit
         self.signature = signature
-        
-        # OPEVM-specific fields for Pre-Execution Static Analysis
-        # List of state storage slots (keys) the transaction is expected to touch
-        self.estimated_read_set = estimated_read_set if estimated_read_set is not None else []
-        self.estimated_write_set = estimated_write_set if estimated_write_set is not None else []
+        self.read_set = read_set or []
+        self.write_set = write_set or []
 
     def to_dict(self) -> Dict:
         return {
             "sender": self.sender,
             "recipient": self.recipient,
             "value": self.value,
-            "data": self.data.hex(),
+            "data": self.data.hex() if isinstance(self.data, bytes) else self.data,
             "nonce": self.nonce,
             "gas_limit": self.gas_limit,
-            "signature": self.signature.hex(),
-            "read_set": self.estimated_read_set,
-            "write_set": self.estimated_write_set,
+            "signature": self.signature.hex() if isinstance(self.signature, bytes) else self.signature,
+            "read_set": self.read_set,
+            "write_set": self.write_set,
         }
 
-# --- 2. Block Structure ---
+# --- 5. Block Structure ---
 
 class PhiBlock:
-    """
-    Represents a block in the Phi Chain, incorporating the P-BFT finality
-    and the OPEVM execution results.
-    """
     def __init__(self,
                  index: int,
                  previous_hash: str,
                  timestamp: float,
                  transactions: List[PhiTransaction],
                  state_root: str,
-                 receipts_root: str,
                  proposer: str,
-                 bls_aggregated_signature: Optional[bytes] = None):
+                 f_vector: Tuple[int, int],
+                 bls_signature: Optional[bytes] = None):
         self.index = index
         self.previous_hash = previous_hash
         self.timestamp = timestamp
         self.transactions = transactions
         self.state_root = state_root
-        self.receipts_root = receipts_root
         self.proposer = proposer
-        
-        # P-BFT-specific field for finality proof
-        # This signature proves that 2/3+ of validators have committed to this block
-        self.bls_aggregated_signature = bls_aggregated_signature
+        self.f_vector = f_vector # Fibonacci state at this block
+        self.bls_signature = bls_signature
 
     def calculate_hash(self) -> str:
-        """
-        Conceptual method to calculate the block's hash (e.g., using SHA-256).
-        """
-        # In a real implementation, this would serialize the block and hash it.
-        return f"hash_{self.index}_{self.timestamp}"
+        import hashlib
+        import json
+        block_string = json.dumps({
+            "index": self.index,
+            "previous_hash": self.previous_hash,
+            "timestamp": self.timestamp,
+            "proposer": self.proposer,
+            "f_vector": list(self.f_vector)
+        }, sort_keys=True)
+        return hashlib.sha256(block_string.encode()).hexdigest()
 
-# --- 3. P-BFT Consensus Message Structure ---
+# --- 6. Consensus Message ---
 
 class PipelinedBFTMessage:
-    """
-    Represents a message used in the Pipelined BFT consensus process.
-    """
-    def __init__(self,
-                 msg_type: str, # e.g., "PROPOSE", "PREVOTE", "PRECOMMIT"
-                 block_hash: str,
-                 block_index: int,
-                 validator_id: str,
-                 signature: bytes):
+    def __init__(self, msg_type: str, block_hash: str, validator_id: str, signature: bytes):
         self.msg_type = msg_type
         self.block_hash = block_hash
-        self.block_index = block_index
         self.validator_id = validator_id
         self.signature = signature
-        
-    def is_supermajority(self, messages: List['PipelinedBFTMessage'], total_validators: int) -> bool:
-        """
-        Conceptual check for 2/3+ supermajority.
-        """
-        required = (2 * total_validators) // 3 + 1
-        unique_validators = {msg.validator_id for msg in messages if msg.msg_type == self.msg_type}
-        return len(unique_validators) >= required
 
-# --- Conceptual Usage Example ---
+    @staticmethod
+    def check_supermajority(votes: int, total_validators: int) -> bool:
+        threshold = (2 * total_validators) // 3 + 1
+        return votes >= threshold
 
 if __name__ == "__main__":
-    # 1. Create a sample transaction
-    tx1 = PhiTransaction(
-        sender="0xAlice",
-        recipient="0xBob",
-        value=100,
-        data=b"",
-        nonce=1,
-        gas_limit=21000,
-        signature=b"sig1",
-        estimated_read_set=["0xAlice_balance", "0xBob_balance"],
-        estimated_write_set=["0xAlice_balance", "0xBob_balance"]
-    )
+    # Quick verification
+    utils = FibonacciUtils()
+    params = GenesisParameters()
+    state = PhiState(utils.fibonacci(2), utils.fibonacci(1))
     
-    # 2. Create a conceptual block
-    genesis_block = PhiBlock(
-        index=0,
-        previous_hash="0x0000000000000000000000000000000000000000000000000000000000000000",
-        timestamp=time.time(),
-        transactions=[tx1],
-        state_root="0xInitialStateRoot",
-        receipts_root="0xInitialReceiptsRoot",
-        proposer="0xProposerNode"
-    )
+    print(f"Genesis PHI: {params.PHI}")
+    print(f"Initial State: {state.get_current_metrics()}")
+    state.evolve()
+    print(f"Evolved State: {state.get_current_metrics()}")
     
-    print(f"Genesis Block Hash: {genesis_block.calculate_hash()}")
-    print(f"Transaction 1 Read Set: {tx1.estimated_read_set}")
-    
-    # 3. Conceptual P-BFT message flow
-    total_validators = 10
-    prevote_msgs = [
-        PipelinedBFTMessage("PREVOTE", genesis_block.calculate_hash(), 0, f"Validator_{i}", b"sig")
-        for i in range(7) # 7 out of 10 is a supermajority
-    ]
-    
-    # Check for supermajority
-    is_finalized = prevote_msgs[0].is_supermajority(prevote_msgs, total_validators)
-    print(f"Prevote Supermajority Reached: {is_finalized}")
-    
-    # The block is finalized by setting the aggregated signature
-    if is_finalized:
-        genesis_block.bls_aggregated_signature = b"BLS_Aggregated_Signature_Proof"
-        print("Block 0 is finalized.")
+    tx = PhiTransaction("0xAlice", "0xBob", 100)
+    block = PhiBlock(0, "0"*64, time.time(), [tx], "root", "proposer", state.get_current_metrics())
+    print(f"Genesis Block Hash: {block.calculate_hash()}")
