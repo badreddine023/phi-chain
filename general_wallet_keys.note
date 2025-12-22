@@ -1,0 +1,21 @@
+# Φ-Chain General Wallet Keys & Mnemonics
+# DO NOT SHARE PUBLICLY
+
+Wallet Name: General Wallet
+Date Generated: 2025-12-22
+
+Mnemonic Phrase (12 words):
+word1 word2 word3 word4 word5 word6 word7 word8 word9 word10 word11 word12
+
+Private Key:
+0xXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+Public Key:
+0xXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+Validator Node Keys:
+Validator 1 Private: 0xXXXXXXXXXXXX
+Validator 1 Public : 0xXXXXXXXXXXXX
+Validator 2 Private: 0xXXXXXXXXXXXX
+Validator 2 Public : 0xXXXXXXXXXXXX
+...
