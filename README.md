@@ -17,17 +17,18 @@ python3 consensus/node_runner.py config/validators/node_0.json
 ```
 
 ### 3. Launch the Wallet
-Open `wallet.html` in your browser to manage your assets, stake tokens, and start PoC mining.
+Open `wallet_mainnet.html` in your browser to manage your assets, stake tokens, and start PoC mining.
 
 ### 4. Monitor the Network
-Open `consensus-monitor.html` to view real-time network metrics and validator performance.
+Open `dashboard.html` to view real-time network metrics and validator performance.
 
 ## 🛠 Architecture
 
-- **Core**: `phi_chain_core.py` - Fibonacci logic, Q-Matrix state transitions, and block structures.
+- **Core**: `phi_chain.py` - Unified core engine with all blockchain logic.
+- **API**: `api/wallet_api.py` - FastAPI backend for wallet and blockchain operations.
 - **Consensus**: `consensus/` - Validator logic, node runner, and FBA implementation.
 - **Tools**: `tools/` - Deployment, key generation, and research aggregation.
-- **UI**: `index.html`, `wallet.html`, `consensus-monitor.html`.
+- **UI**: `wallet_mainnet.html`, `dashboard.html`.
 
 ## 📖 Documentation
 

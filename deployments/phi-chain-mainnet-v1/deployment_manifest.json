@@ -1,0 +1,30 @@
+{
+  "network_name": "phi-chain-mainnet-v1",
+  "deployment_time": "2025-12-22T18:29:14.277096",
+  "genesis_block": {
+    "hash": "00dc09217f3b318b2e12e0e759675c7ecb38c64a39d9865c6c3d1237b2261057",
+    "index": 0
+  },
+  "parameters": {
+    "phi": 1.618033988749895,
+    "slot_duration": 8,
+    "epoch_duration": 2584,
+    "min_validator_stake": 6765,
+    "max_validator_count": 1597,
+    "finality_threshold": 610,
+    "genesis_supply": 3524578,
+    "block_reward": 89,
+    "transaction_fee_base": 21
+  },
+  "validators": {
+    "total": 10,
+    "active": 10,
+    "total_stake": 1335323
+  },
+  "blockchain": {
+    "chain_length": 1,
+    "is_valid": true,
+    "total_supply": 3524578
+  },
+  "deployment_directory": "deployments/phi-chain-mainnet-v1"
+}
