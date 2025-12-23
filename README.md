@@ -1,125 +1,133 @@
-<div align="center">
-    <svg width="120" height="120" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="60" cy="60" r="55" stroke="#FF9900" stroke-width="5" fill="none"/>
-      <text x="50%" y="50%" font-size="60" text-anchor="middle" dominant-baseline="middle" fill="#FF9900">Φ</text>
-    </svg>
-    <h1>Φ-Chain: سلسلة المستقبل الذهبية</h1>
-    <p><strong>الجيل القادم من البنية التحتية اللامركزية، مُصممة وفقًا للتوازن الكوني للنسبة الذهبية (Phi)</strong></p>
-</div>
+# Φ-Chain (Phi-Chain): The Golden Ratio Blockchain
+
+![Φ-Chain Logo](phi_chain_logo.jpg)
+
+Φ-Chain is a revolutionary decentralized blockchain ecosystem governed by the mathematical principles of the **Golden Ratio (Φ)** and the **Fibonacci sequence**. By integrating these universal constants into its core consensus, state transitions, and economic models, Φ-Chain achieves a unique balance of scalability, security, and mathematical purity.
+
+## 🌟 Vision & Purpose
+
+Traditional blockchains often rely on arbitrary constants for block times, rewards, and validator thresholds. Φ-Chain replaces these with values derived from the Fibonacci sequence, ensuring that every parameter of the network is interconnected through the Golden Ratio. The system is not merely engineered; it is discovered from first principles.
 
 ---
 
-## 🚀 رؤيتنا: بلوكشين المستقبل (Marketing Focus)
+## 🚀 Core Features
 
-**Φ-Chain** ليست مجرد بلوكشين أخرى؛ إنها منصة لامركزية **مُحسّنة رياضيًا** لتقديم أعلى مستويات الكفاءة، الأمان، والنمو المتناغم. نحن ندمج مبادئ **النسبة الذهبية (Φ ≈ 1.618)**، التي تحكم التوازن والجمال في الطبيعة والكون، في صميم هندسة البروتوكول. هذا الاندماج بين الرياضيات الكونية والتكنولوجيا المتقدمة يخلق شبكة مستدامة، قابلة للتوسع، وجاهزة لتحديات المستقبل.
+### 1. Fibonacci Q-Matrix State Transitions
+The state of Φ-Chain evolves according to the Fibonacci Q-Matrix:
+```
+Q = [[1, 1], 
+     [1, 0]]
+```
+The state vector $S_n = [F_{n+1}, F_n]^T$ transitions to $S_{n+1} = Q \cdot S_n$, ensuring that the growth of the network metrics follows the natural progression of the Fibonacci sequence.
 
-## ✨ الميزات المبتكرة
+### 2. Proof-of-Coherence (PoC) Mining
+A novel consensus mechanism where validator influence is weighted by their **Coherence Score**. This score is derived from their stake and historical participation, both of which must align with Fibonacci numbers.
 
-| الميزة | الوصف | التفوق المستقبلي |
+### 3. Fibonacci Byzantine Agreement (FBA)
+A robust consensus engine that requires a supermajority of signatures (at least $F_{15} = 610$ validators) to reach finality, providing high security and mathematical consistency.
+
+### 4. Optimistic Parallelized EVM (OPEVM)
+High-throughput transaction execution using static analysis to detect state conflicts before execution, maintaining full compatibility with the Ethereum ecosystem.
+
+### 5. Responsive Wallet & Dashboard
+- **Wallet UI**: Manage balances, stake tokens, and monitor PoC mining in real-time.
+- **Consensus Monitor**: Interactive charts showing Fibonacci convergence and network health.
+
+---
+
+## 🛠 Getting Started
+
+### Prerequisites
+- **Python**: 3.10 or higher
+- **Node.js**: 18.x or higher
+- **Browser**: Modern browser (Chrome, Firefox, Brave)
+
+### Installation
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/badreddine023/phi-chain.git
+   cd phi-chain
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   pip install -r core/requirements.txt
+   # or if using uv
+   uv sync
+   ```
+
+3. **Initialize the Mainnet**:
+   ```bash
+   python3 tools/deploy_mainnet.py
+   ```
+
+---
+
+## 📖 Usage
+
+### Running the Wallet
+Open `wallet.html` in your browser to access the mainnet wallet interface.
+- **Connect**: Use the built-in web3 connector to link your external wallet.
+- **Mine**: Start PoC mining directly from the dashboard.
+- **Stake**: Stake Φ tokens (must be a Fibonacci number) to earn rewards.
+
+### Monitoring the Network
+Open `consensus-monitor.html` to view:
+- Real-time block height and TPS.
+- Active validator count ($F_{17} = 1597$ max).
+- Fibonacci state vector evolution.
+
+### Validator Node Setup
+To run a validator node:
+```bash
+python3 validator_node.py --id your_validator_id --stake 6765
+```
+*Note: Minimum stake is $F_{20} = 6765$ Φ.*
+
+---
+
+## 📂 File & Folder Structure
+
+| File / Folder | Description |
+| :--- | :--- |
+| `phi_chain_core.py` | Core data structures and Fibonacci logic. |
+| `phi_chain.py` | Unified blockchain engine (PoC, FBA, State). |
+| `validator_node.py` | Validator node implementation and key management. |
+| `wallet.html` | Mainnet wallet user interface. |
+| `consensus-monitor.html` | Real-time network analytics dashboard. |
+| `tools/deploy_mainnet.py` | Automated mainnet deployment script. |
+| `api/wallet_api.py` | FastAPI backend for wallet and blockchain queries. |
+| `docs/` | Detailed technical reports and whitepapers. |
+
+---
+
+## 📈 Mainnet Parameters
+
+| Parameter | Value | Fibonacci Index |
 | :--- | :--- | :--- |
-| **إجماع Φ-PoS** | آلية إثبات الحصة (Proof-of-Stake) مُعدلة، حيث يتم تحديد فترات الإجماع ومكافآت المدققين بنسب مستوحاة من تسلسل فيبوناتشي. | **استقرار لا مثيل له** في الشبكة وتقليل التضخم غير المتوقع. |
-| **قابلية التوسع اللانهائية** | استخدام تقنية **Sharding** المتقدمة مع خوارزميات توجيه مُحسّنة بواسطة Φ لضمان توزيع الحمل الأمثل. | **معاملات فورية** وقدرة على استيعاب مليارات المستخدمين دون تباطؤ. |
-| **عقود ذكية ذاتية التوازن** | عقود ذكية (Smart Contracts) مدمجة مع أدوات حوكمة داخلية تضمن تعديل الرسوم والموارد تلقائيًا للحفاظ على التوازن الاقتصادي. | **بيئة DeFi مستدامة** ومقاومة للصدمات الاقتصادية. |
-| **التوافق الكوني (EVM & Beyond)** | توافق كامل مع آلة إيثيريوم الافتراضية (EVM) مع دعم للغات برمجة العقود الذكية الجديدة والمستقبلية. | **جسر سلس** بين الأنظمة الحالية والابتكارات القادمة. |
+| **Slot Duration** | 8s | $F_6$ |
+| **Epoch Duration** | 2,584s | $F_{18}$ |
+| **Min Stake** | 6,765 Φ | $F_{20}$ |
+| **Max Validators** | 1,597 | $F_{17}$ |
+| **Finality Threshold** | 610 | $F_{15}$ |
+| **Genesis Supply** | 3,524,578 Φ | $F_{33}$ |
 
 ---
 
-## ❌ قضايا الكود الحرجة (Technical Focus)
+## 🤝 Development & Contribution
 
-**ملاحظة هامة:** هذا القسم مخصص للمطورين والمساهمين. يمثل هذا المستند **تحليلاً حرجًا** لحالة الكود الحالية وخارطة طريق لإعادة الهيكلة لضمان إطلاق شبكة رئيسية (Mainnet) آمنة ومستقرة.
-
-| الفئة | الملف/الموقع | وصف المشكلة | المخاطر/التأثير | الحل/الإصلاح المقترح |
-| :--- | :--- | :--- | :--- | :--- |
-| **🔒 أمان** | `CONSENSUS/validator.py` | **مفتاح خاص مُشفّر** في المصدر | **اختراق فوري للشبكة الرئيسية** إذا تم النشر | النقل إلى متغيرات البيئة مع التشفير |
-| **✍️ أمان** | `CORE/phi_chain_core.py` | لا يوجد **تحقق من توقيع المعاملات** | يسمح **بحقن معاملات عشوائية** | تطبيق التحقق من ECDSA قبل إدراج الكتلة |
-| **🤝 أمان** | `NETWORK/p2p_handler.py` | لا يوجد **مصادقة للأقران** | **ثغرة هجوم Sybil** | تطبيق بروتوكول التحدي والاستجابة |
-| **📐 خطأ رياضي** | `CORE/fibonacci_logic.py` | **حساب غير صحيح للنسبة الذهبية** (نقطة عائمة) | **انحراف الإجماع** بمرور الوقت | تطبيق حساب دقيق قائم على الكسور أو الأعداد العشرية |
-| **💥 خطأ رياضي** | `CONSENSUS/phi_validator.py` | **تجاوز سعة تسلسل فيبوناتشي** (تكراري) | **تعطل المدقق** أثناء التحميل العالي | الاستبدال بتطبيق تكراري O(1) باستخدام صيغة Binet |
-| **🚀 أداء** | `CORE/blockchain.py` | **التحقق من المعاملات O(n²)** (بحث خطي) | **يفشل عند >100 معاملة في الثانية** | تطبيق Merkle Patricia Trie أو فهرسة خرائط التجزئة |
-| **🏗️ معمارية** | المشروع بأكمله | نقص في **حقن التبعية المعياري** (الحالة العامة) | **يستحيل اختباره** أو تشغيل عقد متعددة | إعادة هيكلة إلى خدمات قائمة على الفئات مع حاوية DI |
-| **🛡️ معمارية** | `API/wallet_endpoints.py` | وصول **مباشر لقاعدة البيانات** في طبقة API | **ثغرة حقن SQL** | تطبيق نمط المستودع (Repository Pattern) مع استعلامات مُعاملة |
+We welcome contributions that maintain the mathematical integrity of Φ-Chain.
+1. Fork the repository.
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`).
+3. Ensure all new parameters follow Fibonacci indices.
+4. Submit a Pull Request.
 
 ---
 
-## 🗺️ خارطة طريق التعديل ذات الأولوية
+## 📜 License
 
-تمت هيكلة عملية إعادة الهيكلة إلى أربع مراحل متميزة، مع إعطاء الأولوية **للأمان والسلامة الرياضية** قبل التركيز على الأداء وجاهزية الإنتاج.
-
-| المرحلة | الأولوية | الوقت المقدر | الأهداف الرئيسية |
-| :--- | :--- | :--- | :--- |
-| **🛡️ المرحلة 1: الأمان والاستقرار** | **عالية** | **40 ساعة** | إصلاح تطبيق التشفير (استخدام مكتبات مُدققة)، إزالة جميع الأنماط المضادة (القيم المشفرة، الحالة العامة)، تطبيق معالجة الأخطاء والتسجيل المناسبين. |
-| **📐 المرحلة 3: السلامة الرياضية** | **عالية** | **30 ساعة** | تطبيق **حساب عشري دقيق** في جميع أنحاء الكود، إضافة براهين رياضية كاختبارات آلية، إنشاء أدوات تصور للإجماع القائم على Φ. |
-| **🚀 المرحلة 2: الأداء وقابلية التوسع** | **متوسطة** | **60 ساعة** | إعادة هيكلة هياكل البيانات لعمليات **O(1)**، تطبيق طبقات التخزين المؤقت (Caching)، إضافة فهرسة لقاعدة البيانات وتحسين الاستعلامات. |
-| **🚢 المرحلة 4: جاهزية الإنتاج** | **متوسطة** | **80 ساعة** | **تغليف الحاويات** والتنسيق (Docker/Kubernetes)، المراقبة والتنبيه (Prometheus/OpenTelemetry)، التوثيق وأدلة النشر. |
-
-**إجمالي الوقت المقدر للإصلاحات: 210 ساعة (حوالي 5-6 أسابيع مع مطورين اثنين)**
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## ✅ النتائج والأهداف المتوقعة
-
-تم تصميم جهد إعادة الهيكلة لتلبية أهداف الأداء والأمان والموثوقية التالية، مما يضمن بلوكشين قويًا ومناسبًا للمؤسسات.
-
-| الفئة | المقياس المستهدف | الهدف |
-| :--- | :--- | :--- |
-| **🚀 الأداء** | الإنتاجية (Throughput) | **1000+ معاملة في الثانية** على الأجهزة التجارية |
-| **⏱️ الأداء** | زمن الوصول (Latency) | تأكيد الكتلة **أقل من 3 ثوانٍ** |
-| **🌐 قابلية التوسع** | حجم الشبكة | **1000+ عقدة** في شارد واحد |
-| **🛡️ الأمان** | الثغرات الأمنية | **صفر ثغرات حرجة** في التدقيق |
-| **🔬 الأمان** | التحقق | **تحقق رسمي** من الخصائص الرياضية |
-| **✅ الأمان** | اختبار الاختراق | اجتياز بنسبة **>90%** |
-| ** uptime** | التوفر | **99.9% توفر** في شبكة محاكاة |
-| **🔄 الموثوقية** | الاسترداد | **استرداد تلقائي** من فشل العقدة |
-
----
-
-## 🛠️ دليل المطورين والبدء السريع (Utility)
-
-للانضمام إلى ثورة Φ-Chain، اتبع الخطوات التالية:
-
-### المتطلبات الأساسية
-
-*   [Node.js](https://nodejs.org/) (v18+)
-*   [Go](https://golang.org/) (v1.20+)
-*   [Docker](https://www.docker.com/) (لبيئات التطوير المعزولة)
-
-### تثبيت المشروع
-
-1.  **استنساخ المستودع:**
-    ```bash
-    git clone https://github.com/badreddine023/phi-chain.git
-    cd phi-chain
-    ```
-
-2.  **تثبيت التبعيات:**
-    ```bash
-    # لتثبيت تبعيات العقد الذكي
-    npm install
-    
-    # لتثبيت تبعيات العقدة الأساسية
-    go mod tidy
-    ```
-
-3.  **تشغيل العقدة المحلية (Local Node):**
-    ```bash
-    # تشغيل شبكة التطوير المحلية
-    npm run devnet
-    ```
-
-## 🤝 المساهمة في المستقبل
-
-نحن نؤمن بأن المستقبل اللامركزي يُبنى بالتعاون. نرحب بالمساهمات من جميع المطورين، الباحثين، والمتحمسين الذين يشاركوننا رؤيتنا لبلوكشين متوازن ومُحسّن.
-
-1.  قم بعمل تفرع (Fork) للمستودع.
-2.  أنشئ فرعًا جديدًا للميزة الخاصة بك (`git checkout -b feature/your-innovation`).
-3.  افتح طلب سحب (Pull Request) واضح ومفصل.
-
-## ⚖️ الترخيص
-
-هذا المشروع مرخص بموجب ترخيص **MIT**. انظر ملف [LICENSE](LICENSE) لمزيد من التفاصيل.
-
----
-
-<div align="center">
-    <em>"التوازن هو أساس كل نمو مستدام." - فلسفة Φ-Chain</em>
-</div>
+**Φ-Chain: The Universe is Written in the Language of Mathematics.**
