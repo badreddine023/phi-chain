@@ -1,31 +1,12 @@
-import decimal
-
-# Set the precision for high-fidelity mathematical purity
-# We will use 50 digits of precision to exceed the 15 decimal places specified in the architecture
-decimal.getcontext().prec = 50
+from core.phi_math import PhiMath
 
 # --- Core Constants ---
 
-def calculate_phi():
-    """Calculates the Golden Ratio (phi) to the set precision."""
-    # phi = (1 + sqrt(5)) / 2
-    D = decimal.Decimal
-    five = D(5)
-    one = D(1)
-    two = D(2)
-    sqrt_five = five.sqrt()
-    phi = (one + sqrt_five) / two
-    return phi
+PHI_FIXED = PhiMath.get_phi()
+PHI_INV_FIXED = PhiMath.get_phi_inv()
 
-def calculate_phi_inverse(phi):
-    """Calculates the Inverse Golden Ratio (phi_inverse) to the set precision."""
-    # phi_inverse = 1 / phi = phi - 1
-    one = decimal.Decimal(1)
-    phi_inverse = one / phi
-    return phi_inverse
-
-PHI = calculate_phi()
-PHI_INV = calculate_phi_inverse(PHI)
+PHI = PhiMath.from_fixed(PHI_FIXED)
+PHI_INV = PhiMath.from_fixed(PHI_INV_FIXED)
 
 # --- Sequence Generators ---
 
@@ -81,7 +62,7 @@ def get_genesis_parameters():
     consensus_threshold = PHI_INV
     
     # Token Supply: phi * 10^15
-    token_supply = PHI * decimal.Decimal(10**15)
+    token_supply = int(PHI * (10**15))
     
     # Shard Count: F8
     shard_count = F8

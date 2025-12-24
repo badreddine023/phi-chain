@@ -13,7 +13,7 @@ import time
 import json
 import hashlib
 from typing import List, Dict, Optional, Tuple, Any
-from decimal import Decimal, getcontext
+from core.phi_math import PhiMath, fibonacci
 import numpy as np
 
 # --- 1. Fibonacci & Golden Ratio Utilities ---
@@ -40,13 +40,9 @@ class FibonacciUtils:
         return result
     
     @staticmethod
-    def golden_ratio(precision: int = 60) -> Decimal:
-        """Calculates the Golden Ratio (Φ) with high precision."""
-        getcontext().prec = precision + 10
-        sqrt5 = Decimal(5).sqrt()
-        phi = (Decimal(1) + sqrt5) / Decimal(2)
-        getcontext().prec = precision
-        return +phi
+    def golden_ratio(precision: int = 18) -> int:
+        """Calculates the Golden Ratio (Φ) with high precision using fixed-point arithmetic."""
+        return PhiMath.get_phi(precision)
     
     @staticmethod
     def is_fibonacci(n: int) -> bool:
@@ -71,7 +67,8 @@ class GenesisParameters:
     """All Φ-Chain parameters derived from Fibonacci sequence"""
     
     def __init__(self):
-        self.PHI = float(FibonacciUtils.golden_ratio())
+        self.PHI_FIXED = FibonacciUtils.golden_ratio()
+        self.PHI = PhiMath.from_fixed(self.PHI_FIXED)
         self.SLOT_DURATION = FibonacciUtils.fibonacci(6)      # F_6 = 8
         self.EPOCH_DURATION = FibonacciUtils.fibonacci(18)    # F_18 = 2584
         self.MIN_VALIDATOR_STAKE = FibonacciUtils.fibonacci(20) # F_20 = 6765

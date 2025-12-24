@@ -1,112 +1,144 @@
-# 🏗️ Φ-Chain Build and Deployment Guide
+# 🏗️ دليل بناء ونشر مشروع Phi-Chain
 
-This document outlines the steps required to build, test, and deploy the Φ-Chain components.
-
----
-
-## 1. Prerequisites
-
-Ensure you have the following tools installed on your system:
-
-- **Git**: For cloning the repository.
-- **Python 3.11+**: The core language for Φ-Chain.
-- **pip**: Python package installer.
-- **Docker** and **Docker Compose**: For containerized deployment.
-- **Make**: For simplified build commands (optional but recommended).
+يوثق هذا المستند الخطوات اللازمة لبناء، اختبار، ونشر مكونات مشروع Phi-Chain.
 
 ---
 
-## 2. Setting Up the Development Environment
+## 1. المتطلبات الأساسية (Prerequisites)
 
-1.  **Clone the Repository:**
+تأكد من تثبيت الأدوات والبيئات التالية على نظامك:
+
+*   **Git:** لاستنساخ المستودع والتحكم في الإصدارات.
+*   **Python 3.11+:** لغة البرمجة الأساسية لمشروع Phi-Chain.
+*   **pip:** مدير حزم Python.
+*   **Docker و Docker Compose:** للنشر في بيئة حاويات معزولة.
+*   **Make:** (اختياري) لأوامر البناء المبسطة.
+
+---
+
+## 2. إعداد بيئة التطوير (Setup)
+
+1.  **استنساخ المستودع:**
     ```bash
     git clone https://github.com/badreddine023/phi-chain.git
     cd phi-chain
     ```
 
-2.  **Create a Virtual Environment (Recommended):**
+2.  **إنشاء بيئة افتراضية (موصى به):**
     ```bash
     python3 -m venv venv
     source venv/bin/activate
     ```
 
-3.  **Install Dependencies:**
+3.  **تثبيت التبعيات:**
     ```bash
     pip install -r requirements.txt
-    # Note: If requirements.txt is missing, use the following:
+    # إذا كان ملف requirements.txt مفقودًا، استخدم الأمر التالي:
     # pip install uvicorn fastapi sqlalchemy requests pycryptodome matplotlib
     ```
 
 ---
 
-## 3. Building the Core Components
+## 3. عملية البناء (Build Process)
 
-The build process involves compiling the core mathematical and cryptographic modules.
+تتضمن عملية البناء تجميع الوحدات الرياضية والتشفير الأساسية.
 
-### 3.1. Mathematical Primitives (Core)
+### 3.1. الوحدات الرياضية الأساسية (Core Mathematical Primitives)
 
-The core logic relies on high-precision integer arithmetic for consensus.
+تعتمد المنطق الأساسي على حسابات الأعداد الصحيحة عالية الدقة (High-Precision Integer Arithmetic) لتحقيق التوافق (Consensus).
+
+**ملاحظة هامة:** تم إلغاء استخدام مكتبة `Decimal`، وسيتم تطبيق حلول بديلة للحسابات الدقيقة (مثل استخدام الكسور أو مكتبات رياضية أخرى) في المرحلة القادمة.
 
 ```bash
-# Compile the core Fibonacci and Golden Ratio logic
+# تجميع منطق فيبوناتشي والنسبة الذهبية الأساسي
 python3 core/build_math_primitives.py
 ```
 
-### 3.2. Docker Image Build
+### 3.2. بناء أداة التشخيص الأمني (Phi-Security-Tool)
 
-For production and testing environments, build the Docker images:
+(سيتم تحديث هذا القسم بالخطوات الدقيقة والأوامر اللازمة لبناء الأداة `Phi-Security-Tool` بعد تطويرها في المرحلة القادمة).
+
+### 3.3. بناء صور Docker
+
+لبيئات الإنتاج والاختبار، يتم بناء صور Docker:
 
 ```bash
-# Build the base image for all services
+# بناء الصورة الأساسية لجميع الخدمات
 docker build -t phichain/base:latest -f Dockerfile.base .
 
-# Build individual service images
+# بناء صور الخدمات الفردية
 docker-compose build
 ```
 
 ---
 
-## 4. Testing and Validation
+## 4. الاختبار والتحقق (Testing and Validation)
 
-Before deployment, all components must pass the security and mathematical integrity tests.
+يجب أن تجتاز جميع المكونات اختبارات السلامة الرياضية والأمنية قبل النشر.
 
-1.  **Run Unit and Integration Tests:**
+1.  **تشغيل اختبارات الوحدة والتكامل:**
     ```bash
     python3 -m pytest tests/
     ```
 
-2.  **Run the Phi-Security-Tool (Static Analysis):**
+2.  **تشغيل أداة التشخيص الأمني (التحليل الثابت):**
+    (سيتم تحديث الأمر بعد تطوير الأداة)
     ```bash
-    # This tool checks for hardcoded secrets, SQL injection, and mathematical errors.
-    python3 tools/phi_security_tool.py --scan-all
+    # الأمر الحالي (سيتم استبداله):
+    # python3 tools/phi_security_tool.py --scan-all
     ```
 
 ---
 
-## 5. Deployment
+## 5. النشر (Deployment)
 
-### 5.1. Local Deployment (Docker Compose)
+### 5.1. النشر المحلي (Docker Compose)
 
-Use Docker Compose for a quick, isolated local testnet:
+استخدم Docker Compose لشبكة اختبار محلية سريعة ومعزولة:
 
 ```bash
-# Start the services (consensus, API, monitoring)
+# تشغيل الخدمات (التوافق، واجهة برمجة التطبيقات، المراقبة)
 docker-compose up -d
 ```
 
-### 5.2. Mainnet Deployment (Kubernetes/Terraform)
+### 5.2. نشر الشبكة الرئيسية (Mainnet Deployment)
 
-Refer to the `deployments/` directory for production-ready scripts:
+راجع دليل `deployments/` للحصول على نصوص برمجية جاهزة للإنتاج:
 
--   `deployments/kubernetes/`: Helm charts and YAML files.
--   `deployments/terraform/`: Infrastructure as Code for cloud providers.
+*   `deployments/kubernetes/`: مخططات Helm وملفات YAML.
+*   `deployments/terraform/`: البنية التحتية ككود لمزودي الخدمات السحابية.
 
 ---
 
-## 6. Clean Up
+## 6. التنظيف (Clean Up)
 
-To stop and remove the local Docker containers:
+لإيقاف وإزالة حاويات Docker المحلية:
 
 ```bash
 docker-compose down
+```
+
+---
+
+## 7. سجل الأبحاث (Research Log)
+
+يتم استخدام ملف `research_log.json` لتسجيل نتائج فحص المستودعات الخارجية ذات الصلة (مثل Ethereum و Solana و Bitcoin) بحثاً عن الابتكارات والتحديثات التي قد تؤثر على تصميم Phi-Chain.
+
+**موقع الملف:** `research_log.json` (في الجذر)
+
+**الغرض:** ضمان أن تصميم Phi-Chain يظل متوافقاً مع أحدث التطورات في تقنية البلوكشين.
+
+**مثال على محتوى السجل (للتوثيق):**
+
+```json
+[
+    {
+        "timestamp": "2025-12-24T07:52:30.338134",
+        "event": "CHECK_REPO",
+        "details": {
+            "repo": "https://github.com/ethereum/go-ethereum",
+            "status": "No critical updates matching Phi-Chain standards found."
+        }
+    }
+]
 ```
