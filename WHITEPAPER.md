@@ -61,13 +61,64 @@ The core engine integrates all fundamental blockchain components:
 ### 6.2 Wallet API (`api/wallet_api.py`)
 A FastAPI-based backend providing RESTful endpoints for wallet operations, staking, mining, and blockchain queries. It includes WebSocket support for real-time updates.
 
+### 6.3 Web Wallet Application (`wallet.html`)
+The front-end web application provides a user-friendly interface for interacting with the Φ-Chain. Key updates include:
+- **Secure Wallet Creation:** Non-custodial wallet generation (Mnemonic/Private Key) using `ethers.js` for mathematical key derivation.
+- **Multi-Wallet Connection:** Seamless integration with MetaMask, Phantom, and WalletConnect.
+- **Asset Management:** Real-time balance and transaction history viewing.
+
+### 6.4 Validator Node (`validator_node.py`)
+A FastAPI-based backend providing RESTful endpoints for wallet operations, staking, mining, and blockchain queries. It includes WebSocket support for real-time updates.
+
 ### 6.3 Validator Node (`validator_node.py`)
 A complete validator node implementation with key management, block proposal, validation, consensus participation, and reward tracking.
 
 ### 6.4 Mainnet Deployment (`tools/deploy_mainnet.py`)
 An automated deployment script that initializes and deploys the Φ-Chain Mainnet, including genesis block creation, validator network setup, and configuration generation.
 
-### 6.5 Interactive Dashboard (`dashboard.html`)
+### 6.6 Interactive Dashboard (`dashboard.html`)
+A real-time analytics dashboard built with Plotly.js, displaying network metrics, validator status, and blockchain performance.
+
+### 6.7 Architectural Diagram
+The complete architecture, including the new wallet component, is visualized below:
+
+```mermaid
+graph TD
+    subgraph Phi-Chain Architecture (The Fibonacci Universe)
+        direction LR
+        
+        subgraph Front-End Applications
+            W[Wallet & PoC Mining App]
+            O[AI Oracle Interface]
+            W --> |Wallet Creation| EWC(Ethers.js Wallet Core)
+        end
+
+        subgraph Core Protocol (Reversible Core)
+            direction TB
+            C[Consensus Layer: FBA]
+            B[Blockchain Layer: Reversible Core]
+            M[Math Layer: Golden Ratio & Fibonacci]
+            
+            M --> C
+            M --> B
+            C --> B
+        end
+        
+        subgraph Key Innovations
+            direction TB
+            FBA[FBA Consensus]
+            RC[Reversible Core]
+            ML[Math Layer]
+            
+            FBA --> |Finality F_n| B
+            RC --> |Temporal Symmetry| B
+            ML --> |Non-Arbitrary Params| C
+        end
+        
+        W --> |Web3 Connector| C
+        O --> |Data Feed| B
+    end
+```
 A real-time analytics dashboard built with Plotly.js, displaying network metrics, validator status, and blockchain performance.
 
 ## 7. Conclusion
