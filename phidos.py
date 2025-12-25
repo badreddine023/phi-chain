@@ -19,16 +19,16 @@ class PhiDOS:
         self.file_system = {} # Local cache of EDOs from chain
         
     def boot(self):
-        print("\n" + "="*60)
-        print(f"PhiDOS Version {self.VERSION}")
-        print("Copyright (c) 2025 Phi-Chain Foundation")
-        print("Ready.")
-        print("="*60 + "\n")
+        print("\n" + "Φ"*60)
+        print(f"Φ PhiDOS Version {self.VERSION}")
+        print("Φ Copyright (c) 2025 Phi-Chain Foundation")
+        print("Φ Ready.")
+        print("Φ"*60 + "\n")
         
     def shell(self):
         while self.is_running:
             try:
-                cmd_input = input(f"{self.current_directory}> ").strip().split()
+                cmd_input = input(f"Φ {self.current_directory}> ").strip().split()
                 if not cmd_input:
                     continue
                 
@@ -64,12 +64,12 @@ class PhiDOS:
         print("  EXIT         - Shutdown PhiDOS\n")
 
     def list_files(self):
-        print(f"\nDirectory of {self.current_directory}")
+        print(f"\nΦ Directory of {self.current_directory}")
         if not self.file_system:
-            print("  No files found.")
+            print("  Φ No files found.")
         else:
             for name, data in self.file_system.items():
-                print(f"  {name:12} {data['size']:8} bytes  [Φ-Coherent]")
+                print(f"  Φ {name:12} {data['size']:8} bytes  [Φ-Coherent]")
         print("")
 
     def save_file(self, args):
