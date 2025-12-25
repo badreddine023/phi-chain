@@ -1,0 +1,62 @@
+[
+  {
+    "validator_id": "validator_000",
+    "stake": 6765,
+    "public_key": "10749271bc2ecd69a9f51758aab6d18083d32392110b9117b2dfc13a2347c2fc",
+    "index": 0
+  },
+  {
+    "validator_id": "validator_001",
+    "stake": 10946,
+    "public_key": "b06e4bb6508d7aec7b4a9dda55b1838f24c5990eace109f0406dd0e47607c1d4",
+    "index": 1
+  },
+  {
+    "validator_id": "validator_002",
+    "stake": 17711,
+    "public_key": "052ef835f0f372566ef5129f07b74b41cff835a49d035055a0fa3408bb3f5898",
+    "index": 2
+  },
+  {
+    "validator_id": "validator_003",
+    "stake": 28657,
+    "public_key": "9e8ac8f50c3d611c45623307b22c1b3d3f5b764a0f142c71a0b469a76f33544d",
+    "index": 3
+  },
+  {
+    "validator_id": "validator_004",
+    "stake": 46368,
+    "public_key": "48855c919abafcf262516f86fff3550058844e4ac90fd6a135ef5e39dc165f09",
+    "index": 4
+  },
+  {
+    "validator_id": "validator_005",
+    "stake": 75025,
+    "public_key": "7875b90183775f3fea4499d9d130fe30e7608d53c745bc809f8c6cdea9696e96",
+    "index": 5
+  },
+  {
+    "validator_id": "validator_006",
+    "stake": 121393,
+    "public_key": "918e25d9ee98f2ca5827edd691792e0c9d6addb22ef7f010dcc8e41beb536b6f",
+    "index": 6
+  },
+  {
+    "validator_id": "validator_007",
+    "stake": 196418,
+    "public_key": "32c4d922a11d59a2a383adc6b7e515a7b7416caa9bc20ccd34be0ec8d9c86349",
+    "index": 7
+  },
+  {
+    "validator_id": "validator_008",
+    "stake": 317811,
+    "public_key": "adc5d61f8cfdbc17107eddee752ad47116486184a8799b73a42961d975b916e6",
+    "index": 8
+  },
+  {
+    "validator_id": "validator_009",
+    "stake": 514229,
+    "public_key": "8ad5046192821b26b3279fa5d8212442c2f590c0b41ea942fc273df0b28b0388",
+    "index": 9
+  }
+]

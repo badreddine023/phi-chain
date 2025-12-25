@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Φ-Chain | Mainnet Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='90' fill='%23b9a369'>Φ</text></svg>">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/3.0.3/plotly.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gold: #b9a369;
+            --dark-bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --accent-gold: #d4af37;
+            --text-light: #f0f0f0;
+            --border-color: rgba(185, 163, 105, 0.2);
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--dark-bg); color: var(--text-light); margin: 0; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        .header { text-align: center; margin-bottom: 3rem; }
+        .header h1 { font-size: 2.5rem; color: var(--primary-gold); }
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; }
+        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 1.5rem; }
+        .metric { font-size: 2rem; font-weight: bold; color: var(--primary-gold); font-family: 'JetBrains Mono', monospace; }
+        .label { font-size: 0.9rem; color: #a0a0a0; margin-bottom: 0.5rem; }
+        .status-tag { padding: 0.2rem 0.6rem; border-radius: 10px; font-size: 0.8rem; font-weight: bold; }
+        .status-ok { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+        .chart { height: 300px; width: 100%; margin-top: 1rem; }
+        .nav-btn { position: fixed; top: 1rem; left: 1rem; z-index: 100; background: var(--primary-gold); color: var(--dark-bg); padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Home</a>
+    <div class="container">
+        <div class="header">
+            <h1>Φ-Chain Mainnet Real-Time Monitor</h1>
+            <p>Live metrics from the Golden Ratio consensus engine</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Network Health -->
+            <div class="card">
+                <div class="label">Network Status</div>
+                <div class="metric"><span class="status-tag status-ok">OPERATIONAL</span></div>
+                <div style="margin-top: 1rem;">
+                    <div class="label">Active Validators</div>
+                    <div class="metric">1,597 / 1,597</div>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <div class="label">Consensus Health</div>
+                    <div class="metric">99.98%</div>
+                </div>
+            </div>
+
+            <!-- Block Metrics -->
+            <div class="card">
+                <div class="label">Current Block Height</div>
+                <div class="metric" id="block-height">3,524,578</div>
+                <div style="margin-top: 1rem;">
+                    <div class="label">Average Block Time</div>
+                    <div class="metric">8.0s (F_6)</div>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <div class="label">TPS (Current / Peak)</div>
+                    <div class="metric">144 / 610</div>
+                </div>
+            </div>
+
+            <!-- Fibonacci State -->
+            <div class="card">
+                <div class="label">Fibonacci State Vector</div>
+                <div class="metric" id="f-vector">[F_33, F_32]</div>
+                <div id="phi-chart" class="chart"></div>
+            </div>
+        </div>
+
+        <!-- Validator Performance -->
+        <div class="card" style="margin-top: 2rem;">
+            <h3>Top Performing Validators</h3>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                <thead>
+                    <tr style="text-align: left; color: var(--primary-gold); border-bottom: 1px solid var(--border-color);">
+                        <th style="padding: 1rem;">Validator ID</th>
+                        <th>Stake (Φ)</th>
+                        <th>Uptime</th>
+                        <th>Rewards</th>
+                    </tr>
+                </thead>
+                <tbody id="validator-table">
+                    <!-- Data will be populated by JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Populate Validator Table
+        const validators = [
+            { id: "phi_val_d62c...", stake: "6,765", uptime: "99.99%", rewards: "144.00" },
+            { id: "phi_val_f79b...", stake: "4,181", uptime: "99.95%", rewards: "89.00" },
+            { id: "phi_val_a61c...", stake: "2,584", uptime: "100.00%", rewards: "55.00" },
+            { id: "phi_val_41fb...", stake: "1,597", uptime: "99.90%", rewards: "34.00" }
+        ];
+
+        const tableBody = document.getElementById('validator-table');
+        validators.forEach(v => {
+            const row = `
+                <tr style="border-bottom: 1px solid rgba(185, 163, 105, 0.1);">
+                    <td style="padding: 1rem; font-family: monospace;">${v.id}</td>
+                    <td>${v.stake}</td>
+                    <td>${v.uptime}</td>
+                    <td style="color: #22c55e;">+${v.rewards} Φ</td>
+                </tr>
+            `;
+            tableBody.innerHTML += row;
+        });
+
+        // Initialize Phi Chart
+        function initChart() {
+            const data = [{
+                x: [1, 2, 3, 5, 8, 13, 21, 34],
+                y: [1, 1, 2, 3, 5, 8, 13, 21],
+                type: 'scatter',
+                mode: 'lines+markers',
+                line: { color: '#b9a369', width: 3 },
+                marker: { size: 8, color: '#d4af37' }
+            }];
+
+            const layout = {
+                title: 'Fibonacci Convergence',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                font: { color: '#f0f0f0' },
+                xaxis: { gridcolor: 'rgba(185, 163, 105, 0.1)' },
+                yaxis: { gridcolor: 'rgba(185, 163, 105, 0.1)' },
+                margin: { t: 40, b: 40, l: 40, r: 40 }
+            };
+
+            Plotly.newPlot('phi-chart', data, layout, { responsive: true, displayModeBar: false });
+        }
+
+        initChart();
+
+        // Simulate Real-time Updates
+        setInterval(() => {
+            const heightEl = document.getElementById('block-height');
+            let currentHeight = parseInt(heightEl.textContent.replace(/,/g, ''));
+            heightEl.textContent = (currentHeight + 1).toLocaleString();
+        }, 8000);
+    </script>
+</body>
+</html>

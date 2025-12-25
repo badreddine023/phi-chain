@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Φ-Chain Portal - Universal Blockchain Applications</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='90' fill='%23b9a369'>Φ</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/3.0.3/plotly.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <style>
+        :root {
+            --primary-gold: #b9a369;
+            --dark-bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --accent-gold: #d4af37;
+            --text-light: #f0f0f0;
+            --text-muted: #a0a0a0;
+            --border-color: rgba(185, 163, 105, 0.2);
+            --gradient-primary: linear-gradient(135deg, #b9a369, #d4af37);
+            --gradient-secondary: linear-gradient(135deg, rgba(185, 163, 105, 0.1), rgba(212, 175, 55, 0.1));
+            --shadow-gold: 0 10px 30px rgba(185, 163, 105, 0.3);
+            --shadow-hover: 0 20px 40px rgba(185, 163, 105, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            font-weight: 400;
+        }
+
+        @keyframes skeleton-loading {
+            0% {
+                background-color: hsl(200, 20%, 70%);
+            }
+
+            100% {
+                background-color: hsl(200, 20%, 95%);
+            }
+        }
+
+        .skeleton {
+            animation: skeleton-loading 1.5s infinite alternate;
+        }
+
+        .skeleton-logo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+        }
+
+        .skeleton-hero-title {
+            width: 80%;
+            height: 2rem;
+            margin: 1rem 0;
+        }
+
+        .skeleton-hero-subtitle {
+            width: 60%;
+            height: 1.5rem;
+            margin: 0.5rem 0;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .skeleton-logo,
+            .skeleton-hero-title,
+            .skeleton-hero-subtitle {
+                animation: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <!-- Skeleton loading screen placeholders -->
+        <div class="skeleton skeleton-logo"></div>
+        <div class="skeleton skeleton-hero-title"></div>
+        <div class="skeleton skeleton-hero-subtitle"></div>
+        
+        <!-- Original loaded content (hidden while loading) -->
+        <h1>Φ-Chain Portal</h1>
+        <p class="subtitle">Universal Blockchain Applications</p>
+    </div>
+</body>
+</html>

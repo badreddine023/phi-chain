@@ -1,0 +1,24 @@
+{
+  "index": 0,
+  "hash": "00dc09217f3b318b2e12e0e759675c7ecb38c64a39d9865c6c3d1237b2261057",
+  "timestamp": 1766446154.275314,
+  "proposer": "0x0000000000000000000000000000000000000000",
+  "f_vector": [
+    1,
+    1
+  ],
+  "transactions": [
+    {
+      "sender": "0x0000000000000000000000000000000000000000",
+      "recipient": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+      "value": 3524578,
+      "data": "",
+      "nonce": 0,
+      "gas_limit": 21000,
+      "signature": "",
+      "read_set": [],
+      "write_set": [],
+      "timestamp": 1766446154.2753127
+    }
+  ]
+}

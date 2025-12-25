@@ -1,0 +1,13 @@
+{
+    "validator_id": "phi_val_a61cb306f7bce2dd",
+    "private_key": "531a61afc148f350cd0b1a9d8d9532fc5cefacec226da5a43000025701ff6b4e",
+    "port": 5002,
+    "peers": [
+        5000,
+        5001,
+        5003,
+        5004,
+        5005,
+        5006
+    ]
+}

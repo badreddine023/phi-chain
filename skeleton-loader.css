@@ -1,0 +1,219 @@
+/* Enhanced Skeleton Loading States with Performance Optimizations */
+
+/* Prevent layout shift during skeleton to real content transition */
+.skeleton-loading #realApp {
+    display: none !important;
+}
+
+#skeleton-container {
+    min-height: 100vh;
+    background: #0a0a0a;
+    font-family: 'Inter', sans-serif;
+    will-change: opacity; /* Optimize for fade-out animation */
+}
+
+/* Animated Shimmer Effect - GPU Accelerated */
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.skeleton-shimmer {
+    background: linear-gradient(90deg, 
+        #1a1a1a 25%, 
+        #2a2a2a 50%, 
+        #1a1a1a 75%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+    border-radius: 4px;
+    /* GPU acceleration */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Skeleton Header - Fixed positioning */
+.skeleton-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(26, 26, 26, 0.95);
+    padding: 1rem 2rem;
+    border-bottom: 1px solid rgba(185, 163, 105, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(20px);
+}
+
+.skeleton-logo {
+    width: 200px;
+    height: 40px;
+}
+
+/* Skeleton Hero Section */
+.skeleton-hero {
+    padding: 10rem 2rem 6rem;
+    text-align: center;
+}
+
+.skeleton-hero-title {
+    width: 80%;
+    max-width: 600px;
+    height: 70px;
+    margin: 0 auto 1.5rem;
+    border-radius: 8px;
+}
+
+.skeleton-hero-subtitle {
+    width: 60%;
+    max-width: 400px;
+    height: 30px;
+    margin: 0 auto 3rem;
+    animation-delay: 0.2s;
+}
+
+.skeleton-cta {
+    width: 200px;
+    height: 50px;
+    margin: 0 0.5rem;
+    border-radius: 25px;
+    display: inline-block;
+    animation-delay: 0.3s;
+}
+
+/* Skeleton Cards Grid */
+.skeleton-grid {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.skeleton-card {
+    background: #1a1a1a;
+    border: 1px solid rgba(185, 163, 105, 0.1);
+    border-radius: 20px;
+    padding: 2.5rem;
+    /* Prevent layout shift */
+    min-height: 300px;
+}
+
+.skeleton-card-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 1.5rem;
+    animation-delay: 0.4s;
+}
+
+.skeleton-card-title {
+    width: 70%;
+    height: 24px;
+    margin: 0 auto 1rem;
+    animation-delay: 0.5s;
+}
+
+.skeleton-card-text {
+    width: 90%;
+    height: 60px;
+    margin: 0 auto;
+    animation-delay: 0.6s;
+}
+
+.skeleton-card-button {
+    width: 160px;
+    height: 44px;
+    margin: 1.5rem auto 0;
+    border-radius: 22px;
+    animation-delay: 0.7s;
+}
+
+/* Skeleton Chart Container */
+.skeleton-chart-container {
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 0 2rem;
+}
+
+.skeleton-chart {
+    width: 100%;
+    height: 400px;
+    background: #1a1a1a;
+    border: 1px solid rgba(185, 163, 105, 0.1);
+    border-radius: 15px;
+    margin-top: 1rem;
+    animation-delay: 0.8s;
+}
+
+/* Smooth Transition Out - GPU Accelerated */
+@keyframes fadeOut {
+    from { 
+        opacity: 1;
+        transform: translateZ(0);
+    }
+    to { 
+        opacity: 0;
+        visibility: hidden;
+        transform: translateZ(0);
+    }
+}
+
+.skeleton-fade-out {
+    animation: fadeOut 0.5s ease forwards;
+}
+
+/* Responsive Design for Skeleton */
+@media (max-width: 768px) {
+    .skeleton-header {
+        padding: 0.75rem 1rem;
+    }
+
+    .skeleton-logo {
+        width: 150px;
+        height: 30px;
+    }
+
+    .skeleton-hero {
+        padding: 6rem 1rem 4rem;
+    }
+
+    .skeleton-hero-title {
+        height: 50px;
+    }
+
+    .skeleton-hero-subtitle {
+        height: 24px;
+    }
+
+    .skeleton-cta {
+        width: 150px;
+        height: 40px;
+        margin: 0.5rem;
+    }
+
+    .skeleton-grid {
+        grid-template-columns: 1fr;
+        padding: 0 1rem;
+    }
+
+    .skeleton-chart {
+        height: 250px;
+    }
+}
+
+/* Accessibility: Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+    .skeleton-shimmer {
+        animation: none;
+        background: #1a1a1a;
+    }
+
+    .skeleton-fade-out {
+        animation: none;
+        opacity: 0;
+        visibility: hidden;
+    }
+}

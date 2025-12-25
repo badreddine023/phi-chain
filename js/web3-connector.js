@@ -1,0 +1,29 @@
+class Web3Connector {constructor() {this.web3 = null;this.connectedAccount = null;this.chainId = null;this.connectionStatus = {metamask: 'disconnected',phantom: 'disconnected',walletconnect: 'disconnected'};}async init() {if (window.ethereum) {this.web3 = new Web3(window.ethereum);await this.setupEventListeners();return true;}return false;}async connectMetaMask() {try {const accounts = await window.ethereum.request({method: 'eth_requestAccounts'});this.connectedAccount = accounts[0];this.connectionStatus.metamask = 'connected';this.chainId = await window.ethereum.request({method: 'eth_chainId'});this.updateConnectionUI('metamask', true, this.connectedAccount);const balance = await this.getSimulatedBalance();this.updateBalanceUI('metamask', balance);return { success: true, account: this.connectedAccount };} catch (error) {console.error('MetaMask connection error:', error);this.updateConnectionUI('metamask', false);return { success: false, error: error.message };}}async connectPhantom() {if (window.solana && window.solana.isPhantom) {try {const response = await window.solana.connect();this.connectedAccount = response.publicKey.toString();this.connectionStatus.phantom = 'connected';this.updateConnectionUI('phantom', true, this.connectedAccount);const balance = (Math.random() * 5000).toFixed(3);this.updateBalanceUI('phantom', balance);return { success: true, account: this.connectedAccount };} catch (error) {console.error('Phantom connection error:', error);this.updateConnectionUI('phantom', false);return { success: false, error: error.message };}}else {alert('Phantom wallet not found. Please install it from https://phantom.app/');return { success: false, error: 'Wallet not installed' };}}async connectWalletConnect() {return new Promise((resolve) => {setTimeout(async () => {this.connectionStatus.walletconnect = 'connected';const simulatedAddress = '0x' + Array.from({length: 40}, () => Math.floor(Math.random() * 16).toString(16)).join('');this.updateConnectionUI('walletconnect', true, simulatedAddress);const balance = (Math.random() * 10000).toFixed(3);this.updateBalanceUI('walletconnect', balance);resolve({ success: true, account: simulatedAddress });}, 1500);});}    createNewWallet() {
+        try {
+            // ethers is available globally because of the CDN link added to wallet.html
+            const wallet = ethers.Wallet.createRandom();
+            const mnemonic = wallet.mnemonic.phrase;
+            const privateKey = wallet.privateKey;
+            const address = wallet.address;
+
+            // Update UI to display the new wallet info (will be implemented in the next phase)
+            this.updateNewWalletUI(mnemonic, privateKey, address);
+
+            return { success: true, mnemonic, privateKey, address };
+        } catch (error) {
+            console.error('Error creating new wallet:', error);
+            return { success: false, error: error.message };
+        }
+    }
+
+    updateNewWalletUI(mnemonic, privateKey, address) {
+        const mnemonicElement = document.getElementById('new-wallet-mnemonic');
+        const privateKeyElement = document.getElementById('new-wallet-private-key');
+        const addressElement = document.getElementById('new-wallet-address');
+
+        if (mnemonicElement) mnemonicElement.textContent = mnemonic;
+        if (privateKeyElement) privateKeyElement.textContent = privateKey;
+        if (addressElement) addressElement.textContent = address;
+    }
+
+    updateConnectionUI(walletType, isConnected, address = null) {const statusElement = document.getElementById(`${walletType}-status`);const buttonElement = document.querySelector(`[onclick*="${walletType}"]`);if (statusElement) {statusElement.textContent = isConnected ? (address ? `Connected: ${address.substring(0, 6)}...${address.substring(address.length - 4)}` : 'Connected') : 'Not Connected';statusElement.className = `wallet-status ${isConnected ? 'status-connected' : 'status-disconnected'}`;}if (buttonElement && isConnected) {buttonElement.innerHTML = '<i class="fas fa-check-circle"></i> Connected';buttonElement.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';buttonElement.onclick = null;}}updateBalanceUI(walletType, balance) {const balanceElement = document.getElementById(`${walletType}-balance`);if (balanceElement) {balanceElement.textContent = `${balance} Φ`;}}async getSimulatedBalance() {return new Promise(resolve => {setTimeout(() => {resolve((Math.random() * 1000).toFixed(3));}, 800);});}setupEventListeners() {if (window.ethereum) {window.ethereum.on('accountsChanged', (accounts) => {if (accounts.length === 0) {this.updateConnectionUI('metamask', false);}else {this.connectedAccount = accounts[0];this.updateConnectionUI('metamask', true, this.connectedAccount);}});window.ethereum.on('chainChanged', (chainId) => {this.chainId = chainId;console.log('Chain changed to:', chainId);window.location.reload();});}}disconnect(walletType) {this.connectionStatus[walletType] = 'disconnected';this.updateConnectionUI(walletType, false);const buttonElement = document.querySelector(`[onclick*="${walletType}"]`);if (buttonElement) {buttonElement.innerHTML = `<i class="fas fa-plug"></i> Connect ${walletType.charAt(0).toUpperCase() + walletType.slice(1)}`;buttonElement.style.background = 'var(--gradient-primary)';}}}const web3Connector = new Web3Connector();async function connectMetaMask() {return await web3Connector.connectMetaMask();}async function connectPhantom() {return await web3Connector.connectPhantom();}async function connectWalletConnect() {return await web3Connector.connectWalletConnect();}async function createNewWallet() {return await web3Connector.createNewWallet();}

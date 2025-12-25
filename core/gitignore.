@@ -1,0 +1,81 @@
+# ========================
+# Φ-CHAIN GITIGNORE
+# Mathematical Blockchain
+# ========================
+
+# 🔐 SECRETS & PRIVATE KEYS
+*.pem
+*.key
+*.crt
+.env
+.env.local
+secrets/
+wallet_keys/
+mnemonic_phrases.txt
+private_seed.txt
+config/keys.json
+
+# 🧮 MATH CALCULATIONS & CACHE
+phi_calculations/
+fibonacci_cache/
+*.hdf5
+*.npy
+*.npz
+math_cache/
+precision_results/
+
+# ⛓️ LOCAL BLOCKCHAIN DATA
+blockchain_data/
+local_chain/
+*.chaindata
+*.statedb
+genesis_local.json
+node_data/
+validator_data/
+*.db
+
+# 🧪 TEST & SIMULATION
+test_output/
+simulation_data/
+*.sim
+benchmark_results/
+load_test_results/
+
+# 🧬 DNA & ORGANISM SIM
+dna_sequences/
+digital_organisms/
+mutation_logs/
+*.fasta
+*.genome
+
+# 🔮 ORACLE & PROPHECY
+gematria_cache/
+prophecy_data/
+oracle_predictions/
+
+# 🐍 PYTHON
+__pycache__/
+*.py[cod]
+*.so
+build/
+dist/
+*.egg-info/
+.venv/
+venv/
+env/
+
+# 🛠️ IDE & EDITORS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# 📊 NOTEBOOKS & DOCS
+.ipynb_checkpoints/
+docs/_build/
+
+# 📈 LOGS
+*.log
+logs/
