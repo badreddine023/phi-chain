@@ -4,62 +4,645 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Φ-Chain | The Golden Ratio Blockchain</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='90' fill='%23b9a369'>Φ</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles-new.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='90' fill='%23d4af37'>Φ</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-gold: #b9a369;
-            --dark-bg: #0a0a0a;
-            --text-light: #f0f0f0;
-            --accent-gold: #d4af37;
-            --gradient-primary: linear-gradient(135deg, #b9a369, #d4af37);
-        }
-        body { font-family: 'Inter', sans-serif; background: var(--dark-bg); color: var(--text-light); margin: 0; overflow-x: hidden; }
-        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%); }
-        .phi-logo { font-size: 8rem; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; animation: pulse 3s infinite ease-in-out; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } }
-        h1 { font-size: 4rem; font-weight: 300; letter-spacing: 0.5rem; margin: 0; }
-        p { font-size: 1.2rem; color: #a0a0a0; max-width: 600px; margin: 1.5rem 0 3rem; }
-        .btn-group { display: flex; gap: 1.5rem; }
-        .btn { padding: 1rem 2.5rem; border-radius: 50px; font-weight: 600; text-decoration: none; transition: 0.3s; }
-        .btn-primary { background: var(--gradient-primary); color: var(--dark-bg); }
-        .btn-secondary { border: 1px solid var(--primary-gold); color: var(--primary-gold); }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(185, 163, 105, 0.2); }
-        .features { padding: 5rem 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; max-width: 1200px; margin: 0 auto; }
-        .feature-card { text-align: center; }
-        .feature-card i { font-size: 2.5rem; color: var(--primary-gold); margin-bottom: 1.5rem; }
-        .feature-card h3 { font-size: 1.5rem; margin-bottom: 1rem; }
-    </style>
 </head>
 <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="phi-symbol">Φ</span>
+                <span class="logo-text">PHI-CHAIN</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#roadmap">Roadmap</a></li>
+                <li><a href="#resources">Resources</a></li>
+                <li><a href="wallet.html" class="nav-btn">Launch Wallet</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
     <section class="hero">
-        <div class="phi-logo">Φ</div>
-        <h1>Φ-CHAIN</h1>
-        <p>The world's first autonomous blockchain ecosystem governed by the Golden Ratio and Fibonacci sequence.</p>
-        <div class="btn-group">
-            <a href="wallet.html" class="btn btn-primary">Launch Wallet</a>
-            <a href="WHITEPAPER.md" class="btn btn-secondary">Read Whitepaper</a>
+        <div class="hero-content">
+            <div class="hero-background">
+                <div class="golden-circle"></div>
+                <div class="fibonacci-spiral"></div>
+            </div>
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    <span class="phi-large">Φ</span>-CHAIN
+                </h1>
+                <p class="hero-subtitle">The World's First Golden Ratio Blockchain</p>
+                <p class="hero-description">
+                    A decentralized ecosystem governed by the mathematical principles of the Golden Ratio and Fibonacci sequence, 
+                    delivering unprecedented scalability, security, and mathematical elegance.
+                </p>
+                <div class="hero-buttons">
+                    <a href="wallet.html" class="btn btn-primary">
+                        <i class="fas fa-wallet"></i> Launch Wallet
+                    </a>
+                    <a href="WHITEPAPER.md" class="btn btn-secondary">
+                        <i class="fas fa-book"></i> Read Whitepaper
+                    </a>
+                    <a href="https://github.com/badreddine023/phi-chain" class="btn btn-secondary" target="_blank">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll to explore</span>
+            <i class="fas fa-chevron-down"></i>
         </div>
     </section>
 
-    <section class="features">
-        <div class="feature-card">
-            <i class="fas fa-microchip"></i>
-            <h3>PoC Consensus</h3>
-            <p>Proof-of-Coherence: A mathematically pure agreement mechanism.</p>
-        </div>
-        <div class="feature-card">
-            <i class="fas fa-bolt"></i>
-            <h3>OPEVM</h3>
-            <p>Optimistic Parallelized EVM for Fibonacci-speed transactions.</p>
-        </div>
-        <div class="feature-card">
-            <i class="fas fa-shield-alt"></i>
-            <h3>Validator Nodes</h3>
-            <p>Decentralized security powered by Fibonacci-weighted staking.</p>
+    <!-- Quick Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>F₃₃ Tokens</h3>
+                        <p>3,524,578 Total Supply</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>8 Second Slots</h3>
+                        <p>F₆ Fibonacci-Based Timing</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>610 Validators</h3>
+                        <p>F₁₅ Byzantine Fault Tolerance</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-infinity"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Golden Ratio</h3>
+                        <p>1.618... Mathematical Foundation</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Core Features & Innovations</h2>
+                <p>Φ-Chain combines cutting-edge blockchain technology with timeless mathematical principles</p>
+            </div>
+            
+            <div class="features-grid">
+                <!-- Feature 1: PoC Consensus -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3>Proof-of-Coherence (PoC)</h3>
+                    <p>
+                        A novel consensus mechanism where validator influence is weighted by their "Coherence Score," 
+                        derived from stake and historical participation aligned with Fibonacci numbers.
+                    </p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Fibonacci-weighted validator selection</li>
+                        <li><i class="fas fa-check"></i> Byzantine Fault Tolerant (BFT)</li>
+                        <li><i class="fas fa-check"></i> Deterministic finality</li>
+                    </ul>
+                </div>
+
+                <!-- Feature 2: OPEVM -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Optimistic Parallelized EVM</h3>
+                    <p>
+                        Execute transactions in parallel with static analysis to detect state conflicts before execution. 
+                        Full EVM compatibility with Fibonacci-speed throughput.
+                    </p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Parallel transaction execution</li>
+                        <li><i class="fas fa-check"></i> EVM compatible smart contracts</li>
+                        <li><i class="fas fa-check"></i> High throughput processing</li>
+                    </ul>
+                </div>
+
+                <!-- Feature 3: Fibonacci Q-Matrix -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-infinity"></i>
+                    </div>
+                    <h3>Fibonacci Q-Matrix State</h3>
+                    <p>
+                        State evolution governed by the Fibonacci Q-Matrix, ensuring deterministic and mathematically pure 
+                        progression of network metrics following natural Fibonacci sequence.
+                    </p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Deterministic state transitions</li>
+                        <li><i class="fas fa-check"></i> Mathematical purity</li>
+                        <li><i class="fas fa-check"></i> Predictable growth patterns</li>
+                    </ul>
+                </div>
+
+                <!-- Feature 4: Validator Nodes -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3>Decentralized Validator Network</h3>
+                    <p>
+                        Secure validator node implementation with key management, block proposal, consensus participation, 
+                        and automated reward tracking based on Fibonacci staking tiers.
+                    </p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Fibonacci-based staking</li>
+                        <li><i class="fas fa-check"></i> Automated rewards</li>
+                        <li><i class="fas fa-check"></i> Full P2P networking</li>
+                    </ul>
+                </div>
+
+                <!-- Feature 5: Smart Wallet -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <h3>Interactive Wallet Interface</h3>
+                    <p>
+                        User-friendly wallet with real-time transaction processing, balance management, staking interface, 
+                        and comprehensive portfolio analytics dashboard.
+                    </p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Real-time updates</li>
+                        <li><i class="fas fa-check"></i> Staking management</li>
+                        <li><i class="fas fa-check"></i> Portfolio analytics</li>
+                    </ul>
+                </div>
+
+                <!-- Feature 6: Analytics Dashboard -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Real-Time Analytics</h3>
+                    <p>
+                        Comprehensive dashboard displaying network metrics, validator status, blockchain performance, 
+                        transaction analytics, and system health monitoring.
+                    </p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Live network metrics</li>
+                        <li><i class="fas fa-check"></i> Validator monitoring</li>
+                        <li><i class="fas fa-check"></i> Performance tracking</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mathematical Foundation Section -->
+    <section class="mathematics">
+        <div class="container">
+            <div class="section-header">
+                <h2>The Golden Ratio Foundation</h2>
+                <p>Φ-Chain is built on timeless mathematical principles that govern nature itself</p>
+            </div>
+
+            <div class="math-grid">
+                <div class="math-card">
+                    <h3>The Golden Ratio (Φ)</h3>
+                    <div class="math-formula">1.618...</div>
+                    <p>
+                        The golden ratio appears throughout nature and has been revered since ancient times. 
+                        Φ-Chain uses this universal constant to govern network parameters, ensuring harmony and balance.
+                    </p>
+                </div>
+
+                <div class="math-card">
+                    <h3>Fibonacci Sequence</h3>
+                    <div class="math-formula">0, 1, 1, 2, 3, 5, 8, 13...</div>
+                    <p>
+                        Each number is the sum of the two preceding ones. This sequence defines all critical network parameters: 
+                        slot duration, epoch length, validator count, and token supply.
+                    </p>
+                </div>
+
+                <div class="math-card">
+                    <h3>Q-Matrix Evolution</h3>
+                    <div class="math-formula">[1 1; 1 0]</div>
+                    <p>
+                        The Fibonacci Q-Matrix governs state transitions. Each multiplication generates the next Fibonacci number, 
+                        creating a deterministic and mathematically pure evolution of the blockchain.
+                    </p>
+                </div>
+            </div>
+
+            <div class="math-parameters">
+                <h3>Mainnet Parameters (All Fibonacci-Based)</h3>
+                <table class="parameters-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Value</th>
+                            <th>Fibonacci Index</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Slot Duration</td>
+                            <td>8 seconds</td>
+                            <td>F₆</td>
+                            <td>Block proposal timing</td>
+                        </tr>
+                        <tr>
+                            <td>Epoch Duration</td>
+                            <td>2,584 seconds</td>
+                            <td>F₁₈</td>
+                            <td>Reward distribution period</td>
+                        </tr>
+                        <tr>
+                            <td>Minimum Stake</td>
+                            <td>6,765 Φ</td>
+                            <td>F₂₀</td>
+                            <td>Validator entry requirement</td>
+                        </tr>
+                        <tr>
+                            <td>Maximum Validators</td>
+                            <td>1,597</td>
+                            <td>F₁₇</td>
+                            <td>Network capacity</td>
+                        </tr>
+                        <tr>
+                            <td>Finality Threshold</td>
+                            <td>610 validators</td>
+                            <td>F₁₅</td>
+                            <td>Byzantine consensus</td>
+                        </tr>
+                        <tr>
+                            <td>Total Supply</td>
+                            <td>3,524,578 Φ</td>
+                            <td>F₃₃</td>
+                            <td>Maximum token cap</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section class="architecture" id="architecture">
+        <div class="container">
+            <div class="section-header">
+                <h2>System Architecture</h2>
+                <p>A comprehensive blockchain ecosystem with interconnected components</p>
+            </div>
+
+            <div class="architecture-grid">
+                <div class="arch-card">
+                    <div class="arch-icon">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <h3>Core Engine</h3>
+                    <p><strong>phi_chain.py</strong></p>
+                    <ul>
+                        <li>Fibonacci Q-Matrix state transitions</li>
+                        <li>PoC mining & consensus</li>
+                        <li>Transaction processing</li>
+                        <li>Blockchain validation</li>
+                        <li>Validator management</li>
+                    </ul>
+                </div>
+
+                <div class="arch-card">
+                    <div class="arch-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <h3>Wallet API</h3>
+                    <p><strong>api/wallet_api.py</strong></p>
+                    <ul>
+                        <li>FastAPI backend</li>
+                        <li>RESTful endpoints</li>
+                        <li>WebSocket support</li>
+                        <li>Real-time updates</li>
+                        <li>Transaction handling</li>
+                    </ul>
+                </div>
+
+                <div class="arch-card">
+                    <div class="arch-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3>Validator Node</h3>
+                    <p><strong>validator_node.py</strong></p>
+                    <ul>
+                        <li>Key management</li>
+                        <li>Block proposal</li>
+                        <li>Consensus participation</li>
+                        <li>Reward tracking</li>
+                        <li>P2P networking</li>
+                    </ul>
+                </div>
+
+                <div class="arch-card">
+                    <div class="arch-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3>Cryptography</h3>
+                    <p><strong>crypto/</strong></p>
+                    <ul>
+                        <li>Digital signatures</li>
+                        <li>Key derivation</li>
+                        <li>Hash functions</li>
+                        <li>Encryption</li>
+                        <li>Security protocols</li>
+                    </ul>
+                </div>
+
+                <div class="arch-card">
+                    <div class="arch-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3>Consensus Layer</h3>
+                    <p><strong>consensus/</strong></p>
+                    <ul>
+                        <li>PoC mechanism</li>
+                        <li>Validator selection</li>
+                        <li>Block finality</li>
+                        <li>Byzantine agreement</li>
+                        <li>Verification logic</li>
+                    </ul>
+                </div>
+
+                <div class="arch-card">
+                    <div class="arch-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3>Network Layer</h3>
+                    <p><strong>network/</strong></p>
+                    <ul>
+                        <li>P2P communication</li>
+                        <li>Node discovery</li>
+                        <li>Message routing</li>
+                        <li>Connection management</li>
+                        <li>Network monitoring</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section class="roadmap" id="roadmap">
+        <div class="container">
+            <div class="section-header">
+                <h2>Development Roadmap</h2>
+                <p>Strategic milestones for Φ-Chain evolution and maturity</p>
+            </div>
+
+            <div class="roadmap-timeline">
+                <div class="timeline-item completed">
+                    <div class="timeline-marker">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Phase 1: Foundation & Core</h3>
+                        <p><strong>Status: Completed</strong></p>
+                        <ul>
+                            <li>Fibonacci Q-Matrix implementation</li>
+                            <li>PoC consensus mechanism</li>
+                            <li>Core blockchain engine</li>
+                            <li>Wallet interface</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item active">
+                    <div class="timeline-marker">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Phase 2: Security & Stability</h3>
+                        <p><strong>Status: In Progress (40 hours)</strong></p>
+                        <ul>
+                            <li>Security audit & fixes</li>
+                            <li>Environment variable hardening</li>
+                            <li>Error handling & logging</li>
+                            <li>Comprehensive testing</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item upcoming">
+                    <div class="timeline-marker">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Phase 3: Performance & Scalability</h3>
+                        <p><strong>Status: Upcoming (60 hours)</strong></p>
+                        <ul>
+                            <li>Data structure optimization</li>
+                            <li>O(1) lookup implementations</li>
+                            <li>Caching & indexing</li>
+                            <li>Load testing</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item upcoming">
+                    <div class="timeline-marker">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Phase 4: Production Ready</h3>
+                        <p><strong>Status: Upcoming (80 hours)</strong></p>
+                        <ul>
+                            <li>Docker containerization</li>
+                            <li>Kubernetes orchestration</li>
+                            <li>Monitoring & alerting</li>
+                            <li>Mainnet deployment</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section class="resources" id="resources">
+        <div class="container">
+            <div class="section-header">
+                <h2>Documentation & Resources</h2>
+                <p>Comprehensive guides, technical documentation, and project resources</p>
+            </div>
+
+            <div class="resources-grid">
+                <a href="WHITEPAPER.md" class="resource-card" target="_blank">
+                    <div class="resource-icon">
+                        <i class="fas fa-scroll"></i>
+                    </div>
+                    <h3>Whitepaper</h3>
+                    <p>Complete technical specification and mathematical foundation of Φ-Chain</p>
+                </a>
+
+                <a href="TECHNICAL_REPORT.md" class="resource-card" target="_blank">
+                    <div class="resource-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3>Technical Report</h3>
+                    <p>In-depth analysis of architecture, consensus, and implementation details</p>
+                </a>
+
+                <a href="SYSTEM_OVERVIEW.md" class="resource-card" target="_blank">
+                    <div class="resource-icon">
+                        <i class="fas fa-diagram-project"></i>
+                    </div>
+                    <h3>System Overview</h3>
+                    <p>High-level system design and component interactions</p>
+                </a>
+
+                <a href="DEVELOPMENT_PLAN.md" class="resource-card" target="_blank">
+                    <div class="resource-icon">
+                        <i class="fas fa-map"></i>
+                    </div>
+                    <h3>Development Plan</h3>
+                    <p>Strategic roadmap and implementation timeline</p>
+                </a>
+
+                <a href="FINAL_REPORT.md" class="resource-card" target="_blank">
+                    <div class="resource-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>Final Report</h3>
+                    <p>Comprehensive project analysis and conclusions</p>
+                </a>
+
+                <a href="https://github.com/badreddine023/phi-chain" class="resource-card" target="_blank">
+                    <div class="resource-icon">
+                        <i class="fab fa-github"></i>
+                    </div>
+                    <h3>GitHub Repository</h3>
+                    <p>Source code, issues, and community contributions</p>
+                </a>
+
+                <a href="dashboard.html" class="resource-card">
+                    <div class="resource-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Analytics Dashboard</h3>
+                    <p>Real-time network metrics and performance monitoring</p>
+                </a>
+
+                <a href="wallet.html" class="resource-card">
+                    <div class="resource-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <h3>Wallet Interface</h3>
+                    <p>Interactive wallet for transactions and staking</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Join the Golden Ratio Revolution?</h2>
+                <p>Experience the future of blockchain powered by mathematical principles</p>
+                <div class="cta-buttons">
+                    <a href="wallet.html" class="btn btn-primary btn-large">
+                        <i class="fas fa-play-circle"></i> Launch Wallet Now
+                    </a>
+                    <a href="https://github.com/badreddine023/phi-chain" class="btn btn-secondary btn-large" target="_blank">
+                        <i class="fab fa-github"></i> Contribute on GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>About Φ-Chain</h3>
+                    <p>
+                        A decentralized blockchain ecosystem governed by the mathematical principles of the Golden Ratio 
+                        and Fibonacci sequence, delivering scalability, security, and mathematical elegance.
+                    </p>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#architecture">Architecture</a></li>
+                        <li><a href="#roadmap">Roadmap</a></li>
+                        <li><a href="#resources">Resources</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="WHITEPAPER.md" target="_blank">Whitepaper</a></li>
+                        <li><a href="wallet.html">Wallet</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="https://github.com/badreddine023/phi-chain" target="_blank">GitHub</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <div class="social-links">
+                        <a href="https://github.com/badreddine023/phi-chain" target="_blank" title="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" title="Discord">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 Φ-Chain. All rights reserved. Built with <span class="heart">♥</span> and mathematics.</p>
+                <p>Inspired by the Golden Ratio and Fibonacci Sequence</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script-new.js"></script>
 </body>
 </html>
