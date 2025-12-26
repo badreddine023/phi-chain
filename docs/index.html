@@ -40,57 +40,1224 @@
             font-weight: 400;
         }
 
-        @keyframes skeleton-loading {
+        /* Animated background with Phi symbols */
+        .hero-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--dark-bg);
+        }
+
+        .phi-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .phi-symbol {
+            position: absolute;
+            color: rgba(185, 163, 105, 0.1);
+            font-size: 2rem;
+            font-weight: 300;
+            animation: float 20s infinite linear;
+            pointer-events: none;
+        }
+
+        @keyframes float {
             0% {
-                background-color: hsl(200, 20%, 70%);
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
             }
-
+            10% {
+                opacity: 0.1;
+            }
+            90% {
+                opacity: 0.1;
+            }
             100% {
-                background-color: hsl(200, 20%, 95%);
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
             }
         }
 
-        .skeleton {
-            animation: skeleton-loading 1.5s infinite alternate;
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
         }
 
-        .skeleton-logo {
-            width: 150px;
-            height: 150px;
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: var(--primary-gold);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo:hover {
+            color: var(--accent-gold);
+            transform: scale(1.05);
+        }
+
+        .logo::before {
+            content: 'Φ';
+            font-size: 2.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: phi-glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes phi-glow {
+            from { filter: drop-shadow(0 0 10px rgba(185, 163, 105, 0.5)); }
+            to { filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.8)); }
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-gold);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            padding: 0 2rem;
+            background: radial-gradient(ellipse at center, rgba(185, 163, 105, 0.1) 0%, transparent 70%);
+        }
+
+        .hero-content h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 300;
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: hero-glow 4s ease-in-out infinite alternate;
+            line-height: 1.1;
+        }
+
+        @keyframes hero-glow {
+            from { 
+                filter: drop-shadow(0 0 20px rgba(185, 163, 105, 0.5));
+                transform: scale(1);
+            }
+            to { 
+                filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.8));
+                transform: scale(1.02);
+            }
+        }
+
+        .hero-content .subtitle {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: var(--primary-gold);
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+        }
+
+        .hero-content .tagline {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        .btn {
+            background: var(--gradient-primary);
+            color: var(--dark-bg);
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            letter-spacing: 0.02em;
+            box-shadow: var(--shadow-gold);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-gold);
+            border: 2px solid var(--primary-gold);
+            box-shadow: none;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-gold);
+            color: var(--dark-bg);
+            box-shadow: var(--shadow-gold);
+        }
+
+        /* Wallet Section */
+        .wallet-section {
+            background: var(--gradient-secondary);
+            padding: 4rem 2rem;
+            margin: 4rem 0;
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wallet-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(185, 163, 105, 0.05) 0%, transparent 70%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .wallet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .wallet-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .wallet-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            border-color: var(--primary-gold);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .wallet-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
             border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            transition: all 0.3s ease;
         }
 
-        .skeleton-hero-title {
-            width: 80%;
-            height: 2rem;
-            margin: 1rem 0;
+        .metamask-icon {
+            background: linear-gradient(135deg, #f6851b, #e2761b);
         }
 
-        .skeleton-hero-subtitle {
-            width: 60%;
-            height: 1.5rem;
-            margin: 0.5rem 0;
+        .phantom-icon {
+            background: linear-gradient(135deg, #ab9ff2, #8b7fc7);
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            .skeleton-logo,
-            .skeleton-hero-title,
-            .skeleton-hero-subtitle {
-                animation: none;
+        .walletconnect-icon {
+            background: linear-gradient(135deg, #3b99fc, #2e5bff);
+        }
+
+        .wallet-card:hover .wallet-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .wallet-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-gold);
+            font-weight: 600;
+        }
+
+        .wallet-card p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .wallet-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        .status-connected {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid #22c55e;
+        }
+
+        .status-disconnected {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+
+        .wallet-balance {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-gold);
+            margin-bottom: 1rem;
+        }
+
+        /* Purchase Section */
+        .purchase-section {
+            padding: 4rem 2rem;
+            margin: 4rem 0;
+        }
+
+        .purchase-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .purchase-form {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+        }
+
+        .purchase-form h3 {
+            color: var(--primary-gold);
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--primary-gold);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 1rem;
+            background: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--primary-gold);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(185, 163, 105, 0.2);
+        }
+
+        .price-display {
+            background: rgba(185, 163, 105, 0.1);
+            border: 1px solid rgba(185, 163, 105, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .price-display .amount {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .price-display .currency {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .purchase-summary {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+        }
+
+        .purchase-summary h3 {
+            color: var(--primary-gold);
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .summary-label {
+            color: var(--text-muted);
+        }
+
+        .summary-value {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .total-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-gold);
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--primary-gold);
+        }
+
+        /* Real-time Data */
+        .realtime-section {
+            background: var(--gradient-secondary);
+            padding: 3rem 2rem;
+            margin: 3rem 0;
+            border-radius: 30px;
+        }
+
+        .realtime-section h2 {
+            text-align: center;
+            color: var(--primary-gold);
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+        }
+
+        .realtime-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .realtime-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .realtime-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .realtime-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-gold);
+            margin-bottom: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .realtime-label {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .realtime-change {
+            font-size: 0.9rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-weight: 600;
+        }
+
+        .change-positive {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .change-negative {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .change-neutral {
+            background: rgba(185, 163, 105, 0.2);
+            color: var(--primary-gold);
+        }
+
+        /* Chart Container */
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            background: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            margin: 2rem 0;
+            padding: 1rem;
+        }
+
+        /* Loading States */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(185, 163, 105, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-gold);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .purchase-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .wallet-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .realtime-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: clamp(2rem, 8vw, 3rem);
+            }
+
+            .home-btn {
+                position: relative;
+                top: auto;
+                left: auto;
+                display: block;
+                margin: 1rem auto;
+                text-align: center;
+            }
+
+            .container {
+                padding: 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="hero">
-        <!-- Skeleton loading screen placeholders -->
-        <div class="skeleton skeleton-logo"></div>
-        <div class="skeleton skeleton-hero-title"></div>
-        <div class="skeleton skeleton-hero-subtitle"></div>
-        
-        <!-- Original loaded content (hidden while loading) -->
-        <h1>Φ-Chain Portal</h1>
-        <p class="subtitle">Universal Blockchain Applications</p>
+    <div class="hero-background">
+        <div class="phi-particles" id="phiParticles"></div>
     </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">Φ-Chain Portal</a>
+            <ul class="nav-links">
+                <li><a href="#apps">Applications</a></li>
+                <li><a href="#wallet">Wallet</a></li>
+                <li><a href="#purchase">Purchase</a></li>
+                <li><a href="comparison.html">Comparison</a></li>
+                <li><a href="https://github.com/badreddine023/phi-chain" target="_blank">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Φ-Chain Portal</h1>
+            <p class="subtitle">Universal Blockchain Applications</p>
+            <p class="tagline">Explore the mathematical purity of the Golden Ratio through interactive blockchain prototypes and decentralized systems</p>
+            
+            <div class="cta-buttons">
+                <a href="#apps" class="btn">
+                    <i class="fas fa-rocket"></i>
+                    Explore Applications
+                </a>
+                <a href="#wallet" class="btn btn-secondary">
+                    <i class="fas fa-wallet"></i>
+                    Connect Wallet
+                </a>
+                <a href="#purchase" class="btn btn-secondary">
+                    <i class="fas fa-shopping-cart"></i>
+                    Buy Φ Tokens
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wallet Section -->
+    <section id="wallet" class="wallet-section">
+        <div class="container">
+            <h2 class="section-title" style="color: var(--primary-gold); position: relative; z-index: 1;">💳 Wallet Integration</h2>
+            <div class="wallet-grid">
+                <div class="wallet-card">
+                    <div class="wallet-icon metamask-icon">
+                        <i class="fab fa-ethereum"></i>
+                    </div>
+                    <div class="wallet-status status-disconnected" id="metamask-status">
+                        Not Connected
+                    </div>
+                    <h3>MetaMask</h3>
+                    <p>Connect your MetaMask wallet to interact with Φ-Chain smart contracts and manage your tokens securely.</p>
+                    <div class="wallet-balance" id="metamask-balance">
+                        0.000 Φ
+                    </div>
+                    <button class="btn" onclick="connectMetaMask()">
+                        <i class="fas fa-plug"></i>
+                        Connect MetaMask
+                    </button>
+                </div>
+
+                <div class="wallet-card">
+                    <div class="wallet-icon phantom-icon">
+                        <i class="fas fa-ghost"></i>
+                    </div>
+                    <div class="wallet-status status-disconnected" id="phantom-status">
+                        Not Connected
+                    </div>
+                    <h3>Phantom</h3>
+                    <p>Connect your Phantom wallet for Solana compatibility and cross-chain token management capabilities.</p>
+                    <div class="wallet-balance" id="phantom-balance">
+                        0.000 Φ
+                    </div>
+                    <button class="btn" onclick="connectPhantom()">
+                        <i class="fas fa-plug"></i>
+                        Connect Phantom
+                    </button>
+                </div>
+
+                <div class="wallet-card">
+                    <div class="wallet-icon walletconnect-icon">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    <div class="wallet-status status-disconnected" id="walletconnect-status">
+                        Not Connected
+                    </div>
+                    <h3>WalletConnect</h3>
+                    <p>Connect any WalletConnect-compatible wallet for maximum flexibility and multi-chain support.</p>
+                    <div class="wallet-balance" id="walletconnect-balance">
+                        0.000 Φ
+                    </div>
+                    <button class="btn" onclick="connectWalletConnect()">
+                        <i class="fas fa-plug"></i>
+                        Connect Wallet
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Purchase Section -->
+    <section id="purchase" class="purchase-section">
+        <div class="container">
+            <h2 class="section-title" style="color: var(--primary-gold);">🛒 Purchase Φ Tokens</h2>
+            <div class="purchase-grid">
+                <div class="purchase-form">
+                    <h3>Buy Φ Tokens</h3>
+                    <div class="form-group">
+                        <label for="payment-method">Payment Method</label>
+                        <select id="payment-method">
+                            <option value="credit-card">Credit Card</option>
+                            <option value="bank-transfer">Bank Transfer</option>
+                            <option value="crypto">Cryptocurrency</option>
+                            <option value="apple-pay">Apple Pay</option>
+                            <option value="google-pay">Google Pay</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="purchase-amount">Amount (USD)</label>
+                        <input type="number" id="purchase-amount" placeholder="100.00" step="0.01" min="10">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="wallet-address">Wallet Address</label>
+                        <input type="text" id="wallet-address" placeholder="0x... or phi...">
+                    </div>
+                    
+                    <div class="price-display">
+                        <div class="amount" id="phi-amount">0.000</div>
+                        <div class="currency">Φ Tokens</div>
+                    </div>
+                    
+                    <button class="btn" onclick="processPurchase()" style="width: 100%;">
+                        <i class="fas fa-shopping-cart"></i>
+                        Buy Φ Tokens
+                    </button>
+                </div>
+
+                <div class="purchase-summary">
+                    <h3>Order Summary</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">Payment Method:</span>
+                        <span class="summary-value" id="summary-payment">Credit Card</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Amount:</span>
+                        <span class="summary-value" id="summary-amount">$0.00</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Exchange Rate:</span>
+                        <span class="summary-value" id="summary-rate">1 Φ = $0.00</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Processing Fee:</span>
+                        <span class="summary-value" id="summary-fee">$0.00</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Network Fee:</span>
+                        <span class="summary-value" id="summary-network-fee">$0.00</span>
+                    </div>
+                    <div class="total-price" id="summary-total">
+                        Total: $0.00
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Real-time Data Section -->
+    <section class="realtime-section">
+        <div class="container">
+            <h2>📊 Real-time Network Data</h2>
+            <div class="realtime-grid">
+                <div class="realtime-card">
+                    <div class="realtime-value" id="realtime-tps">987</div>
+                    <div class="realtime-label">Transactions Per Second</div>
+                    <div class="realtime-change change-positive" id="tps-change">+2.3%</div>
+                </div>
+
+                <div class="realtime-card">
+                    <div class="realtime-value" id="realtime-block-time">8.0s</div>
+                    <div class="realtime-label">Block Time</div>
+                    <div class="realtime-change change-neutral" id="block-time-change">±0.0%</div>
+                </div>
+
+                <div class="realtime-card">
+                    <div class="realtime-value" id="realtime-difficulty">377.0</div>
+                    <div class="realtime-label">Mining Difficulty</div>
+                    <div class="realtime-change change-negative" id="difficulty-change">-1.2%</div>
+                </div>
+
+                <div class="realtime-card">
+                    <div class="realtime-value" id="realtime-validators">21</div>
+                    <div class="realtime-label">Active Validators</div>
+                    <div class="realtime-change change-positive" id="validators-change">+1</div>
+                </div>
+            </div>
+
+            <div class="chart-container" id="realtimeChart"></div>
+        </div>
+    </section>
+
+    <!-- Applications Section -->
+    <section id="apps" class="apps-section">
+        <h2 class="section-title">🚀 Interactive Applications</h2>
+        <div class="apps-grid">
+            <div class="app-card">
+                <i class="fas fa-cube app-icon"></i>
+                <h3>Blockchain Simulator</h3>
+                <p>Experience the living blockchain that breathes every 8 seconds. Watch blocks being created in real-time with Fibonacci-based consensus mechanisms and validator selection.</p>
+                <a href="blockchain-simulator.html" class="app-btn">
+                    <i class="fas fa-play"></i>
+                    Launch Simulator
+                </a>
+            </div>
+
+            <div class="app-card">
+                <i class="fas fa-globe-americas app-icon"></i>
+                <h3>Earth Grid Prototype</h3>
+                <p>Explore the Fibonacci-based coordinate system that maps Earth's surface using the Golden Ratio and phi-radians for universal positioning and navigation.</p>
+                <a href="earth-grid.html" class="app-btn">
+                    <i class="fas fa-map-marked-alt"></i>
+                    Explore Grid
+                </a>
+            </div>
+
+            <div class="app-card">
+                <i class="fas fa-atom app-icon"></i>
+                <h3>MANUS Prototype</h3>
+                <p>Discover the Entangled Data Object system that unifies digital and physical states through quantum-classical bridge coherence and entropy validation.</p>
+                <a href="manus-prototype.html" class="app-btn">
+                    <i class="fas fa-search"></i>
+                    Analyze Data
+                </a>
+            </div>
+
+            <div class="app-card">
+                <i class="fas fa-chart-line app-icon"></i>
+                <h3>Fibonacci Visualizer</h3>
+                <p>Interactive visualization of Fibonacci sequences, Golden Ratio calculations, and their application in blockchain parameters with real-time plotting.</p>
+                <a href="fibonacci-viz.html" class="app-btn">
+                    <i class="fas fa-eye"></i>
+                    Visualize
+                </a>
+            </div>
+
+            <div class="app-card">
+                <i class="fas fa-shield-alt app-icon"></i>
+                <h3>Consensus Monitor</h3>
+                <p>Real-time monitoring of the Fibonacci Byzantine Agreement consensus mechanism with validator selection and finality tracking.</p>
+                <a href="consensus-monitor.html" class="app-btn">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Monitor
+                </a>
+            </div>
+
+            <div class="app-card">
+                <i class="fas fa-analytics app-icon"></i>
+                <h3>Network Analytics</h3>
+                <p>Comprehensive analytics dashboard showing network health, block creation metrics, and Fibonacci-based economic parameters with predictive insights.</p>
+                <a href="network-analytics.html" class="app-btn">
+                    <i class="fas fa-chart-bar"></i>
+                    View Analytics
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h3>Φ-Chain: The Canonical Blockchain of Universal Law</h3>
+            <p>Built with mathematical purity and governed by the Golden Ratio, creating a truly decentralized and non-arbitrary blockchain ecosystem.</p>
+            
+            <div class="footer-links">
+                <a href="https://github.com/badreddine023/phi-chain" target="_blank">
+                    <i class="fab fa-github"></i> GitHub Repository
+                </a>
+                <a href="WHITEPAPER.md">
+                    <i class="fas fa-file-alt"></i> Whitepaper
+                </a>
+                <a href="README.md">
+                    <i class="fas fa-book"></i> Documentation
+                </a>
+                <a href="https://github.com/badreddine023" target="_blank">
+                    <i class="fas fa-user"></i> Creator Profile
+                </a>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Φ-Chain. Created by BadreddineBaha.</p>
+                <p>✨ "There is only one growth law the universe trusts." ✨</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Web3 Integration
+        let web3 = null;
+        let currentAccount = null;
+        let currentChain = null;
+
+        // Initialize Web3
+        function initializeWeb3() {
+            if (typeof window.ethereum !== 'undefined') {
+                web3 = new Web3(window.ethereum);
+                return true;
+            } else if (typeof window.web3 !== 'undefined') {
+                web3 = new Web3(window.web3.currentProvider);
+                return true;
+            }
+            return false;
+        }
+
+        // Connect MetaMask
+        async function connectMetaMask() {
+            if (!initializeWeb3()) {
+                alert('MetaMask is not installed. Please install MetaMask to continue.');
+                return;
+            }
+
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                currentAccount = accounts[0];
+                
+                // Update UI
+                document.getElementById('metamask-status').textContent = 'Connected';
+                document.getElementById('metamask-status').className = 'wallet-status status-connected';
+                
+                // Get balance (simulate for demo)
+                const balance = await getAccountBalance(currentAccount);
+                document.getElementById('metamask-balance').textContent = `${balance} Φ`;
+                
+                console.log('MetaMask connected:', currentAccount);
+            } catch (error) {
+                console.error('MetaMask connection error:', error);
+                alert('Failed to connect MetaMask. Please try again.');
+            }
+        }
+
+        // Connect Phantom (Solana)
+        async function connectPhantom() {
+            if (typeof window.solana !== 'undefined') {
+                try {
+                    const resp = await window.solana.connect();
+                    currentAccount = resp.publicKey.toString();
+                    
+                    // Update UI
+                    document.getElementById('phantom-status').textContent = 'Connected';
+                    document.getElementById('phantom-status').className = 'wallet-status status-connected';
+                    document.getElementById('phantom-balance').textContent = '1,234.567 Φ';
+                    
+                    console.log('Phantom connected:', currentAccount);
+                } catch (err) {
+                    console.error('Phantom connection error:', err);
+                    alert('Failed to connect Phantom wallet.');
+                }
+            } else {
+                alert('Phantom wallet is not installed.');
+            }
+        }
+
+        // Connect WalletConnect
+        async function connectWalletConnect() {
+            // Simulate WalletConnect connection
+            setTimeout(() => {
+                document.getElementById('walletconnect-status').textContent = 'Connected';
+                document.getElementById('walletconnect-status').className = 'wallet-status status-connected';
+                document.getElementById('walletconnect-balance').textContent = '987.654 Φ';
+                console.log('WalletConnect connected');
+            }, 1000);
+        }
+
+        // Get account balance (simulated)
+        async function getAccountBalance(address) {
+            // In a real implementation, this would call the blockchain
+            return (Math.random() * 1000).toFixed(3);
+        }
+
+        // Purchase functionality
+        function processPurchase() {
+            const paymentMethod = document.getElementById('payment-method').value;
+            const amount = document.getElementById('purchase-amount').value;
+            const walletAddress = document.getElementById('wallet-address').value;
+
+            if (!amount || parseFloat(amount) < 10) {
+                alert('Please enter an amount of at least $10.');
+                return;
+            }
+
+            if (!walletAddress) {
+                alert('Please enter your wallet address.');
+                return;
+            }
+
+            // Simulate purchase processing
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="loading"></span> Processing...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-check"></i> Purchase Successful!';
+                btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = 'var(--gradient-primary)';
+                    btn.disabled = false;
+                }, 3000);
+            }, 2000);
+        }
+
+        // Update purchase summary
+        function updatePurchaseSummary() {
+            const amount = parseFloat(document.getElementById('purchase-amount').value) || 0;
+            const paymentMethod = document.getElementById('payment-method').value;
+            
+            // Simulate exchange rate and calculations
+            const exchangeRate = 0.987; // 1 Φ = $0.987
+            const phiAmount = amount * exchangeRate;
+            const processingFee = amount * 0.029; // 2.9%
+            const networkFee = 0.001; // Small network fee
+            const total = amount + processingFee + networkFee;
+
+            // Update UI
+            document.getElementById('phi-amount').textContent = phiAmount.toFixed(3);
+            document.getElementById('summary-payment').textContent = paymentMethod.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+            document.getElementById('summary-amount').textContent = `$${amount.toFixed(2)}`;
+            document.getElementById('summary-rate').textContent = `1 Φ = $${exchangeRate.toFixed(3)}`;
+            document.getElementById('summary-fee').textContent = `$${processingFee.toFixed(2)}`;
+            document.getElementById('summary-network-fee').textContent = `$${networkFee.toFixed(3)}`;
+            document.getElementById('summary-total').textContent = `Total: $${total.toFixed(2)}`;
+        }
+
+        // Real-time data updates
+        function updateRealTimeData() {
+            // Simulate real-time blockchain data
+            const tps = 987 + Math.floor(Math.random() * 20) - 10;
+            const blockTime = 8.0 + (Math.random() - 0.5) * 0.5;
+            const difficulty = 377 + Math.floor(Math.random() * 20) - 10;
+            const validators = 21 + (Math.random() > 0.7 ? 1 : 0);
+
+            document.getElementById('realtime-tps').textContent = tps;
+            document.getElementById('realtime-block-time').textContent = blockTime.toFixed(1) + 's';
+            document.getElementById('realtime-difficulty').textContent = difficulty.toFixed(1);
+            document.getElementById('realtime-validators').textContent = validators;
+
+            // Update changes
+            const tpsChange = ((tps - 987) / 987 * 100).toFixed(1);
+            const blockTimeChange = ((blockTime - 8.0) / 8.0 * 100).toFixed(1);
+            const difficultyChange = ((difficulty - 377) / 377 * 100).toFixed(1);
+            const validatorChange = validators - 21;
+
+            document.getElementById('tps-change').textContent = (tpsChange >= 0 ? '+' : '') + tpsChange + '%';
+            document.getElementById('tps-change').className = 'realtime-change ' + (tpsChange >= 0 ? 'change-positive' : 'change-negative');
+
+            document.getElementById('block-time-change').textContent = (blockTimeChange >= 0 ? '+' : '') + blockTimeChange + '%';
+            document.getElementById('block-time-change').className = 'realtime-change ' + (Math.abs(blockTimeChange) < 1 ? 'change-neutral' : 'change-negative');
+
+            document.getElementById('difficulty-change').textContent = (difficultyChange >= 0 ? '+' : '') + difficultyChange + '%';
+            document.getElementById('difficulty-change').className = 'realtime-change ' + (difficultyChange >= 0 ? 'change-positive' : 'change-negative');
+
+            document.getElementById('validators-change').textContent = (validatorChange >= 0 ? '+' : '') + validatorChange;
+            document.getElementById('validators-change').className = 'realtime-change ' + (validatorChange >= 0 ? 'change-positive' : 'change-negative');
+        }
+
+        // Initialize real-time chart
+        function initializeRealtimeChart() {
+            const timeData = [];
+            const tpsData = [];
+            const blockTimeData = [];
+            
+            // Initialize with some data points
+            for (let i = 0; i < 20; i++) {
+                timeData.push(new Date(Date.now() - (19 - i) * 60000).toLocaleTimeString());
+                tpsData.push(987 + Math.random() * 20 - 10);
+                blockTimeData.push(8.0 + Math.random() * 0.5 - 0.25);
+            }
+
+            const data = [
+                {
+                    x: timeData,
+                    y: tpsData,
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    name: 'TPS',
+                    line: { color: '#b9a369', width: 3 },
+                    marker: { color: '#b9a369', size: 6 }
+                },
+                {
+                    x: timeData,
+                    y: blockTimeData,
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    name: 'Block Time (s)',
+                    line: { color: '#d4af37', width: 3 },
+                    marker: { color: '#d4af37', size: 6 },
+                    yaxis: 'y2'
+                }
+            ];
+
+            const layout = {
+                title: {
+                    text: 'Real-time Network Performance',
+                    font: { color: '#b9a369', size: 18, family: 'Inter' }
+                },
+                xaxis: { 
+                    title: { text: 'Time', font: { color: '#f0f0f0', family: 'Inter' } },
+                    color: '#f0f0f0',
+                    gridcolor: 'rgba(185, 163, 105, 0.2)'
+                },
+                yaxis: { 
+                    title: { text: 'TPS', font: { color: '#b9a369', family: 'Inter' } },
+                    color: '#b9a369',
+                    gridcolor: 'rgba(185, 163, 105, 0.2)'
+                },
+                yaxis2: {
+                    title: { text: 'Block Time (s)', font: { color: '#d4af37', family: 'Inter' } },
+                    color: '#d4af37',
+                    overlaying: 'y',
+                    side: 'right'
+                },
+                plot_bgcolor: '#0a0a0a',
+                paper_bgcolor: '#0a0a0a',
+                font: { color: '#f0f0f0', family: 'Inter' },
+                legend: { font: { color: '#f0f0f0', family: 'Inter' } },
+                margin: { t: 60, b: 60, l: 80, r: 80 }
+            };
+
+            const config = {
+                responsive: true,
+                displayModeBar: false
+            };
+
+            Plotly.newPlot('realtimeChart', data, layout, config);
+
+            // Update chart periodically
+            setInterval(() => {
+                const newTime = new Date().toLocaleTimeString();
+                const newTps = 987 + Math.random() * 20 - 10;
+                const newBlockTime = 8.0 + Math.random() * 0.5 - 0.25;
+
+                timeData.push(newTime);
+                tpsData.push(newTps);
+                blockTimeData.push(newBlockTime);
+
+                // Keep only last 20 data points
+                if (timeData.length > 20) {
+                    timeData.shift();
+                    tpsData.shift();
+                    blockTimeData.shift();
+                }
+
+                Plotly.redraw('realtimeChart');
+            }, 5000);
+        }
+
+        // Generate floating Phi symbols
+        function generatePhiParticles() {
+            const container = document.getElementById('phiParticles');
+            const symbolCount = 20;
+            
+            for (let i = 0; i < symbolCount; i++) {
+                const phi = document.createElement('div');
+                phi.className = 'phi-symbol';
+                phi.textContent = 'Φ';
+                phi.style.left = Math.random() * 100 + '%';
+                phi.style.animationDelay = Math.random() * 20 + 's';
+                phi.style.animationDuration = (15 + Math.random() * 10) + 's';
+                phi.style.fontSize = (1 + Math.random() * 2) + 'rem';
+                container.appendChild(phi);
+            }
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            generatePhiParticles();
+            initializeRealtimeChart();
+            updateRealTimeData();
+            
+            // Update purchase summary when inputs change
+            document.getElementById('purchase-amount').addEventListener('input', updatePurchaseSummary);
+            document.getElementById('payment-method').addEventListener('change', updatePurchaseSummary);
+            
+            // Update real-time data every 3 seconds
+            setInterval(updateRealTimeData, 3000);
+            
+            // Initialize Web3
+            initializeWeb3();
+            
+            // Add some initial animation delay
+            setTimeout(() => {
+                document.querySelector('.hero-content h1').style.animation = 'hero-glow 4s ease-in-out infinite alternate';
+            }, 500);
+        });
+
+        // Add performance optimizations
+        window.addEventListener('load', function() {
+            // Preload critical resources
+            const criticalLinks = [
+                'blockchain-simulator.html',
+                'fibonacci-viz.html',
+                'comparison.html'
+            ];
+            
+            criticalLinks.forEach(link => {
+                const preloadLink = document.createElement('link');
+                preloadLink.rel = 'prefetch';
+                preloadLink.href = link;
+                document.head.appendChild(preloadLink);
+            });
+        });
+    </script>
 </body>
 </html>
