@@ -277,7 +277,7 @@ class Blockchain:
     
     def add_block(self, new_block: PhiBlock) -> bool:
         """
-        Add a new block to the blockchain.
+        Add a new block to the blockchain using the Longest Chain Rule.
         
         Args:
             new_block: The block to add
@@ -289,12 +289,17 @@ class Blockchain:
         if not self.is_valid_block(new_block):
             return False
         
-        self.chain.append(new_block)
+        # Longest Chain Rule: Only add if it extends the current longest chain
+        # In a single-chain implementation, this means it must point to the current tip
+        if new_block.previous_hash == self.get_latest_block().hash:
+            self.chain.append(new_block)
+            # Evolve state after block addition
+            self.state.evolve()
+            return True
         
-        # Evolve state after block addition
-        self.state.evolve()
-        
-        return True
+        # If we were supporting forks, we would handle them here by comparing chain lengths
+        # For now, we strictly enforce mining on top of the current tip
+        return False
     
     def is_valid_block(self, block: PhiBlock) -> bool:
         """
@@ -306,16 +311,8 @@ class Blockchain:
         Returns:
             True if the block is valid, False otherwise
         """
-        # Check that the block's previous hash matches the latest block
-        if block.previous_hash != self.get_latest_block().hash:
-            return False
-        
         # Check that the block's hash is correct
         if block.hash != block.calculate_hash():
-            return False
-        
-        # Check that the block index is sequential
-        if block.index != len(self.chain):
             return False
         
         # Check that transactions are valid
@@ -323,6 +320,12 @@ class Blockchain:
             if not tx.validate(self):
                 return False
         
+        # In a multi-node environment, we would check if this block 
+        # belongs to a longer valid chain. For this implementation,
+        # we ensure it's the next sequential block.
+        if block.index != len(self.chain):
+            return False
+            
         return True
     
     def add_transaction(self, transaction: PhiTransaction) -> bool:
@@ -352,8 +355,9 @@ class Blockchain:
         Returns:
             The newly mined block, or None if mining failed
         """
-        if not self.pending_transactions:
-            return None
+        # Allow mining empty blocks for consensus testing
+        # if not self.pending_transactions:
+        #     return None
         
         # Create a new block with pending transactions
         latest_block = self.get_latest_block()
@@ -399,16 +403,19 @@ class Blockchain:
         
         return balance
     
-    def is_chain_valid(self) -> bool:
+    def is_chain_valid(self, chain: Optional[List[PhiBlock]] = None) -> bool:
         """
-        Validate the entire blockchain.
+        Validate a blockchain (defaults to the current chain).
+        Implements the Longest Chain Rule by ensuring all links are valid.
         
         Returns:
             True if the chain is valid, False otherwise
         """
-        for i in range(1, len(self.chain)):
-            current_block = self.chain[i]
-            previous_block = self.chain[i - 1]
+        target_chain = chain if chain is not None else self.chain
+        
+        for i in range(1, len(target_chain)):
+            current_block = target_chain[i]
+            previous_block = target_chain[i - 1]
             
             # Check current block's hash
             if current_block.hash != current_block.calculate_hash():
@@ -417,8 +424,31 @@ class Blockchain:
             # Check link to previous block
             if current_block.previous_hash != previous_block.hash:
                 return False
+                
+            # Check sequential index
+            if current_block.index != i:
+                return False
         
         return True
+
+    def resolve_conflicts(self, neighbors_chains: List[List[PhiBlock]]) -> bool:
+        """
+        Consensus Algorithm: Resolve conflicts by replacing our chain 
+        with the longest valid one in the network.
+        """
+        new_chain = None
+        max_length = len(self.chain)
+
+        for chain in neighbors_chains:
+            if len(chain) > max_length and self.is_chain_valid(chain):
+                max_length = len(chain)
+                new_chain = chain
+
+        if new_chain:
+            self.chain = new_chain
+            return True
+
+        return False
     
     def get_chain_length(self) -> int:
         """Get the length of the blockchain."""
