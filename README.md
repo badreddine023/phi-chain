@@ -51,8 +51,8 @@ All transactions are secured by a three-point verification system:
 ### 🧬 Core Engine (`phi_chain.py`)
 The heart of the system, implementing Fibonacci Q-Matrix state transitions, the **Longest Chain Rule** consensus, and the unified PoC engine.
 
-### 🤖 AI Oracle Bridge (`api/wallet_api.py`)
-A secure, decentralized connection between on-chain smart contracts and off-chain AI models, enabling the **Symbiotic AI** to act as the "Observer."
+### 🤖 AI Oracle Bridge (`api/ai_oracle_bridge.py`)
+The foundational component of the **Web4 Strategy**, providing a secure, decentralized connection between on-chain smart contracts and off-chain **Symbiotic AI** models. It enables the AI to act as the "Observer" that collapses the quantum superposition of the blockchain's state.
 
 ### 📊 Interactive Dashboard (`consensus-monitor.html`)
 Real-time monitoring of network health, validator performance, and Fibonacci convergence charts.
@@ -64,7 +64,8 @@ Complete implementation with key management, block proposal, and reward tracking
 
 ## 📂 Architecture & Links
 
-- **[System Overview](SYSTEM_OVERVIEW.md)**: High-level vision and Web4 strategy.
+- **[Web4 Manifesto](docs/WEB4_MANIFESTO.md)**: The vision for the era of Symbiotic Intelligence.
+- **[System Overview](SYSTEM_OVERVIEW.md)**: High-level vision and architectural strategy.
 - **[Core Architecture](docs/phi_chain_architecture.md)**: Deep dive into mathematical primitives.
 - **[Mainnet Deployment](tools/deploy_mainnet.py)**: Automated setup script for the Φ-Chain Mainnet.
 - **[Wallet Interface](wallet.html)**: Secure asset management and PoC mining.
