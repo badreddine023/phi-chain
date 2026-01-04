@@ -1,5 +1,6 @@
 import hashlib
 from core.phi_integer_math import PhiIntegerMath, PHI_NUMERATOR
+from reversible_phi_core import ReversibleFibonacciCore
 
 class PhiAddressSystem:
     """
@@ -9,7 +10,7 @@ class PhiAddressSystem:
     @staticmethod
     def generate_phi_address(public_key_hex: str) -> str:
         """
-        Generate a PHI address from a public key.
+        Generate a PHI address from a public key, using Zeckendorf encoding.
         """
         # 1. Convert to integer
         key_int = int(public_key_hex, 16)
@@ -20,11 +21,21 @@ class PhiAddressSystem:
         # 3. Extract 64-bit identifier
         identifier = transformed & ((1 << 64) - 1)
         
-        # 4. Format as PHI-XXXX-XXXX-XXXX-XXXX
-        segments = []
-        for i in range(4):
-            segment = (identifier >> (16 * (3 - i))) & 0xFFFF
-            segments.append(f"{segment:04X}")
+        # 4. Encode as Zeckendorf representation
+        core = ReversibleFibonacciCore()
+        zeckendorf_list = core.zeckendorf_representation(identifier)
+        
+        # 5. Format as PHI-ZECKENDORF-ENCODING
+        # We use a simple comma-separated string for the address body
+        zeckendorf_str = ",".join(map(str, zeckendorf_list))
+        
+        # 6. Calculate Golden CRC and Math Check based on the original identifier
+        # (These checks remain based on the original integer for consistency)
+        golden_crc = PhiAddressSystem.calculate_golden_crc(identifier)
+        math_check = PhiAddressSystem.generate_phi_math_check(identifier)
+        
+        address = f"PHI[{zeckendorf_str}][{golden_crc:04X}][{math_check:04X}]"
+        return address
         
         # 5. Calculate Golden CRC
         golden_crc = PhiAddressSystem.calculate_golden_crc(identifier)
@@ -65,7 +76,7 @@ class PhiAddressSystem:
     def validate_address(address: str) -> bool:
         """Validate a PHI address."""
         try:
-            # Basic format check: PHI[XXXX-XXXX-XXXX-XXXX][XXXX][XXXX]
+            # Basic format check: PHI[ZECKENDORF_ENCODING][CRC][GOLDEN_CHECK]
             if not (address.startswith("PHI[") and address.endswith("]")):
                 return False
             
@@ -74,14 +85,14 @@ class PhiAddressSystem:
                 return False
             
             segments_str, crc_str, check_str = parts
-            segments = segments_str.split("-")
-            if len(segments) != 4:
-                return False
             
-            # Reconstruct identifier
-            identifier = 0
-            for i, seg in enumerate(segments):
-                identifier |= (int(seg, 16) << (16 * (3 - i)))
+            # Reconstruct identifier from Zeckendorf encoding
+            try:
+                zeckendorf_list = [int(x) for x in segments_str.split(",")]
+                # The identifier is the sum of the Zeckendorf components
+                identifier = sum(zeckendorf_list)
+            except ValueError:
+                return False
             
             # Verify CRC
             expected_crc = PhiAddressSystem.calculate_golden_crc(identifier)

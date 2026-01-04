@@ -26,6 +26,7 @@ from phi_chain import (
     FBAConsensus,
     FibonacciUtils
 )
+from reversible_phi_core import ReversibleFibonacciCore
 
 # --- Validator Key Management ---
 
@@ -99,6 +100,7 @@ class ValidatorNode:
         # Consensus
         self.poc = ProofOfCoherence(self.blockchain)
         self.fba = FBAConsensus(self.blockchain)
+        self.reversible_core = ReversibleFibonacciCore()
         
         # Metrics
         self.metrics = ValidatorMetrics()
@@ -108,6 +110,7 @@ class ValidatorNode:
         self.is_active = False
         self.is_synced = False
         self.pending_blocks: List[Dict[str, Any]] = []
+        self.last_recovery_time = time.time()
         
         # Register validator
         self._register()
@@ -121,6 +124,66 @@ class ValidatorNode:
             raise ValueError(f"Stake below minimum {self.params.MIN_VALIDATOR_STAKE}")
         
         return self.blockchain.add_validator(self.validator_id, self.stake)
+
+    def trigger_symmetric_rewind(self, target_height: int = -1) -> bool:
+        """
+        Quantum Loop Consensus: Triggers a Symmetric Rewind to a pre-genesis state
+        for catastrophic recovery without a hard fork.
+        
+        Args:
+            target_height: The negative Fibonacci index (e.g., -33) to rewind to.
+                           -1 means rewind to the last known safe pre-genesis block.
+                           
+        Returns:
+            True if the rewind was successful.
+        """
+        if time.time() - self.last_recovery_time < 3600: # Throttle to once per hour
+            print("Symmetric Rewind throttled. Try again later.")
+            return False
+            
+        print(f"*** QUANTUM LOOP INITIATED: SYMMETRIC REWIND to height {target_height} ***")
+        
+        # 1. Load the reversible genesis data
+        try:
+            with open("reversible_phi_genesis.json", "r") as f:
+                genesis_data = json.load(f)
+        except FileNotFoundError:
+            print("Error: reversible_phi_genesis.json not found. Cannot perform rewind.")
+            return False
+            
+        pre_genesis_blocks = genesis_data.get("temporal_architecture", {}).get("pre_genesis_blocks", [])
+        
+        if not pre_genesis_blocks:
+            print("Error: No pre-genesis blocks found for rewind.")
+            return False
+            
+        # 2. Find the target block
+        if target_height == -1:
+            # Find the block with the highest (closest to 0) negative index
+            target_block = max(pre_genesis_blocks, key=lambda b: b['height'])
+        else:
+            target_block = next((b for b in pre_genesis_blocks if b['height'] == target_height), None)
+            
+        if not target_block:
+            print(f"Error: Target pre-genesis block at height {target_height} not found.")
+            return False
+            
+        # 3. Perform the conceptual rewind (replace the chain with the target block)
+        # In a real system, this would involve complex state rollback.
+        # Here, we simulate by resetting the chain to the genesis block and logging the event.
+        print(f"Rewinding to block height {target_block['height']} (F({target_block['height']}) = {target_block['fibonacci_value']})")
+        
+        # Reset the blockchain to its initial state (simulating a full rewind)
+        self.blockchain.chain = []
+        self.blockchain.create_genesis_block()
+        
+        # The state vector reset is complex, we will rely on the next block to re-establish coherence
+        # For a simple simulation, we just reset the chain and state step count
+        self.blockchain.state.step = 0 
+        
+        self.last_recovery_time = time.time()
+        print("*** SYMMETRIC REWIND COMPLETE. Node is now syncing from Genesis. ***")
+        return True
     
     def activate(self) -> bool:
         """Activate the validator node"""

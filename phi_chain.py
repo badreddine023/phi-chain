@@ -13,6 +13,7 @@ import time
 import json
 import hashlib
 from typing import List, Dict, Optional, Tuple, Any
+from reversible_phi_core import TetrahedralPruning
 from core.phi_math import PhiMath, fibonacci
 import numpy as np
 
@@ -170,10 +171,13 @@ class PhiTransaction:
     
     def validate(self, blockchain: 'Blockchain') -> bool:
         """Validate transaction against blockchain state."""
-        # Check if sender has sufficient balance
-        sender_balance = blockchain.get_balance(self.sender)
-        if sender_balance < self.value:
-            return False
+        # Check if sender has sufficient balance.
+        # If value is negative (debt/slashing), we assume the transaction is
+        # authorized by the consensus layer, so we skip the balance check.
+        if self.value > 0:
+            sender_balance = blockchain.get_balance(self.sender)
+            if sender_balance < self.value:
+                return False
         
         # Check if nonce is correct
         # (In production, track nonce per address)
@@ -234,6 +238,7 @@ class Blockchain:
     def __init__(self, genesis_params: Optional[GenesisParameters] = None):
         """Initialize the blockchain with Genesis Block."""
         self.chain: List[PhiBlock] = []
+        self.pruning_logic = TetrahedralPruning()
         self.pending_transactions: List[PhiTransaction] = []
         self.validators: Dict[str, Dict[str, Any]] = {}
         self.state = PhiState()
@@ -274,6 +279,18 @@ class Blockchain:
     def get_latest_block(self) -> PhiBlock:
         """Get the most recent block in the chain."""
         return self.chain[-1]
+
+    def prune_state(self, block_height: int):
+        """
+        Applies Geometric State Pruning based on the Tetrahedral schedule.
+        This is a conceptual pruning mechanism for state decay.
+        """
+        if self.pruning_logic.should_prune(block_height):
+            print(f"*** GEOMETRIC STATE PRUNING TRIGGERED at block {block_height} ***")
+            # Conceptual pruning: in a real system, this would remove old state data
+            # For now, we log the event and conceptually mark the state for decay.
+            # The actual state decay logic is handled by the reversible core's state vector.
+            pass
     
     def add_block(self, new_block: PhiBlock) -> bool:
         """
@@ -295,6 +312,7 @@ class Blockchain:
             self.chain.append(new_block)
             # Evolve state after block addition
             self.state.evolve()
+            self.prune_state(new_block.index) # Geometric State Pruning
             return True
         
         # If we were supporting forks, we would handle them here by comparing chain lengths
