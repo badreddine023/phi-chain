@@ -13,7 +13,8 @@ import time
 import json
 import hashlib
 from typing import List, Dict, Optional, Tuple, Any
-from reversible_phi_core import TetrahedralPruning
+from reversible_phi_core import TetrahedralPruning, ReversibleFibonacciCore
+from crypto.phi_zk_proofs import PhiZKProof
 from core.phi_math import PhiMath, fibonacci
 import numpy as np
 
@@ -98,20 +99,50 @@ class GenesisParameters:
 
 class PhiState:
     """
-    Represents the chain state, evolved via the Fibonacci Q-Matrix.
+    Represents the chain state, evolved via the Reversible Fibonacci Core.
     State Vector S_n = [F_{n+1}, F_n]^T
+    Balances are represented as offsets in the Fibonacci vector space.
     """
     
     def __init__(self, f_n_plus_1: int = 1, f_n: int = 1):
+        self.core = ReversibleFibonacciCore()
         self.vector = np.array([f_n_plus_1, f_n], dtype=np.int64)
-        self.Q_matrix = np.array([[1, 1], [1, 0]], dtype=np.int64)
+        self.Q_matrix = self.core.matrix_A
+        self.Q_inv = self.core.matrix_A_inv
         self.step = 0
+        # Address-to-Vector mapping for deep state integration
+        self.address_vectors: Dict[str, np.ndarray] = {}
     
-    def evolve(self) -> np.ndarray:
-        """S_{n+1} = Q * S_n"""
-        self.vector = self.Q_matrix @ self.vector
-        self.step += 1
+    def evolve(self, direction: int = 1) -> np.ndarray:
+        """
+        Evolve state: S_{n+1} = Q * S_n (forward) or S_{n-1} = Q_inv * S_n (backward)
+        """
+        if direction >= 0:
+            self.vector = self.Q_matrix @ self.vector
+            self.step += 1
+        else:
+            self.vector = self.Q_inv @ self.vector
+            self.step -= 1
         return self.vector
+    
+    def update_address_state(self, address: str, value: int):
+        """
+        Update an address's state by projecting the value into the Fibonacci space.
+        This treats balances as dynamic state vectors rather than static scalars.
+        """
+        # Get or initialize address vector
+        addr_vec = self.address_vectors.get(address, np.array([0, 0], dtype=np.int64))
+        
+        # Project value into Fibonacci components [F_{n+1}, F_n]
+        # For simplicity, we use the Zeckendorf sum to influence the vector
+        zeckendorf = self.core.zeckendorf_representation(value)
+        for f in zeckendorf:
+            # Each Fibonacci component shifts the address vector
+            # This is a simplified projection of the scalar value into the 2D state space
+            addr_vec[0] += f
+            addr_vec[1] += (f // self.core.phi) if f != 0 else 0
+            
+        self.address_vectors[address] = addr_vec
     
     def get_current_metrics(self) -> Tuple[int, int]:
         """Get current Fibonacci state values."""
@@ -125,7 +156,7 @@ class PhiState:
 # --- 4. Transaction Structure ---
 
 class PhiTransaction:
-    """Φ-Chain transaction with Fibonacci-based validation"""
+    """Φ-Chain transaction with Fibonacci-based validation and ZK-proofs"""
     
     def __init__(self,
                  sender: str,
@@ -136,7 +167,9 @@ class PhiTransaction:
                  gas_limit: int = 21000,
                  signature: bytes = b"",
                  read_set: Optional[List[str]] = None,
-                 write_set: Optional[List[str]] = None):
+                 write_set: Optional[List[str]] = None,
+                 zk_proof: Optional[Dict] = None):
+        self.zk_proof = zk_proof
         self.sender = sender
         self.recipient = recipient
         self.value = value
@@ -170,17 +203,19 @@ class PhiTransaction:
         return hashlib.sha256(tx_data.encode()).hexdigest()
     
     def validate(self, blockchain: 'Blockchain') -> bool:
-        """Validate transaction against blockchain state."""
-        # Check if sender has sufficient balance.
-        # If value is negative (debt/slashing), we assume the transaction is
-        # authorized by the consensus layer, so we skip the balance check.
+        """Validate transaction against blockchain state and ZK-proofs."""
+        # 1. Check if sender has sufficient balance.
         if self.value > 0:
             sender_balance = blockchain.get_balance(self.sender)
             if sender_balance < self.value:
                 return False
         
-        # Check if nonce is correct
-        # (In production, track nonce per address)
+        # 2. Verify Φ-ZK Proof if present
+        if self.zk_proof:
+            zk_verifier = PhiZKProof()
+            if not zk_verifier.verify_phi_invariance(self.zk_proof):
+                return False
+        
         return True
 
 # --- 5. Block Structure ---
@@ -307,11 +342,17 @@ class Blockchain:
             return False
         
         # Longest Chain Rule: Only add if it extends the current longest chain
-        # In a single-chain implementation, this means it must point to the current tip
         if new_block.previous_hash == self.get_latest_block().hash:
             self.chain.append(new_block)
-            # Evolve state after block addition
-            self.state.evolve()
+            
+            # 1. Evolve global state vector
+            self.state.evolve(direction=1)
+            
+            # 2. Deeply integrate transaction values into address state vectors
+            for tx in new_block.transactions:
+                self.state.update_address_state(tx.sender, -tx.value)
+                self.state.update_address_state(tx.recipient, tx.value)
+                
             self.prune_state(new_block.index) # Geometric State Pruning
             return True
         
