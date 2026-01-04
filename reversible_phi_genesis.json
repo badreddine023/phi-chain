@@ -1,12 +1,10 @@
 {
   "metadata": {
     "chain_name": "Reversible-Φ-Chain",
-    "timestamp": "2025-12-11T04:55:15.969854+00:00",
+    "timestamp": "2026-01-04T17:51:26.312727+00:00",
     "phi_constant": 1.618033988749895,
     "reversible_core": true,
-    "quantum_symmetric": true,
-    "creator": "BadreddineBaha",
-    "vision": "The first ledger that speaks the universe's native language"
+    "quantum_symmetric": true
   },
   "mathematical_foundations": {
     "fibonacci_matrix_forward": [
@@ -4679,8 +4677,7 @@
       2584,
       4181,
       6765
-    ],
-    "bidirectional_property": "F(-n) = (-1)^(n+1) * F(n)"
+    ]
   },
   "temporal_architecture": {
     "pre_genesis_blocks": [
@@ -4691,8 +4688,7 @@
         "zeckendorf_encoding": [
           3524578
         ],
-        "is_prunable": false,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": false
       },
       {
         "height": -32,
@@ -4701,8 +4697,7 @@
         "zeckendorf_encoding": [
           -2178309
         ],
-        "is_prunable": true,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": true
       },
       {
         "height": -31,
@@ -4711,8 +4706,7 @@
         "zeckendorf_encoding": [
           1346269
         ],
-        "is_prunable": false,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": false
       },
       {
         "height": -30,
@@ -4721,8 +4715,7 @@
         "zeckendorf_encoding": [
           -832040
         ],
-        "is_prunable": false,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": false
       },
       {
         "height": -29,
@@ -4731,8 +4724,7 @@
         "zeckendorf_encoding": [
           514229
         ],
-        "is_prunable": false,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": false
       },
       {
         "height": -28,
@@ -4741,8 +4733,7 @@
         "zeckendorf_encoding": [
           -317811
         ],
-        "is_prunable": true,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": true
       },
       {
         "height": -27,
@@ -4751,8 +4742,7 @@
         "zeckendorf_encoding": [
           196418
         ],
-        "is_prunable": false,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": false
       },
       {
         "height": -26,
@@ -4761,8 +4751,7 @@
         "zeckendorf_encoding": [
           -121393
         ],
-        "is_prunable": false,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": false
       },
       {
         "height": -25,
@@ -4771,8 +4760,7 @@
         "zeckendorf_encoding": [
           75025
         ],
-        "is_prunable": false,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": false
       },
       {
         "height": -24,
@@ -4781,8 +4769,7 @@
         "zeckendorf_encoding": [
           -46368
         ],
-        "is_prunable": true,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": true
       },
       {
         "height": -23,
@@ -4791,8 +4778,7 @@
         "zeckendorf_encoding": [
           28657
         ],
-        "is_prunable": false,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": false
       },
       {
         "height": -22,
@@ -4801,8 +4787,7 @@
         "zeckendorf_encoding": [
           -17711
         ],
-        "is_prunable": false,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": false
       },
       {
         "height": -21,
@@ -4811,8 +4796,7 @@
         "zeckendorf_encoding": [
           10946
         ],
-        "is_prunable": false,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": false
       },
       {
         "height": -20,
@@ -4821,8 +4805,7 @@
         "zeckendorf_encoding": [
           -6765
         ],
-        "is_prunable": false,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": false
       },
       {
         "height": -19,
@@ -4831,8 +4814,7 @@
         "zeckendorf_encoding": [
           4181
         ],
-        "is_prunable": false,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": false
       },
       {
         "height": -18,
@@ -4841,8 +4823,7 @@
         "zeckendorf_encoding": [
           -2584
         ],
-        "is_prunable": true,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": true
       },
       {
         "height": -17,
@@ -4851,8 +4832,7 @@
         "zeckendorf_encoding": [
           1597
         ],
-        "is_prunable": false,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": false
       },
       {
         "height": -16,
@@ -4861,8 +4841,7 @@
         "zeckendorf_encoding": [
           -987
         ],
-        "is_prunable": false,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": false
       },
       {
         "height": -15,
@@ -4871,8 +4850,7 @@
         "zeckendorf_encoding": [
           610
         ],
-        "is_prunable": true,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": true
       },
       {
         "height": -14,
@@ -4881,8 +4859,7 @@
         "zeckendorf_encoding": [
           -377
         ],
-        "is_prunable": false,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": false
       },
       {
         "height": -13,
@@ -4891,8 +4868,7 @@
         "zeckendorf_encoding": [
           233
         ],
-        "is_prunable": false,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": false
       },
       {
         "height": -12,
@@ -4901,8 +4877,7 @@
         "zeckendorf_encoding": [
           -144
         ],
-        "is_prunable": true,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": true
       },
       {
         "height": -11,
@@ -4911,8 +4886,7 @@
         "zeckendorf_encoding": [
           89
         ],
-        "is_prunable": false,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": false
       },
       {
         "height": -10,
@@ -4921,8 +4895,7 @@
         "zeckendorf_encoding": [
           -55
         ],
-        "is_prunable": true,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": true
       },
       {
         "height": -9,
@@ -4931,8 +4904,7 @@
         "zeckendorf_encoding": [
           34
         ],
-        "is_prunable": false,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": false
       },
       {
         "height": -8,
@@ -4941,8 +4913,7 @@
         "zeckendorf_encoding": [
           -21
         ],
-        "is_prunable": true,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": true
       },
       {
         "height": -7,
@@ -4951,8 +4922,7 @@
         "zeckendorf_encoding": [
           13
         ],
-        "is_prunable": false,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": false
       },
       {
         "height": -6,
@@ -4961,8 +4931,7 @@
         "zeckendorf_encoding": [
           -8
         ],
-        "is_prunable": true,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": true
       },
       {
         "height": -5,
@@ -4971,8 +4940,7 @@
         "zeckendorf_encoding": [
           5
         ],
-        "is_prunable": false,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": false
       },
       {
         "height": -4,
@@ -4981,8 +4949,7 @@
         "zeckendorf_encoding": [
           -3
         ],
-        "is_prunable": true,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": true
       },
       {
         "height": -3,
@@ -4991,8 +4958,7 @@
         "zeckendorf_encoding": [
           2
         ],
-        "is_prunable": true,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": true
       },
       {
         "height": -2,
@@ -5001,8 +4967,7 @@
         "zeckendorf_encoding": [
           -1
         ],
-        "is_prunable": true,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": true
       },
       {
         "height": -1,
@@ -5011,8 +4976,7 @@
         "zeckendorf_encoding": [
           1
         ],
-        "is_prunable": false,
-        "interpretation": "Pre-genesis state (recovery point)"
+        "is_prunable": false
       }
     ],
     "genesis_block": {
@@ -5021,8 +4985,7 @@
       "hash": "768051e818a68b22d465edaa9a85f23bf710e85a44009131f2202456ebb2ead5",
       "zeckendorf_encoding": [],
       "reward_tier": 0,
-      "is_prunable": false,
-      "interpretation": "Genesis to forward state"
+      "is_prunable": true
     },
     "forward_blocks": [
       {
@@ -5033,8 +4996,7 @@
           1
         ],
         "reward_tier": 1,
-        "is_prunable": false,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": false
       },
       {
         "height": 2,
@@ -5044,8 +5006,7 @@
           1
         ],
         "reward_tier": 1,
-        "is_prunable": true,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": true
       },
       {
         "height": 3,
@@ -5055,8 +5016,7 @@
           2
         ],
         "reward_tier": 2,
-        "is_prunable": true,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": true
       },
       {
         "height": 4,
@@ -5066,8 +5026,7 @@
           3
         ],
         "reward_tier": 3,
-        "is_prunable": true,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": true
       },
       {
         "height": 5,
@@ -5077,8 +5036,7 @@
           5
         ],
         "reward_tier": 5,
-        "is_prunable": false,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": false
       },
       {
         "height": 6,
@@ -5088,8 +5046,7 @@
           8
         ],
         "reward_tier": 8,
-        "is_prunable": true,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": true
       },
       {
         "height": 7,
@@ -5099,8 +5056,7 @@
           13
         ],
         "reward_tier": 13,
-        "is_prunable": false,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": false
       },
       {
         "height": 8,
@@ -5110,8 +5066,7 @@
           21
         ],
         "reward_tier": 21,
-        "is_prunable": true,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": true
       },
       {
         "height": 9,
@@ -5121,8 +5076,7 @@
           34
         ],
         "reward_tier": 34,
-        "is_prunable": false,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": false
       },
       {
         "height": 10,
@@ -5132,8 +5086,7 @@
           55
         ],
         "reward_tier": 55,
-        "is_prunable": true,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": true
       },
       {
         "height": 11,
@@ -5143,8 +5096,7 @@
           89
         ],
         "reward_tier": 89,
-        "is_prunable": false,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": false
       },
       {
         "height": 12,
@@ -5154,8 +5106,7 @@
           144
         ],
         "reward_tier": 144,
-        "is_prunable": true,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": true
       },
       {
         "height": 13,
@@ -5165,8 +5116,7 @@
           233
         ],
         "reward_tier": 233,
-        "is_prunable": false,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": false
       },
       {
         "height": 14,
@@ -5176,8 +5126,7 @@
           377
         ],
         "reward_tier": 377,
-        "is_prunable": false,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": false
       },
       {
         "height": 15,
@@ -5187,8 +5136,7 @@
           610
         ],
         "reward_tier": 610,
-        "is_prunable": true,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": true
       },
       {
         "height": 16,
@@ -5198,8 +5146,7 @@
           987
         ],
         "reward_tier": 987,
-        "is_prunable": false,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": false
       },
       {
         "height": 17,
@@ -5209,8 +5156,7 @@
           1597
         ],
         "reward_tier": 1597,
-        "is_prunable": false,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": false
       },
       {
         "height": 18,
@@ -5220,8 +5166,7 @@
           2584
         ],
         "reward_tier": 2584,
-        "is_prunable": true,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": true
       },
       {
         "height": 19,
@@ -5231,8 +5176,7 @@
           4181
         ],
         "reward_tier": 4181,
-        "is_prunable": false,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": false
       },
       {
         "height": 20,
@@ -5242,8 +5186,7 @@
           6765
         ],
         "reward_tier": 6765,
-        "is_prunable": false,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": false
       },
       {
         "height": 21,
@@ -5253,8 +5196,7 @@
           10946
         ],
         "reward_tier": 10946,
-        "is_prunable": false,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": false
       },
       {
         "height": 22,
@@ -5264,8 +5206,7 @@
           17711
         ],
         "reward_tier": 17711,
-        "is_prunable": false,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": false
       },
       {
         "height": 23,
@@ -5275,8 +5216,7 @@
           28657
         ],
         "reward_tier": 28657,
-        "is_prunable": false,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": false
       },
       {
         "height": 24,
@@ -5286,8 +5226,7 @@
           46368
         ],
         "reward_tier": 46368,
-        "is_prunable": true,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": true
       },
       {
         "height": 25,
@@ -5297,8 +5236,7 @@
           75025
         ],
         "reward_tier": 75025,
-        "is_prunable": false,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": false
       },
       {
         "height": 26,
@@ -5308,8 +5246,7 @@
           121393
         ],
         "reward_tier": 121393,
-        "is_prunable": false,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": false
       },
       {
         "height": 27,
@@ -5319,8 +5256,7 @@
           196418
         ],
         "reward_tier": 196418,
-        "is_prunable": false,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": false
       },
       {
         "height": 28,
@@ -5330,8 +5266,7 @@
           317811
         ],
         "reward_tier": 317811,
-        "is_prunable": true,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": true
       },
       {
         "height": 29,
@@ -5341,8 +5276,7 @@
           514229
         ],
         "reward_tier": 514229,
-        "is_prunable": false,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": false
       },
       {
         "height": 30,
@@ -5352,8 +5286,7 @@
           832040
         ],
         "reward_tier": 832040,
-        "is_prunable": false,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": false
       },
       {
         "height": 31,
@@ -5363,8 +5296,7 @@
           1346269
         ],
         "reward_tier": 1346269,
-        "is_prunable": false,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": false
       },
       {
         "height": 32,
@@ -5374,8 +5306,7 @@
           2178309
         ],
         "reward_tier": 2178309,
-        "is_prunable": true,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": true
       },
       {
         "height": 33,
@@ -5385,8 +5316,7 @@
           3524578
         ],
         "reward_tier": 3524578,
-        "is_prunable": false,
-        "interpretation": "Genesis to forward state"
+        "is_prunable": false
       }
     ],
     "time_symmetry_anchor": {
@@ -5567,7 +5497,7 @@
       "homomorphic_operations": "supported"
     }
   },
-  "initial_state_hash": "878703ce33ecfc5056936fef289080165a5deaab1c94e46ef78626d6177099e0",
+  "initial_state_hash": "8e8b7ef19e6e0f613c37c6f7407a8da7f5e0f6abf54cecc9a82b7881beaac553",
   "deployment_manifest": {
     "command": "🌀 DEPLOY_REVERSIBLE_PHI_CORE",
     "irreversible_once_live": true,
