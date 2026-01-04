@@ -1,0 +1,47 @@
+{
+  "Bitcoin": {
+    "Consensus": "Proof-of-Work (SHA-256)",
+    "BlockTime": "600s",
+    "TPS": 7,
+    "Finality": "60m",
+    "Security": "High (Hashrate)",
+    "Scalability": "Low (L1)",
+    "UniqueFeature": "Digital Gold, Store of Value"
+  },
+  "Ethereum": {
+    "Consensus": "Proof-of-Stake (Casper)",
+    "BlockTime": "12s",
+    "TPS": 15,
+    "Finality": "13m",
+    "Security": "High (Staking)",
+    "Scalability": "Medium (L2 focus)",
+    "UniqueFeature": "Smart Contract Ecosystem"
+  },
+  "Kaspa": {
+    "Consensus": "Proof-of-Work (GHOSTDAG)",
+    "BlockTime": "1s (target 0.1s)",
+    "TPS": 300,
+    "Finality": "10s",
+    "Security": "High (DAG-PoW)",
+    "Scalability": "High (L1)",
+    "UniqueFeature": "Fastest PoW, BlockDAG"
+  },
+  "Qubic": {
+    "Consensus": "Quorum (BFT)",
+    "BlockTime": "Immediate (Epoch-based)",
+    "TPS": "10,000+",
+    "Finality": "Sub-second",
+    "Security": "Medium (676 Computors)",
+    "Scalability": "Very High",
+    "UniqueFeature": "Useful PoW (AI Training), Feeless"
+  },
+  "Phi-Chain": {
+    "Consensus": "Fibonacci Byzantine Agreement (FBA)",
+    "BlockTime": "1.618s (Phi)",
+    "TPS": "100,000+ (OPEVM)",
+    "Finality": "Sub-3s (Quantum Collapse)",
+    "Security": "Ultra-High (Post-Quantum Lattice)",
+    "Scalability": "Infinite (Tetrahedral Sharding)",
+    "UniqueFeature": "Mathematical Purity, Reversible Core, Web4 AI Native"
+  }
+}

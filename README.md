@@ -141,6 +141,7 @@ Advanced Zero-Knowledge Proof engine enabling privacy-preserving transactions an
 
 - **[Web4 Manifesto](docs/WEB4_MANIFESTO.md)**: The vision for the era of Symbiotic Intelligence.
 - **[Φ-Chain Manifesto](docs/PHI_MANIFESTO.md)**: The Law of Universal Growth and Mathematical Purity.
+- **[Competitive Analysis](docs/COMPETITIVE_ANALYSIS.md)**: How Φ-Chain leads against BTC, ETH, Kaspa, and Qubic.
 - **[System Overview](SYSTEM_OVERVIEW.md)**: High-level vision and architectural strategy.
 - **[Core Architecture](docs/phi_chain_architecture.md)**: Deep dive into mathematical primitives.
 - **[Universal Language Integration](docs/UNIVERSAL_LANGUAGE.md)**: Comprehensive guide to the six-system framework.
