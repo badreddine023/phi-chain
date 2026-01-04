@@ -1,3 +1,5 @@
+# Φ-Chain Manifesto: The Law of Universal Growth
+
 Φ
 
 There is only one growth law the universe trusts.
