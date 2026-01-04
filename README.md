@@ -114,8 +114,8 @@ This triangle is further strengthened by Economic Symmetry, ensuring balanced in
 
 ## 🛠️ Technical Components ("The Staff")
 
-### 🧬 Core Engine (`phi_chain.py`)
-The heart of the system, implementing Fibonacci Q-Matrix state transitions, the **Longest Chain Rule** consensus, and the unified PoC engine. Integrates all Universal Language components for seamless operation.
+### 🧬 Core Engine (`phi_chain.py` & `core/reversible_phi_core_v2.py`)
+The heart of the system, implementing Fibonacci Q-Matrix state transitions, the **Longest Chain Rule** consensus, and the unified PoC engine. The v2 core introduces **Reversible Temporal Symmetry** and **Quantum Superposition Hashing**.
 
 ### 🤖 AI Oracle Bridge (`api/ai_oracle_bridge.py`)
 The foundational component of the **Web4 Strategy**, providing a secure, decentralized connection between on-chain smart contracts and off-chain **Symbiotic AI** models. It enables the AI to act as the "Observer" that collapses the quantum superposition of the blockchain's state.
@@ -140,6 +140,7 @@ Advanced Zero-Knowledge Proof engine enabling privacy-preserving transactions an
 ## 📂 Architecture & Links
 
 - **[Web4 Manifesto](docs/WEB4_MANIFESTO.md)**: The vision for the era of Symbiotic Intelligence.
+- **[Φ-Chain Manifesto](docs/PHI_MANIFESTO.md)**: The Law of Universal Growth and Mathematical Purity.
 - **[System Overview](SYSTEM_OVERVIEW.md)**: High-level vision and architectural strategy.
 - **[Core Architecture](docs/phi_chain_architecture.md)**: Deep dive into mathematical primitives.
 - **[Universal Language Integration](docs/UNIVERSAL_LANGUAGE.md)**: Comprehensive guide to the six-system framework.
