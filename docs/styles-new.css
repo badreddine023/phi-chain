@@ -1171,3 +1171,46 @@ body {
         gap: 2rem;
     }
 }
+
+/* Disclaimer Section */
+.disclaimer-section {
+    padding: 6rem 0;
+    background: var(--gradient-dark);
+    border-top: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.disclaimer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    text-align: center;
+}
+
+.disclaimer-item {
+    padding: 2rem;
+    background: var(--dark-bg-light);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.disclaimer-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.1);
+}
+
+.disclaimer-item i {
+    font-size: 3rem;
+    color: var(--primary-gold);
+    margin-bottom: 1rem;
+}
+
+.disclaimer-item h4 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-light);
+}
+
+.disclaimer-item p {
+    color: var(--text-muted);
+}

@@ -9,6 +9,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        .wallet-disclaimer {
+            background: rgba(255, 165, 0, 0.1);
+            border: 2px solid var(--primary-gold);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .wallet-disclaimer h2 {
+            color: var(--primary-gold);
+            font-size: 1.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .wallet-disclaimer i {
+            font-size: 2.5rem;
+            color: var(--primary-gold);
+        }
+
+        .wallet-disclaimer p {
+            color: var(--text-light);
+            margin-top: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .wallet-disclaimer p strong {
+            color: #ffcc00;
+        }
         .nav-btn {
             position: fixed;
             top: 1.5rem;
@@ -222,6 +251,16 @@
 
     <div class="container">
         <div class="header">
+            <div class="wallet-disclaimer">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h2>CONCEPTUAL SIMULATION WARNING</h2>
+                <p>This wallet interface is a **conceptual simulation** for research and demonstration purposes only. It does **NOT** connect to a live Mainnet. All generated addresses, balances, and transactions are **NOT REAL** and have no monetary value. Do not use this interface for real-world transactions.</p>
+            </div>
+            <div class="wallet-disclaimer">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h2>CONCEPTUAL SIMULATION WARNING</h2>
+                <p>This wallet interface is a **conceptual simulation** for research and demonstration purposes only. It does **NOT** connect to a live Mainnet. All generated addresses, balances, and transactions are **NOT REAL** and have no monetary value. Do not use this interface for real-world transactions.</p>
+            </div>
             <h1>Φ-Chain Mainnet Wallet</h1>
             <p>Securely manage assets, stake tokens, and mine with Proof-of-Coherence</p>
         </div>
