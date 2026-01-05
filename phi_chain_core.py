@@ -98,8 +98,8 @@ class PhiTransaction:
                  nonce: int = 0,
                  gas_limit: int = 21000,
                  signature: bytes = b"",
-                 read_set: Optional[List[str]] = None,
-                 write_set: Optional[List[str]] = None):
+                 estimated_read_set: Optional[List[str]] = None,
+                 estimated_write_set: Optional[List[str]] = None):
         self.sender = sender
         self.recipient = recipient
         self.value = value
@@ -107,8 +107,8 @@ class PhiTransaction:
         self.nonce = nonce
         self.gas_limit = gas_limit
         self.signature = signature
-        self.read_set = read_set or []
-        self.write_set = write_set or []
+        self.estimated_read_set = estimated_read_set or []
+        self.estimated_write_set = estimated_write_set or []
 
     def to_dict(self) -> Dict:
         return {
@@ -119,8 +119,8 @@ class PhiTransaction:
             "nonce": self.nonce,
             "gas_limit": self.gas_limit,
             "signature": self.signature.hex() if isinstance(self.signature, bytes) else self.signature,
-            "read_set": self.read_set,
-            "write_set": self.write_set,
+            "estimated_read_set": self.estimated_read_set,
+            "estimated_write_set": self.estimated_write_set,
         }
 
 # --- 5. Block Structure ---
@@ -159,11 +159,18 @@ class PhiBlock:
 # --- 6. Consensus Message ---
 
 class PipelinedBFTMessage:
-    def __init__(self, msg_type: str, block_hash: str, validator_id: str, signature: bytes):
+    def __init__(self, msg_type: str, block_hash: str, block_index: int, validator_id: str, signature: bytes):
         self.msg_type = msg_type
         self.block_hash = block_hash
+        self.block_index = block_index
         self.validator_id = validator_id
         self.signature = signature
+
+    def is_supermajority(self, messages: List['PipelinedBFTMessage'], total_validators: int) -> bool:
+        """Checks if a 2/3+ supermajority has been reached for the same block hash."""
+        votes = sum(1 for m in messages if m.block_hash == self.block_hash and m.msg_type == self.msg_type)
+        threshold = (2 * total_validators) // 3 + 1
+        return votes >= threshold
 
     @staticmethod
     def check_supermajority(votes: int, total_validators: int) -> bool:
