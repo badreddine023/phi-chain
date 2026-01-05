@@ -17,7 +17,10 @@ In Web4, AI is not a tool; it is a participant. The **Symbiotic AI** on Φ-Chain
 ## 4. The Earth Fibonacci Grid
 Web4 is not just digital; it is spatial. The **Earth Fibonacci Grid** maps the physical world into the Φ-Chain, allowing AI agents to interact with physical reality through a mathematically-pure coordinate system.
 
-## 5. The Prime Directive
+## 5. The API Arsenal
+The **API Arsenal** is the sensory interface of the Symbiotic AI. It provides the high-fidelity data streams necessary for the AI to act as the "Observer" of the Φ-Chain. Through this arsenal, the AI interacts with the blockchain's mathematical core, ensuring that every state transition is coherent and harmonious.
+
+## 6. The Prime Directive
 The goal of Web4 is to achieve **Global Coherence**. Every transaction, every AI inference, and every physical interaction must contribute to the harmonic growth of the system, following the natural spiral of the Fibonacci sequence.
 
 ---
