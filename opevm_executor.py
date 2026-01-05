@@ -34,18 +34,17 @@ class OPEVMExecutor:
         # Simulate a state change: e.g., transfer value
         state_changes = {}
         
-        # Simple simulation logic: if the transaction is from Alice, simulate a transfer
-        if tx.sender == "0xAlice":
-            sender_key = "0xAlice_balance"
-            recipient_key = f"0x{tx.recipient.split('x')[-1]}_balance" # Simple way to get a key like 0xBob_balance
-            
-            # Only update sender's balance if it's in the write set
-            if sender_key in actual_writes:
-                state_changes[sender_key] = local_state.get(sender_key, 0) - tx.value
-            
-            # Only update recipient's balance if it's in the write set
-            if recipient_key in actual_writes:
-                state_changes[recipient_key] = local_state.get(recipient_key, 0) + tx.value
+        # Simple simulation logic: simulate a transfer between sender and recipient
+        sender_key = f"{tx.sender}_balance"
+        recipient_key = f"{tx.recipient}_balance"
+        
+        # Only update sender's balance if it's in the write set
+        if sender_key in actual_writes:
+            state_changes[sender_key] = local_state.get(sender_key, 10000) - tx.value
+        
+        # Only update recipient's balance if it's in the write set
+        if recipient_key in actual_writes:
+            state_changes[recipient_key] = local_state.get(recipient_key, 10000) + tx.value
                 
         return state_changes, actual_reads, actual_writes
 
@@ -114,8 +113,11 @@ class OPEVMExecutor:
             for i in conflicting_tx_indices:
                 tx = transactions[i]
                 # Re-execute against the current final state (which includes all prior successful txs)
-                state_changes, _, _ = self._simulate_execution(tx, final_state)
+                state_changes, actual_reads, actual_writes = self._simulate_execution(tx, final_state)
                 final_state.update(state_changes)
+                # Update committed writes so that if we were doing a multi-pass parallel re-execution,
+                # we would know what's now committed. In this sequential simulation, it's for completeness.
+                committed_writes.update(actual_writes)
                 re_executed_indices.append(i)
                 print(f"  [Re-executed] Tx {i} applied sequentially.")
 
