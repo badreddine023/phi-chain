@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Φ-Chain Blockchain Simulator - Real-time</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='90' fill='%23b9a369'>Φ</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/3.0.3/plotly.min.js"></script>
+    <style>
+        :root {
+            --primary-gold: #b9a369;
+            --dark-bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --accent-gold: #d4af37;
+            --text-light: #f0f0f0;
+            --text-muted: #a0a0a0;
+            --border-color: rgba(185, 163, 105, 0.2);
+            --gradient-primary: linear-gradient(135deg, #b9a369, #d4af37);
+            --gradient-secondary: linear-gradient(135deg, rgba(185, 163, 105, 0.1), rgba(212, 175, 55, 0.1));
+            --shadow-gold: 0 10px 30px rgba(185, 163, 105, 0.3);
+            --shadow-hover: 0 20px 40px rgba(185, 163, 105, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            font-weight: 400;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-top: 2rem;
+        }
+
+        .header h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            color: var(--primary-gold);
+            margin-bottom: 1rem;
+            font-weight: 300;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            color: var(--text-muted);
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .home-btn {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            background: var(--gradient-primary);
+            color: var(--dark-bg);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-gold);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Enhanced Simulator Grid */
+        .simulator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .control-panel, .blockchain-view {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-panel h3, .blockchain-view h3 {
+            color: var(--primary-gold);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Real-time Status */
+        .realtime-status {
+            background: rgba(185, 163, 105, 0.1);
+            border: 1px solid rgba(185, 163, 105, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-live {
+            background: #22c55e;
+        }
+
+        .status-syncing {
+            background: #f59e0b;
+        }
+
+        .status-offline {
+            background: #ef4444;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-group label {
+            display: block;
+            color: var(--primary-gold);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .control-group input, .control-group select {
+            width: 100%;
+            padding: 1rem;
+            background: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .control-group input:focus, .control-group select:focus {
+            border-color: var(--primary-gold);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(185, 163, 105, 0.2);
+        }
+
+        .btn {
+            background: var(--gradient-primary);
+            color: var(--dark-bg);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            letter-spacing: 0.02em;
+            box-shadow: var(--shadow-gold);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-gold);
+            border: 2px solid var(--primary-gold);
+            box-shadow: none;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-gold);
+            color: var(--dark-bg);
+            box-shadow: var(--shadow-gold);
+        }
+
+        /* Status Display */
+        .status-display {
+            background: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(185, 163, 105, 0.1);
+        }
+
+        .status-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .status-label {
+            color: var(--primary-gold);
+            font-weight: 500;
+        }
+
+        .status-value {
+            color: var(--text-light);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+        }
+
+        .status-value.live {
+            color: #22c55e;
+            animation: pulse 2s infinite;
+        }
+
+        .status-value.warning {
+            color: #f59e0b;
+        }
+
+        .status-value.error {
+            color: #ef4444;
+        }
+
+        /* Blockchain Container */
+        .blockchain-container {
+            max-height: 400px;
+            overflow-y: auto;
+            background: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem;
+            position: relative;
+        }
+
+        .blockchain-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .blockchain-container::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        .blockchain-container::-webkit-scrollbar-thumb {
+            background: var(--primary-gold);
+            border-radius: 4px;
+        }
+
+        .block {
+            background: rgba(185, 163, 105, 0.1);
+            border: 1px solid rgba(185, 163, 105, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-secondary);
+            transition: left 0.5s ease;
+        }
+
+        .block:hover::before {
+            left: 100%;
+        }
+
+        .block:hover {
+            background: rgba(185, 163, 105, 0.15);
+            transform: translateX(5px);
+        }
+
+        .block.new {
+            animation: slideIn 0.5s ease-out;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .block-number {
+            color: var(--primary-gold);
+            font-weight: bold;
+            font-size: 1.1rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .block-timestamp {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .block-details {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .block-hash {
+            color: var(--accent-gold);
+            word-break: break-all;
+            margin: 0.5rem 0;
+        }
+
+        .block-validator {
+            color: var(--primary-gold);
+            margin: 0.5rem 0;
+        }
+
+        .block-status {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+
+        .status-finalized {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid #22c55e;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 1px solid #f59e0b;
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-secondary);
+            transition: left 0.5s ease;
+        }
+
+        .metric-card:hover::before {
+            left: 100%;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-gold);
+            margin-bottom: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            position: relative;
+            z-index: 1;
+        }
+
+        .metric-label {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .metric-change {
+            font-size: 0.9rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        .change-positive {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .change-negative {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .change-neutral {
+            background: rgba(185, 163, 105, 0.2);
+            color: var(--primary-gold);
+        }
+
+        /* Chart Container */
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            background: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            margin: 2rem 0;
+            padding: 1rem;
+        }
+
+        /* Real-time Controls */
+        .realtime-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            padding: 0.5rem 1rem;
+        }
+
+        .speed-control label {
+            color: var(--primary-gold);
+            font-size: 0.9rem;
+        }
+
+        .speed-control select {
+            background: var(--dark-bg);
+            border: none;
+            color: var(--text-light);
+            padding: 0.3rem;
+            border-radius: 5px;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(185, 163, 105, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-gold);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Network Stats */
+        .network-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: rgba(185, 163, 105, 0.05);
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-gold);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .simulator-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .realtime-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .header h1 {
+                font-size: clamp(2rem, 8vw, 3rem);
+            }
+
+            .home-btn {
+                position: relative;
+                top: auto;
+                left: auto;
+                display: block;
+                margin: 1rem auto;
+                text-align: center;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-btn">
+            <i class="fas fa-home"></i>
+            Home
+        </a>
+        
+        <div class="header">
+            <h1>Φ-Chain Blockchain Simulator</h1>
+            <p>Experience real-time blockchain operations with Fibonacci-based consensus mechanisms</p>
+        </div>
+
+        <!-- Real-time Status Bar -->
+        <div class="realtime-status">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <div class="status-indicator status-live" id="network-status"></div>
+                <span style="color: var(--primary-gold); font-weight: 500;">
+                    Live Network Connection
+                </span>
+            </div>
+            <div class="status-value live" id="last-update">
+                Last Update: Never
+            </div>
+        </div>
+
+        <div class="simulator-grid">
+            <div class="control-panel">
+                <h3><i class="fas fa-cogs"></i> Real-time Controls</h3>
+                
+                <div class="control-group">
+                    <label for="blockInterval">Block Interval (seconds)</label>
+                    <select id="blockInterval">
+                        <option value="8" selected>8 seconds (F₆)</option>
+                        <option value="5">5 seconds (F₅)</option>
+                        <option value="13">13 seconds (F₇)</option>
+                        <option value="21">21 seconds (F₈)</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="validatorCount">Validator Count</label>
+                    <input type="number" id="validatorCount" min="3" max="21" value="21" step="1">
+                </div>
+
+                <div class="control-group">
+                    <label for="finalityThreshold">Finality Threshold</label>
+                    <select id="finalityThreshold">
+                        <option value="610" selected>F₁₅ (610 signatures)</option>
+                        <option value="377">F₁₄ (377 signatures)</option>
+                        <option value="987">F₁₆ (987 signatures)</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="networkLoad">Network Load</label>
+                    <select id="networkLoad">
+                        <option value="low">Low (100-500 TPS)</option>
+                        <option value="medium" selected>Medium (500-1000 TPS)</option>
+                        <option value="high">High (1000+ TPS)</option>
+                        <option value="stress">Stress Test</option>
+                    </select>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="btn" id="startBtn" onclick="startSimulation()">
+                        <i class="fas fa-play"></i>
+                        Start Real-time Simulation
+                    </button>
+                    <button class="btn btn-secondary" id="pauseBtn" onclick="pauseSimulation()" disabled>
+                        <i class="fas fa-pause"></i>
+                        Pause
+                    </button>
+                    <button class="btn btn-secondary" onclick="resetSimulation()">
+                        <i class="fas fa-redo"></i>
+                        Reset
+                    </button>
+                </div>
+
+                <div class="status-display">
+                    <div class="status-item">
+                        <span class="status-label">Simulation Status:</span>
+                        <span class="status-value" id="simStatus">Stopped</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Current Block:</span>
+                        <span class="status-value" id="currentBlock">0</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Last Block Time:</span>
+                        <span class="status-value" id="lastBlockTime">Never</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Next Block In:</span>
+                        <span class="status-value" id="nextBlockIn">--</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Active Validators:</span>
+                        <span class="status-value" id="activeValidators">0</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Finalized Blocks:</span>
+                        <span class="status-value" id="finalizedBlocks">0</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Network Latency:</span>
+                        <span class="status-value" id="networkLatency">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blockchain-view">
+                <h3><i class="fas fa-cubes"></i> Live Blockchain</h3>
+                <div class="blockchain-container" id="blockchainContainer">
+                    <div style="text-align: center; color: var(--primary-gold); padding: 2rem;">
+                        Start simulation to see real-time block creation...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-time Controls -->
+        <div class="realtime-controls">
+            <div class="speed-control">
+                <label for="simulation-speed">Speed:</label>
+                <select id="simulation-speed" onchange="updateSimulationSpeed()">
+                    <option value="0.5">0.5x</option>
+                    <option value="1" selected>1x</option>
+                    <option value="2">2x</option>
+                    <option value="5">5x</option>
+                    <option value="10">10x</option>
+                </select>
+            </div>
+            <button class="btn btn-secondary" onclick="forceFinality()">
+                <i class="fas fa-bolt"></i>
+                Force Finality
+            </button>
+            <button class="btn btn-secondary" onclick="simulateAttack()">
+                <i class="fas fa-shield-alt"></i>
+                Simulate Attack
+            </button>
+            <button class="btn btn-secondary" onclick="exportData()">
+                <i class="fas fa-download"></i>
+                Export Data
+            </button>
+        </div>
+
+        <!-- Network Stats -->
+        <div class="network-stats">
+            <div class="stat-item">
+                <div class="stat-value" id="totalBlocks">0</div>
+                <div class="stat-label">Total Blocks</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="avgBlockTime">0.0</div>
+                <div class="stat-label">Avg Block Time (s)</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="transactionsPerBlock">0</div>
+                <div class="stat-label">Avg Txs/Block</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="networkHealth">100%</div>
+                <div class="stat-label">Network Health</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="currentTPS">0</div>
+                <div class="stat-label">Current TPS</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="totalVolume">0</div>
+                <div class="stat-label">Total Volume (Φ)</div>
+            </div>
+        </div>
+
+        <!-- Real-time Charts -->
+        <div class="chart-container" id="performanceChart"></div>
+        <div class="chart-container" id="networkChart"></div>
+    </div>
+
+    <script>
+        // Real-time simulation variables
+        let isRunning = false;
+        let currentBlock = 0;
+        let blocks = [];
+        let validators = [];
+        let simulationTimer = null;
+        let updateTimer = null;
+        let chartTimer = null;
+        let simulationSpeed = 1;
+        let blockInterval = 8000; // 8 seconds in milliseconds
+        let validatorCount = 21;
+        let finalityThreshold = 610;
+        let networkLoad = 'medium';
+        let totalVolume = 0;
+        let totalTransactions = 0;
+        let startTime = null;
+
+        // Fibonacci utilities
+        const FIBONACCI = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765];
+        const PHI = 1.618033988749895;
+
+        class Block {
+            constructor(index, timestamp, transactions, previousHash, validator) {
+                this.index = index;
+                this.timestamp = timestamp;
+                this.transactions = transactions;
+                this.previousHash = previousHash;
+                this.validator = validator;
+                this.hash = this.calculateHash();
+                this.isFinalized = index % 5 === 0; // Every 5th block is finalized
+                this.size = transactions.reduce((sum, tx) => sum + tx.size, 0) + 1000; // Block overhead
+                this.reward = this.calculateReward();
+            }
+
+            calculateHash() {
+                const data = `${this.index}${this.timestamp}${this.previousHash}${this.validator}`;
+                let hash = 0;
+                for (let i = 0; i < data.length; i++) {
+                    const char = data.charCodeAt(i);
+                    hash = ((hash << 5) - hash) + char;
+                    hash = hash & hash;
+                }
+                return '0x' + Math.abs(hash).toString(16).padStart(16, '0');
+            }
+
+            calculateReward() {
+                // Reward based on Fibonacci sequence
+                const fibIndex = Math.min(16, Math.floor(this.index / 100) + 8);
+                return FIBONACCI[fibIndex] * 0.001;
+            }
+        }
+
+        class Transaction {
+            constructor(sender, receiver, amount, fee) {
+                this.id = '0x' + Math.random().toString(36).substring(2, 18);
+                this.sender = sender;
+                this.receiver = receiver;
+                this.amount = amount;
+                this.fee = fee;
+                this.size = Math.floor(Math.random() * 500) + 250; // 250-750 bytes
+                this.timestamp = new Date();
+            }
+        }
+
+        class Validator {
+            constructor(id, name, stake) {
+                this.id = id;
+                this.name = name;
+                this.stake = stake;
+                this.isActive = Math.random() > 0.1; // 90% chance of being active
+                this.hasSigned = false;
+                this.proposerCount = 0;
+                this.signatureCount = 0;
+            }
+
+            getSelectionProbability() {
+                return this.stake / validators.reduce((sum, v) => sum + v.stake, 0);
+            }
+        }
+
+        function generateValidators() {
+            validators = [];
+            const names = [
+                'Apollo', 'Artemis', 'Athena', 'Zeus', 'Hera', 'Poseidon', 'Demeter', 'Ares',
+                'Hermes', 'Aphrodite', 'Hephaestus', 'Dionysus', 'Hestia', 'Hades', 'Persephone',
+                'Eros', 'Nike', 'Iris', 'Chronos', 'Gaia', 'Uranus'
+            ];
+
+            for (let i = 0; i < validatorCount; i++) {
+                const fibIndex = i % FIBONACCI.length;
+                const baseStake = FIBONACCI[fibIndex] * 1000;
+                const variation = Math.random() * 0.2 + 0.9;
+                const stake = Math.floor(baseStake * variation);
+                
+                validators.push(new Validator(i + 1, names[i % names.length], stake));
+            }
+        }
+
+        function selectProposer() {
+            const activeValidators = validators.filter(v => v.isActive);
+            const totalActiveStake = activeValidators.reduce((sum, v) => sum + v.stake, 0);
+            
+            if (totalActiveStake === 0) return validators[0];
+            
+            const randomValue = Math.random() * totalActiveStake;
+            let currentSum = 0;
+            
+            for (const validator of activeValidators) {
+                currentSum += validator.stake;
+                if (currentSum >= randomValue) {
+                    return validator;
+                }
+            }
+            
+            return activeValidators[0];
+        }
+
+        function generateTransactions(count) {
+            const transactions = [];
+            const addresses = [
+                '0x742d35Cc6634C0532925a3b8D400', '0x8ba1f109551bD432903012c3C03', '0x1234567890abcdef1234567890',
+                '0xabcdef1234567890abcdef123456', '0x1111111111111111111111111111'
+            ];
+
+            for (let i = 0; i < count; i++) {
+                const sender = addresses[Math.floor(Math.random() * addresses.length)];
+                const receiver = addresses[Math.floor(Math.random() * addresses.length)];
+                const amount = Math.random() * 10 + 0.1;
+                const fee = amount * 0.001;
+                
+                transactions.push(new Transaction(sender, receiver, amount, fee));
+            }
+            
+            return transactions;
+        }
+
+        function createBlock() {
+            const timestamp = new Date();
+            const proposer = selectProposer();
+            const previousHash = blocks.length > 0 ? blocks[blocks.length - 1].hash : '0x0000000000000000';
+            
+            // Generate transaction count based on network load
+            let txCount;
+            switch (networkLoad) {
+                case 'low':
+                    txCount = Math.floor(Math.random() * 400) + 100;
+                    break;
+                case 'medium':
+                    txCount = Math.floor(Math.random() * 500) + 500;
+                    break;
+                case 'high':
+                    txCount = Math.floor(Math.random() * 500) + 1000;
+                    break;
+                case 'stress':
+                    txCount = Math.floor(Math.random() * 1000) + 2000;
+                    break;
+                default:
+                    txCount = 987; // F16
+            }
+            
+            const transactions = generateTransactions(txCount);
+            const block = new Block(currentBlock, timestamp, transactions, previousHash, proposer.name);
+            
+            // Update validator stats
+            proposer.proposerCount++;
+            validators.forEach(v => {
+                if (v.isActive && Math.random() > 0.1) {
+                    v.hasSigned = true;
+                    v.signatureCount++;
+                }
+            });
+            
+            blocks.push(block);
+            currentBlock++;
+            totalTransactions += transactions.length;
+            totalVolume += transactions.reduce((sum, tx) => sum + tx.amount, 0);
+            
+            return block;
+        }
+
+        function renderBlock(block) {
+            const container = document.getElementById('blockchainContainer');
+            
+            if (blocks.length === 1) {
+                container.innerHTML = '';
+            }
+            
+            const blockElement = document.createElement('div');
+            blockElement.className = 'block new';
+            blockElement.innerHTML = `
+                <div class="block-header">
+                    <span class="block-number">Block #${block.index}</span>
+                    <span class="block-timestamp">${block.timestamp.toLocaleTimeString()}</span>
+                </div>
+                <div class="block-details">
+                    <div class="block-hash"><strong>Hash:</strong> ${block.hash}</div>
+                    <div><strong>Previous Hash:</strong> ${block.previousHash}</div>
+                    <div class="block-validator"><strong>Validator:</strong> ${block.validator}</div>
+                    <div><strong>Transactions:</strong> ${block.transactions.length.toLocaleString()}</div>
+                    <div><strong>Size:</strong> ${(block.size / 1024).toFixed(1)} KB</div>
+                    <div><strong>Reward:</strong> ${block.reward.toFixed(3)} Φ</div>
+                    <div class="block-status ${block.isFinalized ? 'status-finalized' : 'status-pending'}">
+                        ${block.isFinalized ? '✅ Finalized' : '⏳ Pending'}
+                    </div>
+                </div>
+            `;
+            
+            container.insertBefore(blockElement, container.firstChild);
+            
+            // Remove 'new' class after animation
+            setTimeout(() => {
+                blockElement.classList.remove('new');
+            }, 500);
+            
+            // Keep only last 10 blocks visible
+            while (container.children.length > 10) {
+                container.removeChild(container.lastChild);
+            }
+        }
+
+        function updateDisplay() {
+            const status = isRunning ? 'Running' : 'Stopped';
+            document.getElementById('simStatus').textContent = status;
+            document.getElementById('simStatus').className = isRunning ? 'status-value live' : 'status-value';
+            
+            document.getElementById('currentBlock').textContent = currentBlock.toLocaleString();
+            document.getElementById('lastBlockTime').textContent = 
+                blocks.length > 0 ? blocks[blocks.length - 1].timestamp.toLocaleTimeString() : 'Never';
+            
+            document.getElementById('activeValidators').textContent = 
+                validators.filter(v => v.isActive).length;
+            
+            const finalizedBlocks = blocks.filter(b => b.isFinalized).length;
+            document.getElementById('finalizedBlocks').textContent = finalizedBlocks.toLocaleString();
+            
+            // Update next block countdown
+            if (isRunning && blocks.length > 0) {
+                const lastBlockTime = blocks[blocks.length - 1].timestamp;
+                const nextBlockTime = new Date(lastBlockTime.getTime() + blockInterval);
+                const now = new Date();
+                const timeLeft = Math.max(0, nextBlockTime - now);
+                document.getElementById('nextBlockIn').textContent = 
+                    Math.ceil(timeLeft / 1000) + 's';
+            } else {
+                document.getElementById('nextBlockIn').textContent = '--';
+            }
+
+            // Update network latency
+            if (isRunning) {
+                const latency = Math.floor(Math.random() * 50) + 10; // 10-60ms
+                document.getElementById('networkLatency').textContent = latency + 'ms';
+            }
+
+            // Update metrics
+            updateMetrics();
+        }
+
+        function updateMetrics() {
+            document.getElementById('totalBlocks').textContent = blocks.length.toLocaleString();
+            
+            if (blocks.length > 1) {
+                const totalTime = blocks[blocks.length - 1].timestamp - blocks[0].timestamp;
+                const avgBlockTime = totalTime / (blocks.length - 1) / 1000;
+                document.getElementById('avgBlockTime').textContent = avgBlockTime.toFixed(1);
+            }
+            
+            document.getElementById('transactionsPerBlock').textContent = 
+                blocks.length > 0 ? Math.round(totalTransactions / blocks.length) : 0;
+            
+            const health = validators.filter(v => v.isActive).length > 0 ? 100 : 0;
+            document.getElementById('networkHealth').textContent = health + '%';
+            
+            const currentTPS = blocks.length > 0 ? Math.round(totalTransactions / ((Date.now() - (startTime || Date.now())) / 1000)) : 0;
+            document.getElementById('currentTPS').textContent = currentTPS.toLocaleString();
+            
+            document.getElementById('totalVolume').textContent = totalVolume.toFixed(3);
+        }
+
+        function initializeCharts() {
+            // Performance chart
+            const performanceData = [{
+                x: [],
+                y: [],
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: 'Block Time (s)',
+                line: { color: '#b9a369', width: 3 },
+                marker: { color: '#b9a369', size: 6 }
+            }];
+
+            const performanceLayout = {
+                title: {
+                    text: 'Real-time Block Performance',
+                    font: { color: '#b9a369', size: 18, family: 'Inter' }
+                },
+                xaxis: { 
+                    title: { text: 'Block Number', font: { color: '#f0f0f0', family: 'Inter' } },
+                    color: '#f0f0f0',
+                    gridcolor: 'rgba(185, 163, 105, 0.2)'
+                },
+                yaxis: { 
+                    title: { text: 'Block Time (s)', font: { color: '#b9a369', family: 'Inter' } },
+                    color: '#b9a369',
+                    gridcolor: 'rgba(185, 163, 105, 0.2)'
+                },
+                plot_bgcolor: '#0a0a0a',
+                paper_bgcolor: '#0a0a0a',
+                font: { color: '#f0f0f0', family: 'Inter' },
+                showlegend: false,
+                margin: { t: 60, b: 60, l: 80, r: 40 }
+            };
+
+            Plotly.newPlot('performanceChart', performanceData, performanceLayout, {responsive: true, displayModeBar: false});
+
+            // Network chart
+            const networkData = [
+                {
+                    x: [],
+                    y: [],
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    name: 'TPS',
+                    line: { color: '#b9a369', width: 3 },
+                    marker: { color: '#b9a369', size: 6 },
+                    yaxis: 'y'
+                },
+                {
+                    x: [],
+                    y: [],
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    name: 'Network Health (%)',
+                    line: { color: '#d4af37', width: 3 },
+                    marker: { color: '#d4af37', size: 6 },
+                    yaxis: 'y2'
+                }
+            ];
+
+            const networkLayout = {
+                title: {
+                    text: 'Real-time Network Metrics',
+                    font: { color: '#b9a369', size: 18, family: 'Inter' }
+                },
+                xaxis: { 
+                    title: { text: 'Time', font: { color: '#f0f0f0', family: 'Inter' } },
+                    color: '#f0f0f0',
+                    gridcolor: 'rgba(185, 163, 105, 0.2)'
+                },
+                yaxis: { 
+                    title: { text: 'TPS', font: { color: '#b9a369', family: 'Inter' } },
+                    color: '#b9a369',
+                    gridcolor: 'rgba(185, 163, 105, 0.2)'
+                },
+                yaxis2: {
+                    title: { text: 'Network Health (%)', font: { color: '#d4af37', family: 'Inter' } },
+                    color: '#d4af37',
+                    overlaying: 'y',
+                    side: 'right'
+                },
+                plot_bgcolor: '#0a0a0a',
+                paper_bgcolor: '#0a0a0a',
+                font: { color: '#f0f0f0', family: 'Inter' },
+                legend: { font: { color: '#f0f0f0', family: 'Inter' } },
+                margin: { t: 60, b: 60, l: 80, r: 80 }
+            };
+
+            Plotly.newPlot('networkChart', networkData, networkLayout, {responsive: true, displayModeBar: false});
+        }
+
+        function updateCharts() {
+            if (blocks.length === 0) return;
+
+            const blockNumbers = blocks.slice(-20).map(b => b.index);
+            const blockTimes = blocks.slice(-20).map((b, i) => {
+                if (i === 0) return 8;
+                const prevTime = blocks[blocks.indexOf(b) - 1].timestamp;
+                return (b.timestamp - prevTime) / 1000;
+            });
+
+            const performanceUpdate = {
+                x: [blockNumbers],
+                y: [blockTimes]
+            };
+
+            Plotly.restyle('performanceChart', performanceUpdate, [0]);
+
+            // Update network chart
+            const now = new Date().toLocaleTimeString();
+            const currentTPS = blocks.length > 0 ? Math.round(totalTransactions / ((Date.now() - (startTime || Date.now())) / 1000)) : 0;
+            const networkHealth = validators.filter(v => v.isActive).length / validators.length * 100;
+
+            const networkUpdate = {
+                x: [[now]],
+                y: [[currentTPS], [networkHealth]]
+            };
+
+            Plotly.extendTraces('networkChart', networkUpdate, [0, 1]);
+
+            // Keep only last 20 data points
+            const dataLength = document.getElementById('networkChart').data[0].x.length;
+            if (dataLength > 20) {
+                Plotly.restyle('networkChart', {
+                    x: [document.getElementById('networkChart').data[0].x.slice(-20)],
+                    y: [document.getElementById('networkChart').data[0].y.slice(-20)]
+                }, [0]);
+                Plotly.restyle('networkChart', {
+                    x: [document.getElementById('networkChart').data[1].x.slice(-20)],
+                    y: [document.getElementById('networkChart').data[1].y.slice(-20)]
+                }, [1]);
+            }
+        }
+
+        function startSimulation() {
+            if (isRunning) return;
+            
+            isRunning = true;
+            startTime = new Date();
+            blockInterval = parseInt(document.getElementById('blockInterval').value) * 1000 / simulationSpeed;
+            validatorCount = parseInt(document.getElementById('validatorCount').value);
+            finalityThreshold = parseInt(document.getElementById('finalityThreshold').value);
+            networkLoad = document.getElementById('networkLoad').value;
+            
+            generateValidators();
+            
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('pauseBtn').disabled = false;
+            
+            simulationTimer = setInterval(() => {
+                const block = createBlock();
+                renderBlock(block);
+                updateDisplay();
+                updateCharts();
+            }, blockInterval);
+            
+            updateTimer = setInterval(() => {
+                document.getElementById('last-update').textContent = 'Last Update: ' + new Date().toLocaleTimeString();
+                document.getElementById('network-status').className = 'status-indicator status-live';
+            }, 1000);
+            
+            chartTimer = setInterval(updateCharts, 2000);
+            
+            updateDisplay();
+        }
+
+        function pauseSimulation() {
+            if (!isRunning) return;
+            
+            isRunning = false;
+            
+            clearInterval(simulationTimer);
+            clearInterval(updateTimer);
+            clearInterval(chartTimer);
+            
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('pauseBtn').disabled = true;
+            
+            document.getElementById('network-status').className = 'status-indicator status-syncing';
+            document.getElementById('last-update').textContent = 'Last Update: Paused';
+            
+            updateDisplay();
+        }
+
+        function resetSimulation() {
+            pauseSimulation();
+            
+            currentBlock = 0;
+            blocks = [];
+            validators = [];
+            totalTransactions = 0;
+            totalVolume = 0;
+            startTime = null;
+            
+            document.getElementById('blockchainContainer').innerHTML = `
+                <div style="text-align: center; color: var(--primary-gold); padding: 2rem;">
+                    Start simulation to see real-time block creation...
+                </div>
+            `;
+            
+            // Reset charts
+            initializeCharts();
+            updateDisplay();
+        }
+
+        function forceFinality() {
+            if (!isRunning || blocks.length === 0) return;
+            
+            // Force finalize the last block
+            const lastBlock = blocks[blocks.length - 1];
+            lastBlock.isFinalized = true;
+            
+            // Update display
+            renderBlock(lastBlock);
+            updateDisplay();
+        }
+
+        function simulateAttack() {
+            if (!isRunning) return;
+            
+            // Simulate network attack by making some validators inactive
+            const attackCount = Math.floor(validators.length * 0.3); // 30% of validators
+            for (let i = 0; i < attackCount; i++) {
+                const randomIndex = Math.floor(Math.random() * validators.length);
+                validators[randomIndex].isActive = false;
+            }
+            
+            // Update network health
+            updateDisplay();
+            
+            // Show attack notification
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Attack Simulated!';
+            btn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = 'var(--gradient-primary)';
+            }, 3000);
+        }
+
+        function exportData() {
+            const exportData = {
+                timestamp: new Date().toISOString(),
+                total_blocks: blocks.length,
+                total_transactions: totalTransactions,
+                total_volume: totalVolume,
+                average_block_time: blocks.length > 1 ? (blocks[blocks.length - 1].timestamp - blocks[0].timestamp) / (blocks.length - 1) / 1000 : 0,
+                validators: validators.map(v => ({
+                    name: v.name,
+                    stake: v.stake,
+                    proposer_count: v.proposerCount,
+                    signature_count: v.signatureCount,
+                    is_active: v.isActive
+                })),
+                blocks: blocks.slice(-10).map(b => ({
+                    index: b.index,
+                    timestamp: b.timestamp.toISOString(),
+                    transaction_count: b.transactions.length,
+                    size_bytes: b.size,
+                    validator: b.validator,
+                    is_finalized: b.isFinalized,
+                    reward: b.reward
+                }))
+            };
+
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `phi-chain-simulation-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            URL.revokeObjectURL(url);
+
+            // Visual feedback
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> Exported!';
+            btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = 'var(--gradient-primary)';
+            }, 2000);
+        }
+
+        function updateSimulationSpeed() {
+            simulationSpeed = parseFloat(document.getElementById('simulation-speed').value);
+            if (isRunning) {
+                pauseSimulation();
+                blockInterval = parseInt(document.getElementById('blockInterval').value) * 1000 / simulationSpeed;
+                startSimulation();
+            }
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            updateDisplay();
+            
+            // Update display every second
+            setInterval(updateDisplay, 1000);
+            
+            // Update network status
+            setInterval(() => {
+                if (isRunning) {
+                    document.getElementById('network-status').className = 'status-indicator status-live';
+                    document.getElementById('last-update').textContent = 'Last Update: ' + new Date().toLocaleTimeString();
+                } else {
+                    document.getElementById('network-status').className = 'status-indicator status-offline';
+                    document.getElementById('last-update').textContent = 'Last Update: Never';
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

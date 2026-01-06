@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Φ-Chain Dashboard | Mainnet Analytics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/3.0.3/plotly.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gold: #b9a369;
+            --dark-bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --accent-gold: #d4af37;
+            --text-light: #f0f0f0;
+            --text-muted: #a0a0a0;
+            --border-color: rgba(185, 163, 105, 0.2);
+            --gradient-primary: linear-gradient(135deg, #b9a369, #d4af37);
+            --shadow-gold: 0 10px 30px rgba(185, 163, 105, 0.3);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            color: var(--primary-gold);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .metric-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            border-color: var(--primary-gold);
+            box-shadow: var(--shadow-gold);
+        }
+        
+        .metric-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent-gold);
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-change {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        .metric-change.positive {
+            color: #22c55e;
+        }
+        
+        .metric-change.negative {
+            color: #ef4444;
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .chart-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 1.5rem;
+        }
+        
+        .chart-title {
+            color: var(--primary-gold);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .chart-container {
+            width: 100%;
+            height: 350px;
+        }
+        
+        .validators-section {
+            margin-top: 3rem;
+        }
+        
+        .section-title {
+            color: var(--primary-gold);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .validators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .validator-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .validator-card:hover {
+            border-color: var(--primary-gold);
+            box-shadow: var(--shadow-gold);
+        }
+        
+        .validator-id {
+            color: var(--primary-gold);
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 0.5rem;
+        }
+        
+        .validator-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+        }
+        
+        .validator-stat:last-child {
+            border-bottom: none;
+        }
+        
+        .validator-stat-label {
+            color: var(--text-muted);
+        }
+        
+        .validator-stat-value {
+            color: var(--accent-gold);
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+        
+        .status-active {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid #22c55e;
+        }
+        
+        .status-inactive {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+        
+        .btn {
+            background: var(--gradient-primary);
+            color: var(--dark-bg);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-gold);
+        }
+        
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+        
+        .refresh-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            color: var(--dark-bg);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-gold);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .refresh-btn:hover {
+            transform: rotate(180deg);
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary-gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .export-section {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(185, 163, 105, 0.1);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .export-btn {
+            margin: 0 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-chart-line"></i> Φ-Chain Dashboard</h1>
+            <p>Real-time blockchain analytics and network metrics</p>
+        </div>
+        
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-label">Block Height</div>
+                <div class="metric-value" id="block-height">1</div>
+                <div class="metric-change">Latest: <span id="latest-hash">...</span></div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-label">Active Validators</div>
+                <div class="metric-value" id="active-validators">0</div>
+                <div class="metric-change">Total: <span id="total-validators">0</span></div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-label">Total Stake</div>
+                <div class="metric-value" id="total-stake">0</div>
+                <div class="metric-change">Φ</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-label">Pending Transactions</div>
+                <div class="metric-value" id="pending-txs">0</div>
+                <div class="metric-change">In Mempool</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-label">Network Status</div>
+                <div class="metric-value" style="font-size: 1.2rem;">
+                    <i class="fas fa-circle" style="color: #22c55e;"></i> Online
+                </div>
+                <div class="metric-change">All systems operational</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-label">Avg Block Time</div>
+                <div class="metric-value" id="avg-block-time">8s</div>
+                <div class="metric-change">F_6 (Fibonacci)</div>
+            </div>
+        </div>
+        
+        <!-- Charts -->
+        <div class="charts-grid">
+            <!-- Block Height Chart -->
+            <div class="chart-card">
+                <div class="chart-title"><i class="fas fa-cube"></i> Block Height Over Time</div>
+                <div class="chart-container" id="block-chart"></div>
+            </div>
+            
+            <!-- Validator Distribution -->
+            <div class="chart-card">
+                <div class="chart-title"><i class="fas fa-users"></i> Validator Stake Distribution</div>
+                <div class="chart-container" id="validator-chart"></div>
+            </div>
+            
+            <!-- Transaction Volume -->
+            <div class="chart-card">
+                <div class="chart-title"><i class="fas fa-exchange-alt"></i> Transaction Volume</div>
+                <div class="chart-container" id="tx-chart"></div>
+            </div>
+            
+            <!-- Consensus Health -->
+            <div class="chart-card">
+                <div class="chart-title"><i class="fas fa-heartbeat"></i> Consensus Health</div>
+                <div class="chart-container" id="health-chart"></div>
+            </div>
+        </div>
+        
+        <!-- Validators Section -->
+        <div class="validators-section">
+            <div class="section-title">
+                <i class="fas fa-server"></i> Validator Nodes
+            </div>
+            
+            <div class="validators-grid" id="validators-container">
+                <div style="grid-column: 1/-1; text-align: center; padding: 2rem;">
+                    <div class="loading"></div>
+                    <p style="margin-top: 1rem; color: var(--text-muted);">Loading validators...</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Export Section -->
+        <div class="export-section">
+            <h3 style="color: var(--primary-gold); margin-bottom: 1rem;">Export Data</h3>
+            <button class="btn btn-small export-btn" onclick="exportJSON()">
+                <i class="fas fa-download"></i> JSON
+            </button>
+            <button class="btn btn-small export-btn" onclick="exportCSV()">
+                <i class="fas fa-download"></i> CSV
+            </button>
+            <button class="btn btn-small export-btn" onclick="exportPDF()">
+                <i class="fas fa-download"></i> PDF
+            </button>
+        </div>
+    </div>
+    
+    <!-- Refresh Button -->
+    <button class="refresh-btn" onclick="refreshDashboard()" title="Refresh Data">
+        <i class="fas fa-sync-alt"></i>
+    </button>
+    
+    <script>
+        const API_URL = 'http://localhost:8000/api';
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeDashboard();
+            setInterval(refreshDashboard, 10000); // Refresh every 10 seconds
+        });
+        
+        async function initializeDashboard() {
+            await updateMetrics();
+            await updateValidators();
+            initializeCharts();
+        }
+        
+        async function updateMetrics() {
+            try {
+                const response = await fetch(`${API_URL}/blockchain/info`);
+                const data = await response.json();
+                
+                document.getElementById('block-height').textContent = data.chain_length;
+                document.getElementById('latest-hash').textContent = data.latest_block_hash.substring(0, 16) + '...';
+                document.getElementById('pending-txs').textContent = data.pending_transactions;
+                
+                // Get validator info
+                const validatorsResponse = await fetch(`${API_URL}/staking/validators`);
+                const validatorsData = await validatorsResponse.json();
+                
+                document.getElementById('active-validators').textContent = validatorsData.total;
+                document.getElementById('total-validators').textContent = validatorsData.total;
+                document.getElementById('total-stake').textContent = validatorsData.validators.reduce((sum, v) => sum + v.stake, 0).toLocaleString();
+            } catch (error) {
+                console.error('Failed to update metrics:', error);
+            }
+        }
+        
+        async function updateValidators() {
+            try {
+                const response = await fetch(`${API_URL}/staking/validators`);
+                const data = await response.json();
+                
+                const container = document.getElementById('validators-container');
+                container.innerHTML = '';
+                
+                if (data.validators.length === 0) {
+                    container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">No validators found</p>';
+                    return;
+                }
+                
+                data.validators.forEach(validator => {
+                    const card = document.createElement('div');
+                    card.className = 'validator-card';
+                    card.innerHTML = `
+                        <div class="validator-id">${validator.id}</div>
+                        <div class="validator-stat">
+                            <span class="validator-stat-label">Stake</span>
+                            <span class="validator-stat-value">${validator.stake.toLocaleString()} Φ</span>
+                        </div>
+                        <div class="validator-stat">
+                            <span class="validator-stat-label">Coherence Score</span>
+                            <span class="validator-stat-value">${validator.coherence_score.toFixed(6)}</span>
+                        </div>
+                        <div class="validator-stat">
+                            <span class="validator-stat-label">Blocks Proposed</span>
+                            <span class="validator-stat-value">${validator.blocks_proposed}</span>
+                        </div>
+                        <div class="validator-stat">
+                            <span class="validator-stat-label">Participation</span>
+                            <span class="validator-stat-value">${validator.participation}</span>
+                        </div>
+                        <div class="validator-stat">
+                            <span class="validator-stat-label">Rewards</span>
+                            <span class="validator-stat-value">${validator.rewards.toFixed(2)} Φ</span>
+                        </div>
+                        <div class="status-badge status-active">
+                            <i class="fas fa-circle"></i> Active
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Failed to update validators:', error);
+            }
+        }
+        
+        function initializeCharts() {
+            // Block Height Chart
+            const blockData = [{
+                x: Array.from({length: 10}, (_, i) => i),
+                y: Array.from({length: 10}, (_, i) => i + 1),
+                type: 'scatter',
+                mode: 'lines+markers',
+                line: {color: '#b9a369', width: 3},
+                marker: {size: 8, color: '#d4af37'}
+            }];
+            
+            const blockLayout = {
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                font: {color: '#f0f0f0'},
+                margin: {l: 50, r: 20, t: 20, b: 50},
+                xaxis: {title: 'Time', gridcolor: 'rgba(185,163,105,0.1)'},
+                yaxis: {title: 'Block Height', gridcolor: 'rgba(185,163,105,0.1)'}
+            };
+            
+            Plotly.newPlot('block-chart', blockData, blockLayout, {responsive: true});
+            
+            // Validator Distribution Chart
+            const validatorData = [{
+                labels: Array.from({length: 10}, (_, i) => `Validator ${i}`),
+                values: [6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418, 317811, 514229],
+                type: 'pie',
+                marker: {colors: ['#b9a369', '#d4af37', '#c9a961', '#b89f5a', '#a79552', '#968b4b', '#858144', '#74773d', '#636d36', '#52632f']}
+            }];
+            
+            const validatorLayout = {
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                font: {color: '#f0f0f0'},
+                margin: {l: 20, r: 20, t: 20, b: 20}
+            };
+            
+            Plotly.newPlot('validator-chart', validatorData, validatorLayout, {responsive: true});
+            
+            // Transaction Volume Chart
+            const txData = [{
+                x: Array.from({length: 10}, (_, i) => i),
+                y: [5, 8, 12, 7, 15, 10, 18, 14, 11, 16],
+                type: 'bar',
+                marker: {color: '#b9a369'}
+            }];
+            
+            const txLayout = {
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                font: {color: '#f0f0f0'},
+                margin: {l: 50, r: 20, t: 20, b: 50},
+                xaxis: {title: 'Block Number', gridcolor: 'rgba(185,163,105,0.1)'},
+                yaxis: {title: 'Transactions', gridcolor: 'rgba(185,163,105,0.1)'}
+            };
+            
+            Plotly.newPlot('tx-chart', txData, txLayout, {responsive: true});
+            
+            // Consensus Health Chart
+            const healthData = [{
+                x: Array.from({length: 10}, (_, i) => i),
+                y: [98, 99, 98.5, 99.2, 98.8, 99.1, 98.9, 99.3, 98.7, 99.0],
+                type: 'scatter',
+                mode: 'lines',
+                fill: 'tozeroy',
+                line: {color: '#22c55e', width: 3},
+                fillcolor: 'rgba(34, 197, 94, 0.2)'
+            }];
+            
+            const healthLayout = {
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                font: {color: '#f0f0f0'},
+                margin: {l: 50, r: 20, t: 20, b: 50},
+                xaxis: {title: 'Time', gridcolor: 'rgba(185,163,105,0.1)'},
+                yaxis: {title: 'Health %', gridcolor: 'rgba(185,163,105,0.1)', range: [95, 100]}
+            };
+            
+            Plotly.newPlot('health-chart', healthData, healthLayout, {responsive: true});
+        }
+        
+        async function refreshDashboard() {
+            await updateMetrics();
+            await updateValidators();
+        }
+        
+        function exportJSON() {
+            const data = {
+                timestamp: new Date().toISOString(),
+                blockHeight: document.getElementById('block-height').textContent,
+                activeValidators: document.getElementById('active-validators').textContent,
+                totalStake: document.getElementById('total-stake').textContent,
+                pendingTransactions: document.getElementById('pending-txs').textContent
+            };
+            
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(data, null, 2)));
+            element.setAttribute('download', `phi-chain-dashboard-${Date.now()}.json`);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+        
+        function exportCSV() {
+            const csv = `Φ-Chain Dashboard Export\nTimestamp,${new Date().toISOString()}\nBlock Height,${document.getElementById('block-height').textContent}\nActive Validators,${document.getElementById('active-validators').textContent}\nTotal Stake,${document.getElementById('total-stake').textContent}\nPending Transactions,${document.getElementById('pending-txs').textContent}`;
+            
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv));
+            element.setAttribute('download', `phi-chain-dashboard-${Date.now()}.csv`);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+        
+        function exportPDF() {
+            alert('PDF export requires additional setup. Please use JSON or CSV export for now.');
+        }
+    </script>
+</body>
+</html>

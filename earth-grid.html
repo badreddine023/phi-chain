@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Φ-Chain Earth Grid Prototype</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='90' fill='%23618034'>Φ</text></svg>">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/3.0.3/plotly.min.js"></script>
+    <style>
+        :root {
+            --primary-gold: #b9a369;
+            --dark-bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --accent-gold: #d4af37;
+            --text-light: #f0f0f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-top: 2rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            color: var(--primary-gold);
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            opacity: 0.9;
+        }
+
+        .home-btn {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            background: linear-gradient(135deg, var(--primary-gold), var(--accent-gold));
+            color: var(--dark-bg);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(185, 163, 105, 0.3);
+        }
+
+        .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(185, 163, 105, 0.4);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .input-panel, .visualization-panel {
+            background: var(--card-bg);
+            border: 1px solid rgba(185, 163, 105, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+        }
+
+        .input-panel h3, .visualization-panel h3 {
+            color: var(--primary-gold);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .coordinate-input {
+            margin-bottom: 2rem;
+        }
+
+        .coordinate-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            color: var(--primary-gold);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            padding: 0.8rem;
+            background: var(--dark-bg);
+            border: 1px solid rgba(185, 163, 105, 0.3);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary-gold), var(--accent-gold));
+            color: var(--dark-bg);
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(185, 163, 105, 0.3);
+        }
+
+        .results-display {
+            background: var(--dark-bg);
+            border: 1px solid rgba(185, 163, 105, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid rgba(185, 163, 105, 0.1);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .result-label {
+            color: var(--primary-gold);
+            font-weight: 500;
+        }
+
+        .result-value {
+            color: var(--text-light);
+            font-family: monospace;
+            word-break: break-all;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            background: var(--dark-bg);
+            border: 1px solid rgba(185, 163, 105, 0.2);
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+
+        .info-panel {
+            background: var(--card-bg);
+            border: 1px solid rgba(185, 163, 105, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .info-panel h3 {
+            color: var(--primary-gold);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .info-card {
+            background: rgba(185, 163, 105, 0.05);
+            border: 1px solid rgba(185, 163, 105, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+
+        .info-card h4 {
+            color: var(--primary-gold);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .info-card p {
+            color: var(--text-light);
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .formula {
+            background: rgba(185, 163, 105, 0.1);
+            border: 1px solid rgba(185, 163, 105, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: monospace;
+            color: var(--accent-gold);
+        }
+
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+
+            .coordinate-group {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .home-btn {
+                position: relative;
+                top: auto;
+                left: auto;
+                display: block;
+                margin: 1rem auto;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-btn">← Home</a>
+        
+        <div class="header">
+            <h1>Earth Grid Prototype</h1>
+            <p>Explore Fibonacci-based coordinate systems using the Golden Ratio</p>
+        </div>
+
+        <div class="grid-container">
+            <div class="input-panel">
+                <h3>🌍 Coordinate Input</h3>
+                
+                <div class="coordinate-input">
+                    <div class="coordinate-group">
+                        <div class="input-group">
+                            <label for="latitude">Latitude (°)</label>
+                            <input type="number" id="latitude" min="-90" max="90" step="0.0001" value="40.7128" placeholder="e.g., 40.7128">
+                        </div>
+                        <div class="input-group">
+                            <label for="longitude">Longitude (°)</label>
+                            <input type="number" id="longitude" min="-180" max="180" step="0.0001" value="-74.0060" placeholder="e.g., -74.0060">
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin: 1rem 0;">
+                        <button class="btn" onclick="calculateCoordinates()">Calculate Phi Coordinates</button>
+                        <button class="btn" onclick="generateRandomCoordinates()">Random Location</button>
+                    </div>
+
+                    <div class="coordinate-group">
+                        <div class="input-group">
+                            <label for="gridLevel">Grid Level (1-7)</label>
+                            <input type="number" id="gridLevel" min="1" max="7" value="5">
+                        </div>
+                        <div class="input-group">
+                            <label for="customPhi">Custom Φ Value</label>
+                            <input type="number" id="customPhi" step="0.0001" value="1.6180339887">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="results-display" id="resultsDisplay" style="display: none;">
+                    <div class="result-item">
+                        <span class="result-label">Phi Latitude (Φₗ):</span>
+                        <span class="result-value" id="phiLatitude">--</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Phi Azimuth (Φₐ):</span>
+                        <span class="result-value" id="phiAzimuth">--</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Grid Resolution:</span>
+                        <span class="result-value" id="gridResolution">--</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Distance from Origin:</span>
+                        <span class="result-value" id="distanceFromOrigin">--</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Phi Ratio:</span>
+                        <span class="result-value" id="phiRatio">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="visualization-panel">
+                <h3>📊 Coordinate Visualization</h3>
+                <div class="chart-container" id="coordinateChart"></div>
+                
+                <div style="margin-top: 1rem;">
+                    <button class="btn" onclick="plotPhiSpiral()">Plot Φ Spiral</button>
+                    <button class="btn" onclick="plotGridPoints()">Show Grid Points</button>
+                    <button class="btn" onclick="plotComparison()">Compare Systems</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <h3>📚 Fibonacci Grid System Information</h3>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>Phi-Radians System</h4>
+                    <p>The phi-radians system redefines angular measurement where 2π radians equals 2π/Φ phi-radians, creating a natural scaling based on the Golden Ratio.</p>
+                    <div class="formula">
+                        φ-radians = radians × (1/Φ)
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h4>Phi Coordinates</h4>
+                    <p>Phi-Latitude (Φₗ) and Phi-Azimuth (Φₐ) transform standard coordinates using trigonometric functions scaled by Φ and 1/Φ respectively.</p>
+                    <div class="formula">
+                        Φₗ = (sin(lat) + cos(lat)) × Φ<br>
+                        Φₐ = lon × (1/Φ)
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h4>Grid Resolution</h4>
+                    <p>Resolution scales with Fibonacci numbers and the Golden Ratio, creating naturally hierarchical grid cells that follow universal growth patterns.</p>
+                    <div class="formula">
+                        Resolution = Φ × 10^(7-level) meters
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h4>Applications</h4>
+                    <p>This system enables universal positioning that transcends arbitrary human conventions, making it ideal for blockchain-based location services and decentralized mapping.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const PHI = 1.618033988749895;
+        const PHI_INV = 1 / PHI;
+        const EARTH_RADIUS_M = 6371000;
+
+        function toPhiRadians(degrees) {
+            const radians = degrees * Math.PI / 180;
+            return radians * PHI_INV;
+        }
+
+        function getPhiCoordinate(latitude, longitude) {
+            const latRad = latitude * Math.PI / 180;
+            const lonRad = longitude * Math.PI / 180;
+            
+            const phi_L = (Math.sin(latRad) + Math.cos(latRad)) * PHI;
+            const phi_A = lonRad * PHI_INV;
+            
+            return { phi_L, phi_A };
+        }
+
+        function getGridResolution(level) {
+            const fibs = [1, 1, 2, 3, 5, 8, 13];
+            if (level < 1 || level > 7) return null;
+            
+            const resolution = PHI * Math.pow(10, 7 - level);
+            return resolution;
+        }
+
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = EARTH_RADIUS_M;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                      Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        function calculateCoordinates() {
+            const latitude = parseFloat(document.getElementById('latitude').value);
+            const longitude = parseFloat(document.getElementById('longitude').value);
+            const gridLevel = parseInt(document.getElementById('gridLevel').value);
+            const customPhi = parseFloat(document.getElementById('customPhi').value);
+
+            if (isNaN(latitude) || isNaN(longitude)) {
+                alert('Please enter valid latitude and longitude values');
+                return;
+            }
+
+            const phiCoords = getPhiCoordinate(latitude, longitude);
+            const resolution = getGridResolution(gridLevel);
+            const distance = calculateDistance(0, 0, latitude, longitude);
+            const phiRatio = phiCoords.phi_L / phiCoords.phi_A;
+
+            document.getElementById('phiLatitude').textContent = phiCoords.phi_L.toFixed(6);
+            document.getElementById('phiAzimuth').textContent = phiCoords.phi_A.toFixed(6);
+            document.getElementById('gridResolution').textContent = resolution ? `${resolution.toFixed(0)} meters` : 'Invalid level';
+            document.getElementById('distanceFromOrigin').textContent = `${distance.toFixed(0)} km`;
+            document.getElementById('phiRatio').textContent = phiRatio.toFixed(6);
+
+            document.getElementById('resultsDisplay').style.display = 'block';
+
+            // Update chart
+            updateCoordinateChart(latitude, longitude, phiCoords);
+        }
+
+        function generateRandomCoordinates() {
+            const lat = (Math.random() - 0.5) * 180; // -90 to 90
+            const lon = (Math.random() - 0.5) * 360; // -180 to 180
+            
+            document.getElementById('latitude').value = lat.toFixed(4);
+            document.getElementById('longitude').value = lon.toFixed(4);
+            
+            calculateCoordinates();
+        }
+
+        function updateCoordinateChart(lat, lon, phiCoords) {
+            const data = [
+                {
+                    x: ['Standard', 'Phi System'],
+                    y: [Math.abs(lat), Math.abs(phiCoords.phi_L)],
+                    type: 'bar',
+                    name: 'Latitude',
+                    marker: { color: '#b9a369' }
+                },
+                {
+                    x: ['Standard', 'Phi System'],
+                    y: [Math.abs(lon), Math.abs(phiCoords.phi_A)],
+                    type: 'bar',
+                    name: 'Longitude/Azimuth',
+                    marker: { color: '#d4af37' }
+                }
+            ];
+
+            const layout = {
+                title: {
+                    text: 'Coordinate System Comparison',
+                    font: { color: '#b9a369', size: 16 }
+                },
+                xaxis: {
+                    title: 'Coordinate System',
+                    color: '#f0f0f0'
+                },
+                yaxis: {
+                    title: 'Magnitude',
+                    color: '#f0f0f0'
+                },
+                plot_bgcolor: '#0a0a0a',
+                paper_bgcolor: '#0a0a0a',
+                font: { color: '#f0f0f0' },
+                showlegend: true,
+                legend: {
+                    font: { color: '#f0f0f0' }
+                }
+            };
+
+            Plotly.newPlot('coordinateChart', data, layout, {responsive: true});
+        }
+
+        function plotPhiSpiral() {
+            const theta = Array.from({length: 1000}, (_, i) => i * 4 * Math.PI / 999);
+            const r = theta.map(t => Math.pow(PHI, t / Math.PI));
+            const x = r.map((radius, i) => radius * Math.cos(theta[i]));
+            const y = r.map((radius, i) => radius * Math.sin(theta[i]));
+
+            const data = [{
+                x: x,
+                y: y,
+                type: 'scatter',
+                mode: 'lines',
+                name: 'Φ Spiral',
+                line: { color: '#b9a369', width: 3 }
+            }];
+
+            const layout = {
+                title: {
+                    text: 'Golden Ratio Spiral',
+                    font: { color: '#b9a369', size: 16 }
+                },
+                xaxis: { title: 'X', color: '#f0f0f0' },
+                yaxis: { title: 'Y', color: '#f0f0f0' },
+                plot_bgcolor: '#0a0a0a',
+                paper_bgcolor: '#0a0a0a',
+                font: { color: '#f0f0f0' },
+                showlegend: false
+            };
+
+            Plotly.newPlot('coordinateChart', data, layout, {responsive: true});
+        }
+
+        function plotGridPoints() {
+            const levels = [1, 2, 3, 4, 5];
+            const colors = ['#b9a369', '#d4af37', '#f4d03f', '#f8c471', '#f39c12'];
+            
+            const data = levels.map((level, i) => {
+                const resolution = getGridResolution(level);
+                const points = [];
+                
+                for (let lat = -90; lat <= 90; lat += 30 / level) {
+                    for (let lon = -180; lon <= 180; lon += 30 / level) {
+                        const phiCoords = getPhiCoordinate(lat, lon);
+                        points.push({
+                            x: phiCoords.phi_A,
+                            y: phiCoords.phi_L,
+                            lat: lat,
+                            lon: lon
+                        });
+                    }
+                }
+
+                return {
+                    x: points.map(p => p.x),
+                    y: points.map(p => p.y),
+                    type: 'scatter',
+                    mode: 'markers',
+                    name: `Level ${level}`,
+                    marker: { 
+                        color: colors[i], 
+                        size: 8 - level,
+                        opacity: 0.8
+                    },
+                    text: points.map(p => `Lat: ${p.lat.toFixed(1)}°, Lon: ${p.lon.toFixed(1)}°`),
+                    hovertemplate: '%{text}<br>Φₗ: %{y:.3f}<br>Φₐ: %{x:.3f}<extra></extra>'
+                };
+            });
+
+            const layout = {
+                title: {
+                    text: 'Fibonacci Grid Points by Level',
+                    font: { color: '#b9a369', size: 16 }
+                },
+                xaxis: { title: 'Phi Azimuth (Φₐ)', color: '#f0f0f0' },
+                yaxis: { title: 'Phi Latitude (Φₗ)', color: '#f0f0f0' },
+                plot_bgcolor: '#0a0a0a',
+                paper_bgcolor: '#0a0a0a',
+                font: { color: '#f0f0f0' },
+                showlegend: true,
+                legend: { font: { color: '#f0f0f0' } }
+            };
+
+            Plotly.newPlot('coordinateChart', data, layout, {responsive: true});
+        }
+
+        function plotComparison() {
+            const lat = parseFloat(document.getElementById('latitude').value) || 40.7128;
+            const lon = parseFloat(document.getElementById('longitude').value) || -74.0060;
+            
+            const systems = ['Standard', 'Decimal Degrees', 'Radians', 'Phi Coordinates'];
+            const latValues = [lat, lat, lat * Math.PI / 180, getPhiCoordinate(lat, lon).phi_L];
+            const lonValues = [lon, lon * 100000, lon * Math.PI / 180, getPhiCoordinate(lat, lon).phi_A];
+
+            const data = [
+                {
+                    x: systems,
+                    y: latValues.map(Math.abs),
+                    type: 'bar',
+                    name: 'Latitude Component',
+                    marker: { color: '#b9a369' }
+                },
+                {
+                    x: systems,
+                    y: lonValues.map(Math.abs),
+                    type: 'bar',
+                    name: 'Longitude Component',
+                    marker: { color: '#d4af37' }
+                }
+            ];
+
+            const layout = {
+                title: {
+                    text: 'Coordinate System Comparison',
+                    font: { color: '#b9a369', size: 16 }
+                },
+                xaxis: { title: 'Coordinate System', color: '#f0f0f0' },
+                yaxis: { 
+                    title: 'Magnitude (log scale)', 
+                    type: 'log',
+                    color: '#f0f0f0' 
+                },
+                plot_bgcolor: '#0a0a0a',
+                paper_bgcolor: '#0a0a0a',
+                font: { color: '#f0f0f0' },
+                showlegend: true,
+                legend: { font: { color: '#f0f0f0' } },
+                barmode: 'group'
+            };
+
+            Plotly.newPlot('coordinateChart', data, layout, {responsive: true});
+        }
+
+        // Initialize with default coordinates
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateCoordinates();
+        });
+    </script>
+</body>
+</html>

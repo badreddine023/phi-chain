@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Φ-Chain Wallet | Mainnet</title>
+    <link rel="stylesheet" href="styles-new.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='90' fill='%23d4af37'>Φ</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .wallet-disclaimer {
+            background: rgba(255, 165, 0, 0.1);
+            border: 2px solid var(--primary-gold);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .wallet-disclaimer h2 {
+            color: var(--primary-gold);
+            font-size: 1.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .wallet-disclaimer i {
+            font-size: 2.5rem;
+            color: var(--primary-gold);
+        }
+
+        .wallet-disclaimer p {
+            color: var(--text-light);
+            margin-top: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .wallet-disclaimer p strong {
+            color: #ffcc00;
+        }
+        .nav-btn {
+            position: fixed;
+            top: 1.5rem;
+            left: 1.5rem;
+            z-index: 100;
+            background: var(--gradient-primary);
+            color: var(--dark-bg);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            margin-top: 60px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .address-display {
+            background: rgba(212, 175, 55, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            word-break: break-all;
+            color: var(--primary-gold);
+            margin: 1rem 0;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--dark-bg-light);
+            margin: 10% auto;
+            padding: 2rem;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            color: var(--primary-gold);
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--primary-gold);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            background: rgba(212, 175, 55, 0.1);
+            border-color: rgba(212, 175, 55, 0.4);
+        }
+
+        .success-message {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border: 1px solid #10b981;
+            display: none;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border: 1px solid #ef4444;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+                margin-top: 80px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Home</a>
+
+    <div class="container">
+        <div class="header">
+            <div class="wallet-disclaimer">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h2>CONCEPTUAL SIMULATION WARNING</h2>
+                <p>This wallet interface is a **conceptual simulation** for research and demonstration purposes only. It does **NOT** connect to a live Mainnet. All generated addresses, balances, and transactions are **NOT REAL** and have no monetary value. Do not use this interface for real-world transactions.</p>
+            </div>
+            <div class="wallet-disclaimer">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h2>CONCEPTUAL SIMULATION WARNING</h2>
+                <p>This wallet interface is a **conceptual simulation** for research and demonstration purposes only. It does **NOT** connect to a live Mainnet. All generated addresses, balances, and transactions are **NOT REAL** and have no monetary value. Do not use this interface for real-world transactions.</p>
+            </div>
+            <h1>Φ-Chain Mainnet Wallet</h1>
+            <p>Securely manage assets, stake tokens, and mine with Proof-of-Coherence</p>
+        </div>
+
+        <div class="grid">
+            <!-- Create Wallet Card -->
+            <div class="card">
+                <div class="status">New Wallet</div>
+                <h3>Create Wallet</h3>
+                <p>Generate a new Φ-Chain wallet with a unique PHIXXXX address.</p>
+                <button class="btn" onclick="createNewWallet()">
+                    <i class="fas fa-plus-circle"></i> Create New Wallet
+                </button>
+                <div id="create-wallet-message"></div>
+            </div>
+
+            <!-- Wallet Balance Card -->
+            <div class="card">
+                <div class="status">Connected</div>
+                <h3>Wallet Balance</h3>
+                <p>Your Φ token balance and address information</p>
+                <div class="balance" id="main-balance">0.000 Φ</div>
+                <div class="address-display" id="wallet-address">
+                    <i class="fas fa-wallet"></i> No wallet created yet
+                </div>
+                <div class="button-group">
+                    <button class="btn" onclick="showSendModal()">
+                        <i class="fas fa-paper-plane"></i> Send
+                    </button>
+                    <button class="btn btn-secondary" onclick="copyToClipboard()">
+                        <i class="fas fa-copy"></i> Copy Address
+                    </button>
+                </div>
+            </div>
+
+            <!-- Staking Card -->
+            <div class="card">
+                <h3>Staking & Governance</h3>
+                <p>Stake your Φ tokens to secure the network and earn rewards.</p>
+                <div class="balance" id="staked-balance">0.000 Φ</div>
+                <div class="mining-stats">
+                    <p><strong>Current APR:</strong> 14.4% (F₁₂)</p>
+                    <p><strong>Next Reward:</strong> 0.089 Φ (F₁₁)</p>
+                    <p><strong>Minimum Stake:</strong> 6,765 Φ (F₂₀)</p>
+                </div>
+                <button class="btn" style="margin-top: 1.5rem;" onclick="stakeTokens()">
+                    <i class="fas fa-lock"></i> Stake More
+                </button>
+            </div>
+
+            <!-- PoC Mining Card -->
+            <div class="card">
+                <div class="status">Mining Ready</div>
+                <h3>PoC Mining</h3>
+                <p>Proof-of-Coherence mining based on Fibonacci Q-Matrix.</p>
+                <div class="mining-stats">
+                    <p><strong>Hashrate:</strong> 1.618 GH/s</p>
+                    <p><strong>Coherence Score:</strong> 0.999</p>
+                    <p><strong>Blocks Mined:</strong> 377 (F₁₄)</p>
+                </div>
+                <button class="btn" style="margin-top: 1.5rem; background: linear-gradient(135deg, #ef4444, #b91c1c); color: white;" onclick="toggleMining()">
+                    <i class="fas fa-play-circle"></i> Start Mining
+                </button>
+            </div>
+
+            <!-- Network Info Card -->
+            <div class="card">
+                <h3>Network Status</h3>
+                <p>Real-time Φ-Chain Mainnet information</p>
+                <div class="mining-stats">
+                    <p><strong>Chain Height:</strong> <span id="chain-height">1</span> blocks</p>
+                    <p><strong>Active Validators:</strong> <span id="validator-count">0</span></p>
+                    <p><strong>Pending Transactions:</strong> <span id="pending-tx">0</span></p>
+                    <p><strong>Network Status:</strong> <span style="color: #10b981;">✓ Healthy</span></p>
+                </div>
+                <button class="btn btn-secondary" style="margin-top: 1.5rem;" onclick="refreshNetworkStats()">
+                    <i class="fas fa-sync-alt"></i> Refresh Stats
+                </button>
+            </div>
+
+            <!-- Wallet Info Card -->
+            <div class="card">
+                <h3>Wallet Information</h3>
+                <p>Your wallet details and keys</p>
+                <div class="mining-stats">
+                    <p><strong>Private Key:</strong></p>
+                    <div class="address-display" id="private-key-display" style="margin: 0.5rem 0; font-size: 0.75rem;">
+                        Not available
+                    </div>
+                    <p style="margin-top: 1rem;"><strong>Public Address:</strong></p>
+                    <div class="address-display" id="public-address-display" style="margin: 0.5rem 0; font-size: 0.75rem;">
+                        Not available
+                    </div>
+                </div>
+                <button class="btn btn-secondary" style="margin-top: 1.5rem;" onclick="exportWallet()">
+                    <i class="fas fa-download"></i> Export Wallet
+                </button>
+            </div>
+        </div>
+
+        <!-- Transaction History -->
+        <div class="card" style="margin-top: 2rem;">
+            <h3>Transaction History</h3>
+            <div id="tx-history" class="tx-history">
+                <div class="tx-item">
+                    <div>
+                        <i class="fas fa-plus-circle tx-icon received"></i>
+                        <span>Wallet Created</span>
+                    </div>
+                    <span class="tx-amount">+1,618.034 Φ</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Send Transaction Modal -->
+    <div id="sendModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Send Φ Tokens</h2>
+                <button class="close-btn" onclick="closeSendModal()">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="recipient-address">Recipient Address (PHIXXXX):</label>
+                <input type="text" id="recipient-address" placeholder="PHI0..." required>
+            </div>
+            <div class="form-group">
+                <label for="send-amount">Amount (Φ):</label>
+                <input type="number" id="send-amount" placeholder="0.000" step="0.001" required>
+            </div>
+            <div class="form-group">
+                <label for="send-note">Note (optional):</label>
+                <textarea id="send-note" placeholder="Add a note to this transaction..." rows="3"></textarea>
+            </div>
+            <button class="btn" onclick="sendTransaction()" style="width: 100%; justify-content: center;">
+                <i class="fas fa-check"></i> Send Transaction
+            </button>
+            <div id="send-message"></div>
+        </div>
+    </div>
+
+    <!-- Create Wallet Modal -->
+    <div id="createWalletModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>New Wallet Created!</h2>
+                <button class="close-btn" onclick="closeCreateWalletModal()">&times;</button>
+            </div>
+            <div class="form-group">
+                <label>Private Key (Keep Safe!):</label>
+                <div class="address-display" id="new-private-key" style="font-size: 0.75rem; word-break: break-all;">
+                    Loading...
+                </div>
+                <button class="btn btn-secondary" onclick="copyPrivateKey()" style="width: 100%; margin-top: 0.5rem; justify-content: center;">
+                    <i class="fas fa-copy"></i> Copy Private Key
+                </button>
+            </div>
+            <div class="form-group">
+                <label>Public Address:</label>
+                <div class="address-display" id="new-public-address" style="font-size: 0.75rem; word-break: break-all;">
+                    Loading...
+                </div>
+                <button class="btn btn-secondary" onclick="copyNewPublicAddress()" style="width: 100%; margin-top: 0.5rem; justify-content: center;">
+                    <i class="fas fa-copy"></i> Copy Address
+                </button>
+            </div>
+            <div style="background: rgba(239, 68, 68, 0.1); padding: 1rem; border-radius: 8px; margin-top: 1rem; border: 1px solid rgba(239, 68, 68, 0.3);">
+                <p style="color: #ef4444; margin: 0; font-size: 0.9rem;">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>Important:</strong> Save your private key in a secure location. You will need it to access your wallet.
+                </p>
+            </div>
+            <button class="btn" onclick="closeCreateWalletModal()" style="width: 100%; justify-content: center; margin-top: 1rem;">
+                <i class="fas fa-check"></i> Done
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // WALLET GENERATION LOGIC
+        // ============================================
+
+        function generateWallet() {
+            // Generate a random 64-character hex string as private key
+            const privateKey = Array.from(crypto.getRandomValues(new Uint8Array(32)))
+                .map(b => b.toString(16).padStart(2, '0'))
+                .join('');
+
+            // Generate public address from private key using SHA-256
+            const encoder = new TextEncoder();
+            const data = encoder.encode(privateKey);
+            
+            // Use SubtleCrypto to generate SHA-256 hash
+            return crypto.subtle.digest('SHA-256', data).then(hashBuffer => {
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+                
+                // Create PHIXXXX format address
+                const addressPrefix = 'PHI';
+                const addressBody = hashHex.substring(0, 40);
+                
+                // Simple checksum: sum of first 4 hex chars modulo 10
+                let checksumValue = 0;
+                for (let i = 0; i < 4; i++) {
+                    checksumValue += parseInt(addressBody[i], 16);
+                }
+                const checksum = checksumValue % 10;
+                
+                const publicAddress = `${addressPrefix}${checksum}${addressBody}`;
+                
+                return {
+                    privateKey: privateKey,
+                    publicAddress: publicAddress
+                };
+            });
+        }
+
+        // ============================================
+        // WALLET MANAGEMENT
+        // ============================================
+
+        let currentWallet = null;
+        let isMining = false;
+
+        function createNewWallet() {
+            generateWallet().then(wallet => {
+                currentWallet = wallet;
+                
+                // Update UI
+                document.getElementById('wallet-address').textContent = wallet.publicAddress;
+                document.getElementById('main-balance').textContent = '1,618.034 Φ';
+                document.getElementById('staked-balance').textContent = '610.000 Φ';
+                document.getElementById('private-key-display').textContent = wallet.privateKey;
+                document.getElementById('public-address-display').textContent = wallet.publicAddress;
+                
+                // Show create wallet modal
+                document.getElementById('new-private-key').textContent = wallet.privateKey;
+                document.getElementById('new-public-address').textContent = wallet.publicAddress;
+                document.getElementById('createWalletModal').style.display = 'block';
+                
+                // Show success message
+                const messageDiv = document.getElementById('create-wallet-message');
+                messageDiv.innerHTML = `
+                    <div class="success-message" style="display: block;">
+                        <i class="fas fa-check-circle"></i> Wallet created successfully!
+                    </div>
+                `;
+                
+                // Store wallet in localStorage
+                localStorage.setItem('phi_wallet', JSON.stringify(wallet));
+            });
+        }
+
+        function closeCreateWalletModal() {
+            document.getElementById('createWalletModal').style.display = 'none';
+        }
+
+        // ============================================
+        // BUTTON FUNCTIONS
+        // ============================================
+
+        function toggleMining() {
+            if (!currentWallet) {
+                alert('Please create a wallet first!');
+                return;
+            }
+            
+            isMining = !isMining;
+            const btn = event.currentTarget;
+            
+            if (isMining) {
+                btn.innerHTML = '<i class="fas fa-stop-circle"></i> Stop Mining';
+                btn.style.background = 'linear-gradient(135deg, #ef4444, #b91c1c)';
+                btn.style.color = 'white';
+                alert('Mining started! Your wallet will earn rewards.');
+            } else {
+                btn.innerHTML = '<i class="fas fa-play-circle"></i> Start Mining';
+                btn.style.background = 'var(--gradient-primary)';
+                btn.style.color = 'var(--dark-bg)';
+                alert('Mining stopped.');
+            }
+        }
+
+        function stakeTokens() {
+            if (!currentWallet) {
+                alert('Please create a wallet first!');
+                return;
+            }
+            
+            const amount = prompt("Enter amount of Φ to stake (must be a Fibonacci number):");
+            if (amount) {
+                alert(`Staking ${amount} Φ from ${currentWallet.publicAddress}...\nRequest sent to validator nodes.`);
+            }
+        }
+
+        function showSendModal() {
+            if (!currentWallet) {
+                alert('Please create a wallet first!');
+                return;
+            }
+            document.getElementById('sendModal').style.display = 'block';
+        }
+
+        function closeSendModal() {
+            document.getElementById('sendModal').style.display = 'none';
+            document.getElementById('recipient-address').value = '';
+            document.getElementById('send-amount').value = '';
+            document.getElementById('send-note').value = '';
+            document.getElementById('send-message').innerHTML = '';
+        }
+
+        function sendTransaction() {
+            const recipient = document.getElementById('recipient-address').value;
+            const amount = document.getElementById('send-amount').value;
+            const note = document.getElementById('send-note').value;
+            
+            if (!recipient || !amount) {
+                document.getElementById('send-message').innerHTML = `
+                    <div class="error-message" style="display: block;">
+                        <i class="fas fa-exclamation-circle"></i> Please fill in all required fields.
+                    </div>
+                `;
+                return;
+            }
+            
+            if (!recipient.startsWith('PHI')) {
+                document.getElementById('send-message').innerHTML = `
+                    <div class="error-message" style="display: block;">
+                        <i class="fas fa-exclamation-circle"></i> Invalid address format. Must start with PHI.
+                    </div>
+                `;
+                return;
+            }
+            
+            document.getElementById('send-message').innerHTML = `
+                <div class="success-message" style="display: block;">
+                    <i class="fas fa-check-circle"></i> Transaction of ${amount} Φ to ${recipient} is being processed.
+                </div>
+            `;
+            
+            setTimeout(() => {
+                closeSendModal();
+            }, 2000);
+        }
+
+        function copyToClipboard() {
+            if (!currentWallet) {
+                alert('Please create a wallet first!');
+                return;
+            }
+            navigator.clipboard.writeText(currentWallet.publicAddress).then(() => {
+                alert('Address copied to clipboard!');
+            });
+        }
+
+        function copyPrivateKey() {
+            if (!currentWallet) return;
+            navigator.clipboard.writeText(currentWallet.privateKey).then(() => {
+                alert('Private key copied to clipboard!');
+            });
+        }
+
+        function copyNewPublicAddress() {
+            if (!currentWallet) return;
+            navigator.clipboard.writeText(currentWallet.publicAddress).then(() => {
+                alert('Public address copied to clipboard!');
+            });
+        }
+
+        function exportWallet() {
+            if (!currentWallet) {
+                alert('Please create a wallet first!');
+                return;
+            }
+            
+            const walletData = JSON.stringify(currentWallet, null, 2);
+            const blob = new Blob([walletData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `phi-wallet-${currentWallet.publicAddress}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function refreshNetworkStats() {
+            document.getElementById('chain-height').textContent = Math.floor(Math.random() * 10000) + 1;
+            document.getElementById('validator-count').textContent = Math.floor(Math.random() * 1597) + 1;
+            document.getElementById('pending-tx').textContent = Math.floor(Math.random() * 100);
+            alert('Network stats refreshed!');
+        }
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+
+        // Load wallet from localStorage on page load
+        window.addEventListener('load', function() {
+            const savedWallet = localStorage.getItem('phi_wallet');
+            if (savedWallet) {
+                currentWallet = JSON.parse(savedWallet);
+                document.getElementById('wallet-address').textContent = currentWallet.publicAddress;
+                document.getElementById('private-key-display').textContent = currentWallet.privateKey;
+                document.getElementById('public-address-display').textContent = currentWallet.publicAddress;
+            }
+        });
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const sendModal = document.getElementById('sendModal');
+            const createModal = document.getElementById('createWalletModal');
+            
+            if (event.target === sendModal) {
+                sendModal.style.display = 'none';
+            }
+            if (event.target === createModal) {
+                createModal.style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>

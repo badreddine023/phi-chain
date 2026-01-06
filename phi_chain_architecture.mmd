@@ -1,0 +1,45 @@
+graph TD
+    subgraph Phi-Chain Architecture (The Fibonacci Universe)
+        direction LR
+        
+        subgraph Front-End Applications
+            W[Wallet & PoC Mining App]
+            O[AI Oracle Interface]
+            W --> |Wallet Creation| EWC(Ethers.js Wallet Core)
+        end
+
+        subgraph Core Protocol (Reversible Core)
+            direction TB
+            C[Consensus Layer: FBA]
+            B[Blockchain Layer: Reversible Core]
+            M[Math Layer: Golden Ratio & Fibonacci]
+            
+            M --> C
+            M --> B
+            C --> B
+        end
+        
+        subgraph Key Innovations
+            direction TB
+            FBA[FBA Consensus]
+            RC[Reversible Core]
+            ML[Math Layer]
+            
+            FBA --> |Finality F_n| B
+            RC --> |Temporal Symmetry| B
+            ML --> |Non-Arbitrary Params| C
+        end
+        
+        W --> |Web3 Connector| C
+        O --> |Data Feed| B
+    end
+
+    style W fill:#d4af37,stroke:#b9a369,stroke-width:2px
+    style O fill:#d4af37,stroke:#b9a369,stroke-width:2px
+    style EWC fill:#f9f,stroke:#333,stroke-width:2px
+    style C fill:#cfc,stroke:#333,stroke-width:2px
+    style B fill:#ccf,stroke:#333,stroke-width:2px
+    style M fill:#fcc,stroke:#333,stroke-width:2px
+    style FBA fill:#cfc,stroke:#333,stroke-width:2px
+    style RC fill:#ccf,stroke:#333,stroke-width:2px
+    style ML fill:#fcc,stroke:#333,stroke-width:2px

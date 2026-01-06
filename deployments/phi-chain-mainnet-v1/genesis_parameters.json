@@ -1,0 +1,11 @@
+{
+  "phi": 1.618033988749895,
+  "slot_duration": 8,
+  "epoch_duration": 2584,
+  "min_validator_stake": 6765,
+  "max_validator_count": 1597,
+  "finality_threshold": 610,
+  "genesis_supply": 3524578,
+  "block_reward": 89,
+  "transaction_fee_base": 21
+}

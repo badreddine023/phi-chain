@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phi-Chain Live Wallet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white font-sans">
+    <div class="container mx-auto p-8">
+        <header class="flex justify-between items-center mb-12">
+            <h1 class="text-4xl font-bold text-cyan-400">Φ-Chain Wallet</h1>
+            <div id="status" class="px-4 py-2 rounded-full bg-red-500 text-sm">Disconnected</div>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Wallet Info -->
+            <div class="bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-700">
+                <h2 class="text-xl font-semibold mb-4">Your Wallet</h2>
+                <div class="mb-4">
+                    <label class="block text-slate-400 text-sm mb-1">Address</label>
+                    <div id="wallet-address" class="bg-slate-900 p-3 rounded border border-slate-700 break-all font-mono">phi_...</div>
+                </div>
+                <div>
+                    <label class="block text-slate-400 text-sm mb-1">Balance</label>
+                    <div id="wallet-balance" class="text-3xl font-bold text-cyan-400">0.00 PHI</div>
+                </div>
+            </div>
+
+            <!-- Send Transaction -->
+            <div class="bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-700">
+                <h2 class="text-xl font-semibold mb-4">Send PHI</h2>
+                <form id="send-form">
+                    <div class="mb-4">
+                        <input type="text" placeholder="Recipient Address" class="w-full bg-slate-900 border border-slate-700 p-3 rounded focus:outline-none focus:border-cyan-400">
+                    </div>
+                    <div class="mb-4">
+                        <input type="number" placeholder="Amount" class="w-full bg-slate-900 border border-slate-700 p-3 rounded focus:outline-none focus:border-cyan-400">
+                    </div>
+                    <button type="submit" class="w-full bg-cyan-500 hover:bg-cyan-600 text-slate-900 font-bold py-3 rounded transition duration-200">Send Transaction</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Network Activity -->
+        <div class="mt-12 bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-700">
+            <h2 class="text-xl font-semibold mb-4">Live Network Activity</h2>
+            <div id="activity-log" class="h-64 overflow-y-auto bg-slate-900 p-4 rounded border border-slate-700 font-mono text-sm">
+                <div class="text-slate-500 italic">Waiting for network connection...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const statusEl = document.getElementById('status');
+        const logEl = document.getElementById('activity-log');
+
+        // Simulate WebSocket connection
+        function connect() {
+            log('Connecting to Phi-Chain node...');
+            setTimeout(() => {
+                statusEl.innerText = 'Connected';
+                statusEl.classList.remove('bg-red-500');
+                statusEl.classList.add('bg-green-500');
+                log('Successfully connected to ws://localhost:8765');
+                log('Syncing blockchain state...');
+            }, 1500);
+        }
+
+        function log(msg) {
+            const div = document.createElement('div');
+            div.className = 'mb-1';
+            div.innerHTML = `<span class="text-slate-500">[${new Date().toLocaleTimeString()}]</span> ${msg}`;
+            logEl.prepend(div);
+        }
+
+        connect();
+    </script>
+</body>
+</html>

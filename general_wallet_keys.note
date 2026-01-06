@@ -1,0 +1,21 @@
+# Φ-Chain General Wallet Keys & Mnemonics
+Wallet Name: General Wallet
+Date Generated: 2025-12-22
+
+Mnemonic Phrase (12 words):
+PHI1 PHI2 PHI3 PHI4 PHI5 PHI6 PHI7 PHI8 PHI9 PHI10 PHI11 PHI12
+
+Private Key:
+PHIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+Public Key:
+PHIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+Validator Node Keys:
+Validator 1 Private: PHIXXXXXXXXXXXXXXXX
+Validator 1 Public : PHIXXXXXXXXXXXXXXXX
+Validator 2 Private: PHIXXXXXXXXXXXXXXXX
+Validator 2 Public : PHIXXXXXXXXXXXXXXXX
+Validator 3 Private: PHIXXXXXXXXXXXXXXXX
+Validator 3 Public : PHIXXXXXXXXXXXXXXXX
+# …continue for all your validators
