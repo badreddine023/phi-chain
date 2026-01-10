@@ -84,6 +84,9 @@ A high-fidelity data interface layer for **Symbiotic AI** integration, providing
 ### 📊 Interactive Dashboard (`consensus-monitor.html`)
 Real-time monitoring of network health, validator performance, Fibonacci convergence charts, and Universal Language metrics.
 
+### 🧠 Claude Smart Commit (`tools/claude_smart_commit.py`)
+Integrates Claude Code analytical intelligence into the development workflow, ensuring every commit is mathematically coherent and rigorously documented.
+
 ---
 
 ## 📂 Architecture & Links
