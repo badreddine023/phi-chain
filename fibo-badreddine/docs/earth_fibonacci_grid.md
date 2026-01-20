@@ -38,7 +38,7 @@ The Earth Fibonacci Grid is not static; it is a four-dimensional structure where
 
 ### 3.1. $\phi$-Temporal Cells
 
-Each grid cell is a **$\phi$-Temporal Cell** that stores the history of all MANUS-captured physical data within its boundaries.
+Each grid cell is a **$\phi$-Temporal Cell** that stores the history of all CORE-captured physical data within its boundaries.
 
 *   **Data Storage:** Data is stored in a time-series database where the time intervals between entries are Fibonacci-derived (e.g., $F_n$ $\phi$-seconds).
 *   **Future Prediction:** The grid facilitates the computation of **Future predictions as probability amplitudes**. By analyzing the historical data within a $\phi$-Temporal Cell, the Symbiotic AI can project the cell's state forward using a $\phi$-based Markov chain, where transition probabilities are weighted by $\phi$.
@@ -50,4 +50,4 @@ The grid serves as the physical anchor for the **Quantum-Classical Bridge**.
 *   **Entanglement Zones:** Specific grid cells that exhibit high $\phi$-ratio complexity (e.g., high entropy in the ratio of digital to physical data) are designated as **Entanglement Zones**.
 *   **Validator Placement:** $\Phi$-Chain validators are encouraged to physically locate their nodes within these Entanglement Zones, enhancing their "entanglement" for the Superposition-Based Proof-of-Coherence (PoC) consensus mechanism.
 
-This mathematically pure grid system provides the necessary spatial and temporal framework for the entire Fibonacci Universe, linking the physical world to the $\Phi$-Chain via MANUS. The final architectural component, the Symbiotic AI, will now be designed.
+This mathematically pure grid system provides the necessary spatial and temporal framework for the entire Fibonacci Universe, linking the physical world to the $\Phi$-Chain via CORE. The final architectural component, the Symbiotic AI, will now be designed.

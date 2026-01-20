@@ -351,12 +351,12 @@ export default function Home() {
             </div>
             <div>
               <h3 className="font-semibold text-white mb-4">Analysis</h3>
-              <p className="text-slate-400 text-sm">Comprehensive structural analysis of the phi-chain blockchain repository by Manus AI.</p>
+              <p className="text-slate-400 text-sm">Comprehensive structural analysis of the phi-chain blockchain repository by Core Team.</p>
             </div>
           </div>
           <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-slate-500 text-sm">© 2025 Phi-Chain Repository Analysis. All rights reserved.</p>
-            <p className="text-slate-500 text-sm mt-4 md:mt-0">Analyzed with Manus AI</p>
+            <p className="text-slate-500 text-sm mt-4 md:mt-0">Analyzed with Core Team</p>
           </div>
         </div>
       </footer>

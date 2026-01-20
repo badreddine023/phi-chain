@@ -1,6 +1,6 @@
 # Comprehensive Analysis and Strategic Plan for PHICOIN (Phi Chain)
 
-**Author:** Manus AI
+**Author:** Core Team
 **Date:** December 25, 2025
 
 ## 1. Introduction

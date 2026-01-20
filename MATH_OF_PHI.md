@@ -72,11 +72,11 @@ This spiral represents the principle of **logarithmic growth** and **self-simila
 
 The following diagram illustrates the construction of the Fibonacci Spiral, demonstrating how the sequence's numbers ($1, 1, 2, 3, 5, 8, \dots$) define the dimensions of the squares that form the spiral's path.
 
-![Fibonacci Spiral Diagram](https://files.manuscdn.com/user_upload_by_module/session_file/310519663255111589/DMaEBUbKYrJqkkos.png)
+![Fibonacci Spiral Diagram](https://files.corecdn.com/user_upload_by_module/session_file/310519663255111589/DMaEBUbKYrJqkkos.png)
 
 ## Conclusion
 
 By embedding the Golden Ratio and the Fibonacci sequence into its core protocols, $\Phi$-Chain seeks to create a blockchain that is not only decentralized and secure but also mathematically harmonious with the fundamental laws of the universe. This mathematical purity is the ultimate source of its stability and predictability.
 
 ---
-*Authored by Manus AI for badreddine023*
+*Authored by Core Team for badreddine023*

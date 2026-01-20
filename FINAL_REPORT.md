@@ -2,7 +2,7 @@
 
 **Date:** December 22, 2025  
 **Version:** 1.0  
-**Author:** Manus AI
+**Author:** Core Team
 
 ---
 

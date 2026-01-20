@@ -1,6 +1,6 @@
 # Universal Language Framework: Comprehensive Integration Guide
 
-**Author:** Manus AI  
+**Author:** Core Team  
 **Date:** January 4, 2026  
 **Status:** Genesis Documentation - Smart Commit Ready
 
@@ -466,4 +466,4 @@ This framework is the foundation for the next generation of blockchain technolog
 
 **Document Status:** Genesis - Ready for Smart Commit  
 **Last Updated:** January 4, 2026  
-**Maintained by:** Manus AI & badreddine023
+**Maintained by:** Core Team & badreddine023

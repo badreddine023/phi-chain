@@ -1,6 +1,6 @@
 # Smart Commit Guide: Universal Language Integration
 
-**Author:** Manus AI  
+**Author:** Core Team  
 **Date:** January 4, 2026  
 **Purpose:** Comprehensive guide for the final Smart Commit consolidating all Universal Language integrations
 
@@ -347,4 +347,4 @@ The genesis is complete. The future begins now.
 
 **Document Status:** Ready for Smart Commit  
 **Last Updated:** January 4, 2026  
-**Maintained by:** Manus AI & badreddine023
+**Maintained by:** Core Team & badreddine023

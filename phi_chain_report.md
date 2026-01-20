@@ -1,6 +1,6 @@
 # The Φ-Chain: A Simulation of Universal Growth
 
-**Author:** Manus AI
+**Author:** Core Team
 **Date:** December 5, 2025
 
 ## Abstract

@@ -3,7 +3,7 @@
 **Status:** Production Ready  
 **Version:** 1.0  
 **Date:** January 6, 2026  
-**Author:** Manus AI & badreddine023
+**Author:** Core Team & badreddine023
 
 ---
 

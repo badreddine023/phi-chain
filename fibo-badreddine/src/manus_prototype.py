@@ -7,7 +7,7 @@ from decimal import Decimal
 # Use the same precision as math_primitives
 decimal.getcontext().prec = 50
 
-# --- MANUS Prototype: Phi-Merkle Tree and EDO ---
+# --- CORE Prototype: Phi-Merkle Tree and EDO ---
 
 class EntangledDataObject:
     """
@@ -110,7 +110,7 @@ class PhiMerkleTree:
 
 # --- Prototype Execution ---
 if __name__ == "__main__":
-    print("--- MANUS Prototype: EDO and Phi-Merkle Tree ---")
+    print("--- CORE Prototype: EDO and Phi-Merkle Tree ---")
     
     # 1. Create EDOs
     # EDO 1: Coherent (Ratio close to PHI)

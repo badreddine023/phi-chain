@@ -69,4 +69,4 @@ Every block height $n$ **MUST** correspond to a Fibonacci number $F_n$. This req
 
 The initial **Shard Count** is $F_8 = 21$. Shard growth will also follow the Fibonacci sequence, ensuring that the system's complexity scales according to natural law.
 
-This design establishes the foundation for the **Φ-Chain**, strictly adhering to the Prime Directives of Mathematical Purity and the Quantum-Classical Bridge. The next phase will focus on the **MANUS** capture engine.
+This design establishes the foundation for the **Φ-Chain**, strictly adhering to the Prime Directives of Mathematical Purity and the Quantum-Classical Bridge. The next phase will focus on the **CORE** capture engine.

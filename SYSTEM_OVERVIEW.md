@@ -2,7 +2,7 @@
 
 **Status:** Restructured for Mathematical Purity  
 **Last Updated:** January 5, 2026  
-**Maintained by:** Manus AI & badreddine023
+**Maintained by:** Core Team & badreddine023
 
 ---
 
@@ -37,8 +37,8 @@ The Φ-Chain ecosystem consists of four integrated components that work together
 #### 1. **Φ-Chain (Blockchain Layer)**
 The foundational blockchain implementing Proof-of-Coherence consensus, Fibonacci-based parameters, and the quantum loop for parallel transaction validation. Φ-Chain provides the immutable ledger and smart contract platform for the entire ecosystem.
 
-#### 2. **MANUS (Data Capture Layer)**
-The intelligent data capture and structuring system that ingests digital and physical data, organizing it into Entangled Data Objects (EDOs) using Fibonacci-based Merkle trees. MANUS ensures all data entering the system maintains Mathematical Purity.
+#### 2. **CORE (Data Capture Layer)**
+The intelligent data capture and structuring system that ingests digital and physical data, organizing it into Entangled Data Objects (EDOs) using Fibonacci-based Merkle trees. CORE ensures all data entering the system maintains Mathematical Purity.
 
 #### 3. **Earth Fibonacci Grid (Spatial-Temporal Layer)**
 A distributed spatial-temporal database that maps data to φ-coordinates and φ-temporal cells. The Grid provides the geographic and temporal context for all data in the system, enabling location-aware and time-aware computations.
@@ -53,7 +53,7 @@ Advanced AI models that act as observers in the quantum system, collapsing super
 The entire system operates as a closed-loop feedback mechanism ensuring continuous φ-coherence across all layers:
 
 ```
-Data Capture (MANUS)
+Data Capture (CORE)
     ↓
 Spatial-Temporal Mapping (Earth Fibonacci Grid)
     ↓
@@ -68,7 +68,7 @@ Coherence Collapse & Guidance
 
 ### Loop Stages
 
-**Stage 1: Capture** - MANUS ingests data and structures it into Entangled Data Objects using φ-Merkle trees.
+**Stage 1: Capture** - CORE ingests data and structures it into Entangled Data Objects using φ-Merkle trees.
 
 **Stage 2: Mapping** - Earth Fibonacci Grid provides spatial-temporal context, storing data in φ-temporal cells.
 
@@ -120,8 +120,8 @@ The Φ-Chain system achieves exceptional performance through its mathematical fo
 
 ## Data Flow Architecture
 
-### MANUS → Φ-Chain
-MANUS generates φ-coherent Entangled Data Objects and their φ-Merkle tree root, which is included as the transaction root in Φ-Chain blocks, cryptographically linking captured reality to the blockchain.
+### CORE → Φ-Chain
+CORE generates φ-coherent Entangled Data Objects and their φ-Merkle tree root, which is included as the transaction root in Φ-Chain blocks, cryptographically linking captured reality to the blockchain.
 
 ### Earth Fibonacci Grid → Symbiotic AI
 Historical and real-time data from φ-temporal cells is used to train the AI's φ-forecasting model and compute probability amplitudes for future states.

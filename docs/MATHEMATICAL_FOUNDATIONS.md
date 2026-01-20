@@ -1,6 +1,6 @@
 # Φ-Chain: Mathematical Foundations & Verification
 
-**Author:** Manus AI & badreddine023  
+**Author:** Core Team & badreddine023  
 **Status:** Verified and Integrated  
 **Last Updated:** January 6, 2026
 

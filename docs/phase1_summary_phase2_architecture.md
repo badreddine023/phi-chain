@@ -24,7 +24,7 @@ Key mathematical derivations and their applications include:
 
 The `SYSTEM_OVERVIEW.md` document [2] details the `Φ-Coherence Loop`, a closed-loop feedback mechanism ensuring continuous φ-coherence across all layers. This loop integrates four core components:
 
-*   **MANUS:** Ingests data into Entangled Data Objects (EDOs), structured by a `φ-Merkle Tree`.
+*   **CORE:** Ingests data into Entangled Data Objects (EDOs), structured by a `φ-Merkle Tree`.
 *   **Earth Fibonacci Grid:** Provides spatial and temporal context for EDOs in `φ-Temporal Cells`.
 *   **Φ-Chain:** Records EDOs and state transitions using `Superposition-Based PoC`.
 *   **Symbiotic AI:** Acts as the `Observer`, collapsing the Φ-Chain's superposition state and computing `Probability Amplitudes`.

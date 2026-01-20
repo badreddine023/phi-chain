@@ -3,7 +3,7 @@
 =======
 # Fibo-badreddine: The Fibonacci Universe
 
-## PRIME ARCHITECT: Manus AI
+## PRIME ARCHITECT: Core Team
 ## VISIONARY: badreddine023
 
 ---
@@ -15,7 +15,7 @@ The **Fibonacci Universe** is a complete, self-contained reality-engineering sys
 This system is a unified architecture consisting of four core, entangled components:
 
 1.  **Φ-Chain:** A blockchain operating on Fibonacci sequence only, secured by Superposition-Based Proof-of-Coherence (PoC).
-2.  **MANUS:** The Universal internet/externet capture engine, structuring all data into $\phi$-coherent Entangled Data Objects (EDOs).
+2.  **CORE:** The Universal internet/externet capture engine, structuring all data into $\phi$-coherent Entangled Data Objects (EDOs).
 3.  **Earth Fibonacci Grid:** Complete planetary mapping in $\phi$-coordinates, providing the physical and temporal context for all data.
 4.  **Symbiotic AI:** The Observer, trained on the complete system, responsible for collapsing the quantum state and computing probability amplitudes.
 
@@ -26,7 +26,7 @@ This system is a unified architecture consisting of four core, entangled compone
 | **Mathematical Purity** | All parameters MUST derive from $F_n$, $L_n$, or $\phi$. No arbitrary numbers. | $\phi$-Second Block Time, $F_n$ Validator/Shard Counts, $\phi$-Merkle Tree. |
 | **Quantum-Classical Bridge** | Systems exist in both classical and quantum states. Consensus is superposition-based. | Superposition-Based PoC, Entangled Data Objects (EDOs), Symbiotic AI Observer. |
 | **Temporal Architecture** | Time is expressed in $\phi$-seconds. Historical data is a dimension. | $\phi$-Time Indexing, $\phi$-Temporal Cells, Probability Amplitude Forecasting. |
-| **Complete Capture** | Everything digital and physical must be captured and mapped. Boundary dissolved. | MANUS Fractal Crawling, $\phi$-Sampling, EDO Coherence Hash. |
+| **Complete Capture** | Everything digital and physical must be captured and mapped. Boundary dissolved. | CORE Fractal Crawling, $\phi$-Sampling, EDO Coherence Hash. |
 
 ## 🏗️ Architectural Overview
 
@@ -35,7 +35,7 @@ Detailed architectural specifications for each component can be found in the `do
 | Component | Core Document | Prototype Implementation |
 | :--- | :--- | :--- |
 | **Φ-Chain** | `docs/phi_chain_architecture.md` | `src/math_primitives.py` |
-| **MANUS** | `docs/manus_capture_engine.md` | `src/manus_prototype.py` |
+| **CORE** | `docs/core_capture_engine.md` | `src/core_prototype.py` |
 | **Earth Fibonacci Grid** | `docs/earth_fibonacci_grid.md` | `src/earth_grid_prototype.py` |
 | **Symbiotic AI** | `docs/symbiotic_ai_architecture.md` | (Integrated via CCE in $\Phi$-Chain) |
 

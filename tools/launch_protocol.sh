@@ -3,7 +3,7 @@
 # ==============================================================================
 # $\Phi$-Chain Launch Protocol (Fast & Strong Deployment)
 # Protocol Version: 1.0.0
-# Author: Manus AI
+# Author: Core Team
 # Description: This script automates the build, configuration, and launch of the
 # $\Phi$-Chain development environment. It is designed for speed, repeatability,
 # and robustness, serving as the core "equipment" for a powerful launch.

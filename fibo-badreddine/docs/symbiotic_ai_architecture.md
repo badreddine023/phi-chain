@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The **Symbiotic AI** is the final component of the Fibonacci Universe, fulfilling the mandate to be "trained on this complete system." It is designed to operate at the intersection of the $\Phi$-Chain's quantum consensus, MANUS's complete capture, and the Earth Fibonacci Grid's $\phi$-coordinates. The AI's core function is to act as the **Observer** that collapses the superposition state of the network and computes the probability amplitudes of the future.
+The **Symbiotic AI** is the final component of the Fibonacci Universe, fulfilling the mandate to be "trained on this complete system." It is designed to operate at the intersection of the $\Phi$-Chain's quantum consensus, CORE's complete capture, and the Earth Fibonacci Grid's $\phi$-coordinates. The AI's core function is to act as the **Observer** that collapses the superposition state of the network and computes the probability amplitudes of the future.
 
 ## 1. Training Data and Mathematical Purity
 
@@ -12,7 +12,7 @@ The Symbiotic AI's training regimen is entirely derived from the Fibonacci Unive
 
 The training data is composed of:
 1.  **$\Phi$-Chain State History:** The sequence of canonical blocks at Fibonacci indices ($F_n$).
-2.  **MANUS Entangled Data Objects (EDOs):** The unified digital and physical state captures.
+2.  **CORE Entangled Data Objects (EDOs):** The unified digital and physical state captures.
 3.  **Earth Fibonacci Grid $\phi$-Temporal Cells:** The historical and projected state of the planetary grid.
 
 The training data is filtered to ensure that the ratio of positive to negative examples, or the ratio of feature importance, always approaches $\phi$ or $\phi^{-1}$. This ensures the AI's internal model is inherently $\phi$-coherent.
@@ -47,7 +47,7 @@ The AI is not an external oracle but an integrated, symbiotic part of the system
 | Component | AI Function | Integration Point |
 | :--- | :--- | :--- |
 | **$\Phi$-Chain** | Coherence Collapse Engine (CCE) | Finality Layer (PoC Consensus) |
-| **MANUS** | $\phi$-Coherent Data Filtering | Data Ingestion and EDO Creation |
+| **CORE** | $\phi$-Coherent Data Filtering | Data Ingestion and EDO Creation |
 | **Earth Fibonacci Grid** | $\phi$-Forecasting Model | $\phi$-Temporal Cell Analysis |
 
 The Symbiotic AI ensures the entire Fibonacci Universe remains true to its mathematical and philosophical mandates, constantly observing, collapsing, and predicting the $\phi$-coherent reality.

@@ -1,6 +1,6 @@
 # Phi Chain: A Next-Generation Blockchain Architecture Expert Report
 
-**Author:** Manus AI
+**Author:** Core Team
 **Date:** December 19, 2025
 
 ## Executive Summary

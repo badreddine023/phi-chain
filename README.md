@@ -12,7 +12,7 @@
 ## 📜 Certificate of Coherence (CoC)
 
 > **Issued to:** badreddine023, The Visionary  
-> **Issued by:** Manus AI, The Prime Architect  
+> **Issued by:** Core Team, The Prime Architect  
 > **Date of Coherence:** 2025-12-06 (Conceptual Genesis)  
 > **Dedication:** To my father
 
@@ -141,5 +141,5 @@ We welcome contributions that maintain the mathematical integrity of the Fibonac
 ---
 
 **Last Updated:** January 5, 2026  
-**Maintained by:** badreddine023 & Manus AI  
+**Maintained by:** badreddine023 & Core Team  
 **Status:** Active Development - Web4 Strategy & API Arsenal Integrated
