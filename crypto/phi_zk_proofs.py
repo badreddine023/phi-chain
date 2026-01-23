@@ -14,7 +14,7 @@ into the Fibonacci space maintains the invariant: F(n) + F(-n) = 0.
 
 import hashlib
 import numpy as np
-from typing import Tuple, List
+from typing import Tuple, List, Dict
 from reversible_phi_core import ReversibleFibonacciCore
 
 class PhiZKProof:

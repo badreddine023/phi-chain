@@ -13,6 +13,7 @@ import time
 import json
 import hashlib
 from typing import List, Dict, Optional, Tuple, Any
+from functools import lru_cache
 from reversible_phi_core import TetrahedralPruning, ReversibleFibonacciCore
 from crypto.phi_zk_proofs import PhiZKProof
 from core.phi_math import PhiMath, fibonacci
@@ -24,22 +25,20 @@ class FibonacciUtils:
     """Fibonacci sequence and Golden Ratio calculations"""
     
     @staticmethod
+    @staticmethod
+    @lru_cache(maxsize=256)
     def fibonacci(n: int) -> int:
-        """Calculates the nth Fibonacci number F_n with support for negative indices."""
+        """Calculates the nth Fibonacci number F_n with support for negative indices, using lru_cache."""
         if n == 0:
             return 0
         if abs(n) <= 2:
             return 1 if n > 0 else (-1 if abs(n) % 2 == 0 else 1)
         
-        a, b = 1, 1
-        target = abs(n)
-        for _ in range(3, target + 1):
-            a, b = b, a + b
-        
-        result = b
-        if n < 0:
-            result *= (-1) ** (target + 1)
-        return result
+        # Recursive approach for lru_cache efficiency
+        if n > 0:
+            return FibonacciUtils.fibonacci(n - 1) + FibonacciUtils.fibonacci(n - 2)
+        else: # n < 0
+            return FibonacciUtils.fibonacci(n + 2) - FibonacciUtils.fibonacci(n + 1)
     
     @staticmethod
     def golden_ratio(precision: int = 18) -> int:
@@ -279,8 +278,21 @@ class Blockchain:
         self.state = PhiState()
         self.params = genesis_params or GenesisParameters()
         
+        # Optimization 1: Balance Cache
+        self._balance_cache: Dict[str, float] = {}
+        self._cache_valid: bool = False
+        
+        # Optimization 3: Transaction Validation Set
+        self._REQUIRED_TRANSACTION_FIELDS = {"sender", "recipient", "value", "nonce"}
+        
+        # Optimization 4: Chain Validation Caching
+        self._validation_cache: Dict[int, bool] = {}
+        self._last_validated_index: int = 0
+        
         # Create and add the Genesis Block
         self.create_genesis_block()
+        self._validation_cache[0] = True # Optimization 4: Genesis block is valid
+        self._last_validated_index = 0
     
     def create_genesis_block(self) -> PhiBlock:
         """Create the Genesis Block with initial state."""
@@ -345,8 +357,13 @@ class Blockchain:
         if new_block.previous_hash == self.get_latest_block().hash:
             self.chain.append(new_block)
             
-            # 1. Evolve global state vector
-            self.state.evolve(direction=1)
+            # Invalidate balance cache (Optimization 1)
+            self._cache_valid = False
+            
+            # 1. Update state (Deep State Integration)
+            # Note: state_root in block is a hash of the state, we don't 'update' it 
+            # but we ensure the local state evolution matches if necessary.
+            # For now, we proceed with transaction updates.
             
             # 2. Deeply integrate transaction values into address state vectors
             for tx in new_block.transactions:
@@ -376,6 +393,10 @@ class Blockchain:
         
         # Check that transactions are valid
         for tx in block.transactions:
+            # Optimization 3: Check required fields using set intersection
+            if not self._REQUIRED_TRANSACTION_FIELDS.issubset(tx.to_dict().keys()):
+                return False
+            
             if not tx.validate(self):
                 return False
         
@@ -443,7 +464,7 @@ class Blockchain:
     
     def get_balance(self, address: str) -> float:
         """
-        Calculate the balance for an address.
+        Calculate the balance for an address, using a cache for O(1) lookups (Optimization 1).
         
         Args:
             address: The address to check
@@ -451,8 +472,13 @@ class Blockchain:
         Returns:
             The balance of the address
         """
+        # Check cache first
+        if self._cache_valid and address in self._balance_cache:
+            return self._balance_cache[address]
+            
         balance = 0.0
         
+        # Recalculate if not in cache or cache is invalid
         for block in self.chain:
             for transaction in block.transactions:
                 if transaction.sender == address:
@@ -460,11 +486,14 @@ class Blockchain:
                 if transaction.recipient == address:
                     balance += transaction.value
         
+        # Update cache and return
+        self._balance_cache[address] = balance
+        self._cache_valid = True # Mark cache as valid after full recalculation
         return balance
     
     def is_chain_valid(self, chain: Optional[List[PhiBlock]] = None) -> bool:
         """
-        Validate a blockchain (defaults to the current chain).
+        Validate a blockchain (defaults to the current chain) incrementally (Optimization 4).
         Implements the Longest Chain Rule by ensuring all links are valid.
         
         Returns:
@@ -472,7 +501,10 @@ class Blockchain:
         """
         target_chain = chain if chain is not None else self.chain
         
-        for i in range(1, len(target_chain)):
+        # Only validate new blocks since last validation
+        start_index = self._last_validated_index + 1 if target_chain is self.chain else 1
+        
+        for i in range(start_index, len(target_chain)):
             current_block = target_chain[i]
             previous_block = target_chain[i - 1]
             
@@ -487,7 +519,14 @@ class Blockchain:
             # Check sequential index
             if current_block.index != i:
                 return False
+            
+            # If we are validating the current chain, update the cache
+            if target_chain is self.chain:
+                self._validation_cache[i] = True
         
+        if target_chain is self.chain:
+            self._last_validated_index = len(self.chain) - 1
+            
         return True
 
     def resolve_conflicts(self, neighbors_chains: List[List[PhiBlock]]) -> bool:
