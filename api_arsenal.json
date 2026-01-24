@@ -1,0 +1,49 @@
+{
+  "api_arsenal": {
+    "version": "1.0.0",
+    "description": "High-fidelity data streams for the Symbiotic AI Oracle Bridge",
+    "tiers": {
+      "tier_1": {
+        "name": "Core Harmony",
+        "function": "Direct interaction with the Fibonacci Q-Matrix and state transitions",
+        "endpoints": [
+          "/chain/info",
+          "/state/coherence",
+          "/block/validate"
+        ]
+      },
+      "tier_2": {
+        "name": "Oracle Bridge",
+        "function": "Facilitates off-chain AI inference and coherence proof generation",
+        "endpoints": [
+          "/oracle/request",
+          "/oracle/process",
+          "/oracle/proof"
+        ]
+      },
+      "tier_3": {
+        "name": "Symbiotic Flow",
+        "function": "Real-time data streams for AI observation and market analysis",
+        "endpoints": [
+          "/stream/mempool",
+          "/stream/consensus",
+          "/market/coherence"
+        ]
+      },
+      "tier_4": {
+        "name": "External Sentinel",
+        "function": "Monitoring and aggregation of external blockchain innovations",
+        "endpoints": [
+          "/research/aggregate",
+          "/external/audit",
+          "/bridge/status"
+        ]
+      }
+    },
+    "integration": {
+      "bridge_module": "api/ai_oracle_bridge.py",
+      "aggregator_tool": "tools/research_aggregator.py",
+      "status": "Operational"
+    }
+  }
+}
