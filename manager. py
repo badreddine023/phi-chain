@@ -1,0 +1,62 @@
+"""
+manager.py - Φ-Chain Secure Configuration Manager
+Centralizes API keys, network parameters, and environment variables.
+"""
+
+import os
+from typing import Any, Optional
+from dataclasses import dataclass
+
+@dataclass
+class PhiConfig:
+    # Network Parameters
+    NETWORK_NAME: str = "Φ-Chain Mainnet-Alpha"
+    PHI: float = 1.618033988749895
+    SLOT_DURATION: int = 8  # F_6
+    
+    # API Keys (Loaded from environment)
+    OPENAI_API_KEY: Optional[str] = os.getenv("OPENAI_API_KEY")
+    GITHUB_TOKEN: Optional[str] = os.getenv("GH_TOKEN")
+    
+    # API Server Config
+    API_HOST: str = "0.0.0.0"
+    API_PORT: int = 8000
+    
+    # Data Paths
+    DATA_DIR: str = "data"
+    LOG_DIR: str = "data/logs"
+    REPORT_DIR: str = "data/reports"
+
+class ConfigManager:
+    """
+    Manages and validates the Φ-Chain configuration.
+    Ensures all necessary keys and paths are initialized.
+    """
+    
+    def __init__(self):
+        self.config = PhiConfig()
+        self._initialize_directories()
+
+    def _initialize_directories(self):
+        """Ensure all data directories exist."""
+        dirs = [self.config.DATA_DIR, self.config.LOG_DIR, self.config.REPORT_DIR]
+        for d in dirs:
+            if not os.path.exists(d):
+                os.makedirs(d)
+
+    def get(self, key: str) -> Any:
+        """Retrieve a configuration value."""
+        return getattr(self.config, key, None)
+
+    def is_ai_enabled(self) -> bool:
+        """Check if AI features can be activated."""
+        return self.config.OPENAI_API_KEY is not None
+
+# Global instance
+phi_config = ConfigManager()
+
+if __name__ == "__main__":
+    print("--- Φ-Chain Configuration Manager ---")
+    print(f"Network: {phi_config.get('NETWORK_NAME')}")
+    print(f"AI Enabled: {phi_config.is_ai_enabled()}")
+    print(f"Data Directory: {phi_config.get('DATA_DIR')}")
