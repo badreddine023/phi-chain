@@ -1,95 +1,150 @@
-# Φ-Chain (Phi-Chain): The Golden Ratio Blockchain
+# Φ-Chain: The Mathematically Perfect Blockchain
 
-<div align="center">
-    <img src="web/assets/phi_chain_logo.jpg" width="250" alt="Φ-Chain Logo">
-    <h3>"The Universe is Written in the Language of Mathematics."</h3>
-    <p><strong>A Layer-1 Blockchain Ecosystem Governed by the Golden Ratio (Φ) and Fibonacci Sequence</strong></p>
-    <p><em>Unified by Universal Law: Economic Symmetry, Zeckendorf Addressing, Quantum Loop, Tetrahedral Pruning, Deep State Integration, and Zero-Knowledge Proofs</em></p>
-</div>
+![Golden Spiral Graphic Placeholder](https://i.imgur.com/example_golden_spiral.png)
 
----
+> "Mathematics is the language in which God has written the universe." — Galileo Galilei
 
-## 🚀 Recent Updates: Core & Wallet Integration
-
-We have successfully reached a major milestone in the Φ-Chain development:
-- **Unified Core Engine**: Integration of Fibonacci Q-Matrix state transitions and Proof-of-Coherence (PoC) mining.
-- **FastAPI Backend**: A high-performance API bridge for real-time blockchain interaction.
-- **Live Wallet Interface**: A beautiful UI/UX for the Pure Φ-Chain Wallet with WebSocket synchronization.
-- **FBA Consensus**: Implementation of the Fibonacci Byzantine Agreement for secure and harmonious finality.
+**The world's first blockchain built entirely on the Golden Ratio ($\Phi$) and Fibonacci sequence.**
+**No approximations. No decimals. Pure mathematical harmony.**
 
 ---
 
-## 📂 Project Structure
+## 🌌 Why Φ-Chain? The Mathematical Vision
 
-The Φ-Chain ecosystem is organized into thematic directories for better clarity and maintainability:
-
-- **[`/core/`](core/)**: The heart of the system, containing the Fibonacci Q-Matrix state transitions, consensus engine, and mathematical primitives.
-- **[`/api/`](api/)**: FastAPI backend, AI Oracle Bridge, and RPC protocol implementations.
-- **[`/wallet/`](wallet/)**: The user interface layer, featuring the **Pure Φ-Chain Wallet** with real-time synchronization.
-- **[`/scripts/`](scripts/)**: Network launchers and simulation tools.
-- **[`/docs/`](docs/)**: Comprehensive documentation, including technical reports and development plans.
-- **[`/web/`](web/)**: Interactive simulators and legacy dashboard components.
+Traditional blockchains are built on arbitrary computational rules. **Φ-Chain is built on the fundamental constants of nature.** We believe that by aligning our protocol with the most elegant and pervasive mathematical constant—the Golden Ratio ($\Phi \approx 1.618$)—we can achieve a level of harmony, efficiency, and beauty unattainable by conventional systems.
 
 ---
 
-## 📜 Key Documents
+### The Golden Ratio Principle
 
-- [View Full Certificate of Coherence](docs/CERTIFICATE_OF_COHERENCE.md)
-- [Read the Whitepaper](docs/guides/WHITEPAPER.md)
-- [Universal Language Integration](docs/guides/SYSTEM_INTEGRATION.md)
-- [Development Plan](docs/guides/DEVELOPMENT_PLAN.md)
+Every core aspect of Φ-Chain is governed by the Golden Ratio:
 
----
-
-## ⚡ Quick Start: Live Simulation
-
-To launch the Φ-Chain network and API locally:
-
-1. **Start the Network & API**:
-   ```bash
-   cd api
-   python3 -m server
-   ```
-2. **Open the Wallet**:
-   Open `wallet/phi_pure_wallet.html` in your browser to interact with the live blockchain.
+*   **Fibonacci-Only Transactions:** Transaction amounts are strictly limited to **Fibonacci numbers** ($1, 1, 2, 3, 5, 8, 13, \dots$). This ensures every value on the ledger is intrinsically linked to the mathematical structure of the universe.
+*   **Harmonic Block Times:** Block generation times follow the **Fibonacci sequence**, creating a naturally accelerating and decelerating rhythm for the network.
+*   **Golden Spiral Connection Web:** Our peer-to-peer network topology is modeled after the **Golden Spiral**, optimizing for the most harmonious and efficient data flow.
+*   **Proof-of-Φ-Harmony Consensus:** Consensus requires a $61.8\%$ agreement ($\Phi^{-1}$), ensuring that the network is always in a state of mathematical harmony.
 
 ---
 
-## 📊 Performance & Scalability
+## 🔬 How It Works: Pure Integer Mathematics
 
-| Metric | Value | Derivation | Impact |
-| :--- | :--- | :--- | :--- |
-| **Block Time** | 1.618s | $\phi$ seconds | Ultra-low latency transaction finality. |
-| **Throughput** | 1,000+ TPS | OPEVM + Quantum Loop | Parallel execution via Optimistic EVM. |
-| **Initial Shards** | 21 | $F_8$ | Distributed data partitions. |
-| **Storage Efficiency** | 60%+ reduction | Tetrahedral Pruning | Optimized data organization. |
+We reject the imprecision of floating-point arithmetic. Φ-Chain operates exclusively on exact integer representations, maintaining mathematical purity at every layer.
 
----
+### No Decimals, Ever
 
-## 🛠️ Technical Components
+The Golden Ratio itself is represented as a ratio of large, exact Fibonacci integers:
 
-### 🧬 Core Engine ([`core/`](core/))
-Implements the **Proof-of-Coherence (PoC)** consensus and Fibonacci-based state management.
+```python
+# Exact integer representation of Phi (Φ)
+# Ratio of two consecutive, large Fibonacci numbers, e.g., F(79)/F(78)
+PHI_NUMERATOR = 14472334024676221
+PHI_DENOMINATOR = 8944394323791464
+```
 
-### 🌐 Real-Time API ([`api/server.py`](api/server.py))
-FastAPI-based bridge providing WebSocket streams for blocks and transactions.
+### PHI Address System
 
-### 💎 Pure Φ Wallet ([`wallet/phi_pure_wallet.html`](wallet/phi_pure_wallet.html))
-A **beautiful UI/UX** designed for harmonious interaction with the Fibonacci ledger.
+Our address system is designed to reflect a mathematical identity, not a random string:
 
----
+*   **Traditional:** `0x742d35Cc6634C0532925a3b844Bc454e4438f44e`
+*   **Φ-Chain:** `PHI[5A1F-8B3C-9D2E-4F7A][ED42][F13B]`
 
-## 🤝 Contributing
-
-We welcome contributions! Please review our **[Contributing Guidelines](CONTRIBUTING.md)** and **[Development Plan](docs/guides/DEVELOPMENT_PLAN.md)**.
+Each address contains a **Mathematical Identity** (derived from $\Phi$), a **Golden Checksum**, and a **Harmony Validation Code**.
 
 ---
 
-## 📄 License
+## 🚀 Getting Started: Join the Mathematical Revolution
 
-Φ-Chain is released under the MIT License. See [LICENSE](LICENSE) for details.
+### For Mathematicians
+
+Explore the pure mathematical underpinnings of our ledger:
+
+```bash
+# Experience pure mathematical blockchain
+git clone https://github.com/badreddine023/phi-chain
+cd phi-chain
+python3 -c "from core.phi_integer_math import explore_golden_ratio"
+```
+
+### For Developers
+
+Build elegant, mathematically-sound applications on the Φ-Chain:
+
+```python
+from phi_chain import PhiNetwork
+
+# Show mathematical elegance in a transaction
+def create_golden_transaction(sender, receiver):
+    """All amounts must be Fibonacci numbers"""
+    # Returns the next Fibonacci number above 100, which is 144
+    amount = next_fibonacci_above(100) 
+    return PhiTransaction(sender, receiver, amount)
+
+# Create your first Φ identity
+network = PhiNetwork()
+address = network.generate_phi_address()
+print(f"Your mathematical identity: {address}")
+```
 
 ---
 
-**Last Updated:** April 08, 2026  
-**Maintained by:** badreddine023 & Core Team
+### For Everyone
+
+Visit [wallet.phi.chain](https://wallet.phi.chain) to experience Φ-Chain through our web interface and participate in the harmony consensus.
+
+---
+
+## 🏛️ Architecture: Built from First Principles
+
+The Φ-Chain is structured to mirror the natural elegance of the Golden Ratio.
+
+| Component | Description | Traditional Term (Avoid) |
+| :--- | :--- | :--- |
+| **Mathematics/** | Pure integer $\Phi$ operations and exact calculations. | Core Library |
+| **Harmony/** | The system for achieving mathematical agreement. | Consensus Algorithm |
+| **Spiral/** | The efficient, $\Phi$-optimized connection web. | P2P Network |
+| **Identity/** | The PHI address system for mathematical identities. | Wallet/Address System |
+| **Interface/** | The human interaction layer. | API/Frontend |
+
+### Key Innovations
+
+1.  **Φ-Math Library:** All operations are performed in $\mathbb{Z}$ (integers), ensuring mathematical rigor.
+2.  **Golden Blocks:** Each block contains a $\Phi$-proof, validating its position in the chain's mathematical progression.
+3.  **Harmonic Consensus:** Agreement is reached through a system of mathematical harmony, not brute-force computation.
+4.  **Fibonacci Economics:** The supply and issuance of the native token follow a Fibonacci growth model.
+
+---
+
+## 🤝 Contribute to Mathematical History
+
+We invite mathematicians, developers, and visionaries to join us in pioneering this new era of mathematically harmonious technology.
+
+---
+
+### For Mathematicians
+
+*   **Prove theorems** about our consensus algorithm's stability.
+*   **Optimize $\Phi$ calculations** for greater efficiency.
+*   **Discover new applications** of the Golden Ratio in distributed ledger technology.
+
+### For Developers
+
+*   **Build $\Phi$-based applications** and smart contracts.
+*   **Create mathematical visualization tools** for the network.
+*   **Implement new $\Phi$-cryptography schemes.**
+
+### For Everyone
+
+*   **Run a validator node** to participate in the harmony consensus.
+*   **Help spread mathematical literacy** about the project.
+
+---
+
+## 📚 Community & Resources
+
+| Category | Resources |
+| :--- | :--- |
+| **Interactive Demos** | Golden Ratio Explorer, Fibonacci Transaction Simulator, Harmony Consensus Visualizer |
+| **Community** | Discord: Mathematicians Channel, Live Network Dashboard |
+| **Documentation** | Mathematical Foundation, API Reference, Protocol Specification |
+
+**Φ-Chain: Making mathematics beautiful again.**
