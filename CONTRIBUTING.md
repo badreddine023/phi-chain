@@ -1,6 +1,7 @@
 # Contributing to Φ-Chain: The Canonical Blockchain of Universal Law
 
 Thank you for your interest in contributing to the **Φ-Chain**, a revolutionary blockchain built on the Golden Ratio and Fibonacci sequence. This document outlines how to contribute with mathematical purity and consciousness awareness.
+/assets/
 
 ## 🌀 Mathematical Purity
 

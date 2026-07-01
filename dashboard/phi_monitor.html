@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Φ-Chain | Harmony Monitor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&family=JetBrains+Mono:wght@300;500&display=swap');
+        
+        body { font-family: 'Space Grotesk', sans-serif; background-color: #020617; color: #f8fafc; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        
+        .golden-gradient {
+            background: linear-gradient(135deg, #164e63 0%, #0891b2 50%, #22d3ee 100%);
+        }
+        
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(34, 211, 238, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(34, 211, 238, 0.5);
+            box-shadow: 0 0 30px rgba(34, 211, 238, 0.1);
+            transform: translateY(-2px);
+        }
+        .phi-glow {
+            text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+        }
+        
+        .phi-pulse {
+            animation: pulse 1.618s infinite ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(0.98); }
+        }
+        
+        .spiral-bg {
+            position: fixed;
+            top: 0; right: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at 100% 0%, rgba(34, 211, 238, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        #log::-webkit-scrollbar { width: 4px; }
+        #log::-webkit-scrollbar-thumb { background: #164e63; border-radius: 10px; }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+    <div class="spiral-bg"></div>
+    
+    <div class="container mx-auto px-6 py-8 max-w-7xl">
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
+            <div>
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 rounded-full golden-gradient flex items-center justify-center text-black font-bold text-xl">Φ</div>
+                    <h1 class="text-4xl font-bold tracking-tighter text-white phi-glow">HARMONY MONITOR</h1>
+                </div>
+                <p class="text-cyan-600 mono text-sm uppercase tracking-widest">Real-Time Fibonacci Network Analytics</p>
+            </div>
+            
+            <div class="flex gap-4">
+                <div class="glass-card px-6 py-3 rounded-xl text-right">
+                    <div class="text-[10px] text-cyan-800 uppercase font-bold">Network Status</div>
+                    <div id="net-status" class="text-yellow-400 font-bold flex items-center gap-2 justify-end">
+                        <span class="w-2 h-2 rounded-full bg-yellow-400 phi-pulse"></span>
+                        CONNECTING...
+                    </div>
+                </div>
+                <div class="glass-card px-6 py-3 rounded-xl text-right">
+                    <div class="text-[10px] text-cyan-800 uppercase font-bold">Current Epoch</div>
+                    <div id="epoch" class="text-white font-bold mono">F(18)</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Top Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="glass-card p-6 rounded-2xl">
+                <div class="text-cyan-700 text-xs font-bold mb-2 uppercase">Total Blocks</div>
+                <div id="total-blocks" class="text-3xl font-bold text-white mono">0</div>
+            </div>
+            <div class="glass-card p-6 rounded-2xl">
+                <div class="text-cyan-700 text-xs font-bold mb-2 uppercase">Total Stake</div>
+                <div id="total-stake" class="text-3xl font-bold text-white mono">0 Φ</div>
+            </div>
+            <div class="glass-card p-6 rounded-2xl">
+                <div class="text-cyan-700 text-xs font-bold mb-2 uppercase">Active Validators</div>
+                <div id="active-validators" class="text-3xl font-bold text-white mono">0</div>
+            </div>
+            <div class="glass-card p-6 rounded-2xl">
+                <div class="text-cyan-700 text-xs font-bold mb-2 uppercase">Phi Convergence</div>
+                <div id="phi-conv" class="text-3xl font-bold text-cyan-400 mono">1.618...</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Q-Matrix Evolution -->
+            <div class="lg:col-span-2 space-y-8">
+                <div class="glass-card p-8 rounded-3xl">
+                    <div class="flex justify-between items-center mb-8">
+                        <h2 class="text-xl font-bold border-l-4 border-cyan-500 pl-4">Q-MATRIX STATE EVOLUTION</h2>
+                        <div class="text-xs text-cyan-800 mono">S_{n+1} = Q · S_n</div>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="qMatrixChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="glass-card p-8 rounded-3xl">
+                        <h2 class="text-lg font-bold mb-6 text-cyan-400">LATEST BLOCK</h2>
+                        <div id="latest-block-info" class="space-y-4">
+                            <div class="flex justify-between border-b border-cyan-950 pb-2">
+                                <span class="text-cyan-800 text-xs">HASH</span>
+                                <span id="lb-hash" class="text-white text-xs mono">---</span>
+                            </div>
+                            <div class="flex justify-between border-b border-cyan-950 pb-2">
+                                <span class="text-cyan-800 text-xs">VALIDATOR</span>
+                                <span id="lb-validator" class="text-white text-xs mono">---</span>
+                            </div>
+                            <div class="flex justify-between border-b border-cyan-950 pb-2">
+                                <span class="text-cyan-800 text-xs">F-VECTOR</span>
+                                <span id="lb-vector" class="text-cyan-400 text-xs mono">---</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card p-8 rounded-3xl">
+                        <h2 class="text-lg font-bold mb-6 text-cyan-400">PENDING POOL</h2>
+                        <div class="flex items-center justify-center h-24">
+                            <div id="pending-count" class="text-6xl font-bold text-white mono">0</div>
+                            <div class="text-cyan-800 ml-4 text-xs uppercase font-bold">Transactions<br>Waiting</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Validator List -->
+            <div class="glass-card p-8 rounded-3xl">
+                <h2 class="text-xl font-bold mb-8 border-l-4 border-cyan-500 pl-4">VALIDATOR COHERENCE</h2>
+                <div id="validator-list" class="space-y-6">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Live Log -->
+        <div class="mt-12 glass-card p-6 rounded-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xs text-cyan-800 font-bold uppercase tracking-widest">Network Event Stream</h3>
+                <div id="ws-status" class="text-[10px] text-cyan-900 mono">WebSocket: Connecting...</div>
+            </div>
+            <div id="log" class="h-32 overflow-y-auto space-y-2 text-[10px] mono text-cyan-600 flex flex-col-reverse">
+                <div>[SYSTEM] Initializing monitoring engine...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = "8000-ih2adqx1han2lnnt5dw93-601273c1.us2.manus.computer";
+        const API_URL = `https://${API_BASE}`;
+        const WS_URL = `wss://${API_BASE}/ws`;
+
+        let qMatrixChart;
+        const logContainer = document.getElementById('log');
+
+        function addLog(msg, color = 'text-cyan-600') {
+            const div = document.createElement('div');
+            div.className = color;
+            div.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            logContainer.appendChild(div);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('qMatrixChart').getContext('2d');
+            qMatrixChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'F_{n+1}',
+                        data: [],
+                        borderColor: '#22d3ee',
+                        backgroundColor: 'rgba(34, 211, 238, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'F_n',
+                        data: [],
+                        borderColor: '#0891b2',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: 'rgba(34, 211, 238, 0.05)' }, ticks: { color: '#164e63', font: { family: 'JetBrains Mono' } } },
+                        x: { grid: { display: false }, ticks: { color: '#164e63', font: { family: 'JetBrains Mono' } } }
+                    }
+                }
+            });
+        }
+
+        async function updateValidators() {
+            try {
+                const res = await fetch(`${API_URL}/validators`);
+                const data = await res.json();
+                const list = document.getElementById('validator-list');
+                list.innerHTML = '';
+                
+                Object.entries(data).forEach(([id, info]) => {
+                    const div = document.createElement('div');
+                    div.className = 'border-b border-cyan-950 pb-4';
+                    div.innerHTML = `
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-white font-bold text-sm">${id}</span>
+                            <span class="text-cyan-400 text-xs mono">${info.coherence.toFixed(3)} Φ</span>
+                        </div>
+                        <div class="w-full bg-slate-900 h-1 rounded-full overflow-hidden">
+                            <div class="bg-cyan-500 h-full" style="width: ${(info.coherence/2)*100}%"></div>
+                        </div>
+                        <div class="flex justify-between mt-2 text-[10px] text-cyan-800 uppercase">
+                            <span>Stake: ${info.stake}</span>
+                            <span>Blocks: ${info.blocks}</span>
+                        </div>
+                    `;
+                    list.appendChild(div);
+                });
+            } catch (e) { console.error(e); }
+        }
+
+        function connectWS() {
+            const socket = new WebSocket(WS_URL);
+            
+            socket.onopen = () => {
+                addLog('WEBSOCKET CONNECTED', 'text-green-500');
+                document.getElementById('ws-status').innerText = 'WebSocket: Connected';
+                document.getElementById('net-status').innerHTML = '<span class="w-2 h-2 rounded-full bg-green-400 phi-pulse"></span> SYNCHRONIZED';
+                document.getElementById('net-status').className = 'text-green-400 font-bold flex items-center gap-2 justify-end';
+            };
+            
+            socket.onmessage = (event) => {
+                const msg = JSON.parse(event.data);
+                if (msg.type === 'NEW_BLOCK') {
+                    const block = msg.data;
+                    const metrics = msg.metrics;
+                    
+                    // Update Stats
+                    document.getElementById('total-blocks').innerText = metrics.total_blocks;
+                    document.getElementById('total-stake').innerText = metrics.total_stake.toLocaleString() + ' Φ';
+                    document.getElementById('active-validators').innerText = metrics.active_validators;
+                    document.getElementById('pending-count').innerText = metrics.pending_tx_count;
+                    
+                    // Update Latest Block
+                    document.getElementById('lb-hash').innerText = block.hash.substring(0, 24) + '...';
+                    document.getElementById('lb-validator').innerText = block.validator;
+                    document.getElementById('lb-vector').innerText = `[${block.f_vector[0]}, ${block.f_vector[1]}]`;
+                    
+                    // Update Chart
+                    qMatrixChart.data.labels.push(block.index);
+                    qMatrixChart.data.datasets[0].data.push(block.f_vector[0]);
+                    qMatrixChart.data.datasets[1].data.push(block.f_vector[1]);
+                    if (qMatrixChart.data.labels.length > 15) {
+                        qMatrixChart.data.labels.shift();
+                        qMatrixChart.data.datasets[0].data.shift();
+                        qMatrixChart.data.datasets[1].data.shift();
+                    }
+                    qMatrixChart.update();
+                    
+                    addLog(`NEW BLOCK MINED: #${block.index} BY ${block.validator}`, 'text-cyan-400');
+                    updateValidators();
+                }
+            };
+            
+            socket.onclose = () => {
+                addLog('WEBSOCKET DISCONNECTED. RETRYING...', 'text-red-500');
+                document.getElementById('ws-status').innerText = 'WebSocket: Disconnected';
+                document.getElementById('net-status').innerHTML = '<span class="w-2 h-2 rounded-full bg-red-400 phi-pulse"></span> DISCONNECTED';
+                document.getElementById('net-status').className = 'text-red-400 font-bold flex items-center gap-2 justify-end';
+                setTimeout(connectWS, 3000);
+            };
+        }
+
+        // Init
+        initChart();
+        connectWS();
+        updateValidators();
+        
+        // Initial metrics fetch
+        fetch(`${API_URL}/metrics`).then(r => r.json()).then(m => {
+            document.getElementById('total-blocks').innerText = m.total_blocks;
+            document.getElementById('total-stake').innerText = m.total_stake.toLocaleString() + ' Φ';
+            document.getElementById('active-validators').innerText = m.active_validators;
+        });
+    </script>
+</body>
+</html>
