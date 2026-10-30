@@ -1,17 +1,18 @@
-# Φ-Chain Sacred Architecture — Completed Phase
+# Φ-Chain Genesis-to-Wallet Rebuild
 
-The Sacred Architecture specification, deterministic sacred metrics, focused tests, and React website integration are complete. The website checkpoint is saved. The remaining engineering work is research-grade consensus validation and cleanup of unrelated legacy test failures.
+The genesis review, wallet smoke workflow, React website rebuild, and checkpoint are complete. The wallet path is locally non-custodial and executes in under one second; the first-block artifacts remain inconsistent and must be canonicalized before any real launch.
 
 ## Evidence
 
-- `docs/SACRED_ARCHITECTURE.md` defines mathematical, quantum-inspired, and symbolic layers with explicit boundaries.
-- `core/sacred_metrics.py` provides deterministic φ/Fibonacci ratios, normalized φ⁻ⁱ experiment weights, and observable agreement fractions.
-- `tests/test_sacred_metrics.py` passes all four focused tests.
-- The React website typecheck and production build pass.
-- The website checkpoint is saved as version `834443ec`.
+- `tools/genesis_wallet_smoke.py` compares the constructed, configured, and deployed first block.
+- Wallet address generation, validation, and tamper rejection passed without reading private keys or broadcasting transactions.
+- Measured local smoke runtime: `0.422 ms`.
+- React typecheck and production build pass.
+- Website checkpoint saved as `73c818c7`.
 
-## Follow-up
+## Required before launch
 
-- [ ] Specify and formally test Proof-of-Coherence safety/liveness assumptions.
-- [ ] Compare φ-weighted selection against neutral baselines.
-- [ ] Repair unrelated legacy test dependencies/import paths and invalid non-ASCII bytes literal.
+- [ ] Choose one canonical genesis timestamp, schema, and hash derivation.
+- [ ] Regenerate and verify all genesis artifacts from that source of truth.
+- [ ] Add a strict CI gate that fails when genesis artifacts disagree.
+- [ ] Replace placeholder/conceptual wallet and validator data before any live deployment.
